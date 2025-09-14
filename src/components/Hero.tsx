@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import heroChicken from "@/assets/1.png";
+import mainChicken from "@/assets/1.png";
 
 export const Hero = () => {
   return (
@@ -9,15 +9,14 @@ export const Hero = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 animate-slide-up">
             <div className="space-y-4">
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+              <h1 className="font-display text-5xl md:text-7xl font-semibold leading-tight tracking-tight">
                 <span className="bg-gradient-hero bg-clip-text text-transparent">
                   Pudgy Farms
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl">
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
                 O primeiro protocolo de tokenização de RWAnimals (Real World Animals). 
-                Começamos com as <strong>Pudgy Chickens</strong> e agora tokenizamos todos os animais da fazenda, 
-                revolucionando a agricultura digital mundial.
+                Começamos com as <strong>Pudgy Chickens</strong> e agora tokenizamos todos os animais da fazenda.
               </p>
             </div>
 
@@ -49,12 +48,22 @@ export const Hero = () => {
           </div>
 
           <div className="relative flex justify-center lg:justify-end">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-hero rounded-full blur-3xl opacity-20 animate-glow"></div>
+            <div className="relative w-full max-w-md lg:max-w-lg">
+              {/* Subtle background glow */}
+              <div className="absolute -inset-8 bg-gradient-hero blur-2xl opacity-15 animate-breath" />
+              
+              {/* Minimal border frame */}
+              <div className="absolute inset-0 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent" />
+              <div className="absolute inset-1 rounded-xl border border-accent/10" />
+              
+              {/* Main image with subtle shadow */}
               <img
-                src={heroChicken}
-                alt="Pudgy Farms Hero"
-                className="relative z-10 w-full max-w-md lg:max-w-lg animate-float drop-shadow-2xl"
+                src={mainChicken}
+                alt="Pudgy Chicken destaque"
+                className="relative z-10 w-full rounded-xl animate-float"
+                style={{ 
+                  filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.3)) drop-shadow(0 0 20px rgba(265, 92%, 68%, 0.1))"
+                }}
               />
             </div>
           </div>

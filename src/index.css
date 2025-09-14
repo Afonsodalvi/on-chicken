@@ -8,48 +8,51 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 220 25% 8%;
+    /* Dark futuristic base with subtle blue-teal undertone */
+    --background: 210 28% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 220 20% 12%;
+    --card: 220 18% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 220 20% 12%;
+    --popover: 220 18% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 280 100% 70%;
+    /* Neon accent leaning to aurora purple */
+    --primary: 265 92% 68%;
     --primary-foreground: 220 25% 8%;
 
-    --secondary: 220 15% 18%;
+    --secondary: 220 16% 16%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 15% 18%;
+    --muted: 220 14% 20%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 280 100% 70%;
+    --accent: 190 95% 65%;
     --accent-foreground: 220 25% 8%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 2 84% 58%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 280 100% 70%;
+    --border: 220 12% 22%;
+    --input: 220 12% 22%;
+    --ring: 265 92% 68%;
 
-    /* Custom penguin theme colors */
-    --ice-blue: 200 100% 85%;
-    --penguin-orange: 25 100% 60%;
-    --arctic-purple: 280 100% 70%;
-    --snow-white: 0 0% 98%;
-    --deep-ocean: 220 25% 8%;
+    /* Farm-futuristic auxiliary palette */
+    --ice-blue: 198 94% 82%;
+    --penguin-orange: 32 96% 58%;
+    --arctic-purple: 265 92% 68%;
+    --snow-white: 0 0% 99%;
+    --deep-ocean: 210 28% 6%;
     
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(280 100% 70%), hsl(25 100% 60%), hsl(350 100% 70%));
-    --gradient-card: linear-gradient(145deg, hsl(220 20% 12%), hsl(220 15% 18%));
-    --gradient-accent: linear-gradient(90deg, hsl(280 100% 70%), hsl(200 100% 70%));
+    --gradient-hero: linear-gradient(135deg, hsl(265 92% 68%), hsl(190 95% 65%), hsl(320 78% 66%));
+    --gradient-card: linear-gradient(145deg, hsl(220 18% 12%), hsl(220 16% 16%));
+    --gradient-accent: linear-gradient(90deg, hsl(265 92% 68%), hsl(190 95% 65%));
+    --gradient-aurora: linear-gradient(120deg, hsla(265,92%,68%,0.35), hsla(190,95%,65%,0.25), hsla(150,80%,60%,0.25));
     
     /* Shadows */
-    --shadow-glow: 0 0 30px hsl(280 100% 70% / 0.3);
+    --shadow-glow: 0 0 30px hsl(265 92% 68% / 0.35);
     --shadow-card: 0 10px 30px hsl(220 25% 8% / 0.5);
 
     --radius: 0.5rem;
@@ -72,33 +75,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 220 25% 8%;
+    --background: 210 28% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 220 20% 12%;
+    --card: 220 18% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 220 20% 12%;
+    --popover: 220 18% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 280 100% 70%;
+    --primary: 265 92% 68%;
     --primary-foreground: 220 25% 8%;
 
-    --secondary: 220 15% 18%;
+    --secondary: 220 16% 16%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 15% 18%;
+    --muted: 220 14% 20%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 280 100% 70%;
+    --accent: 190 95% 65%;
     --accent-foreground: 220 25% 8%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 2 62% 32%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 280 100% 70%;
+    --border: 220 12% 22%;
+    --input: 220 12% 22%;
+    --ring: 265 92% 68%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -116,6 +119,20 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: radial-gradient(1000px 600px at 10% -10%, hsl(265 92% 68% / .08), transparent 60%),
+      radial-gradient(800px 500px at 110% 10%, hsl(190 95% 65% / .08), transparent 60%),
+      var(--gradient-aurora);
+    background-size: auto, auto, 200% 200%;
+    animation: aurora 14s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg;
+  }
+  .surface {
+    @apply bg-card/80 backdrop-blur-md border border-border;
   }
 }

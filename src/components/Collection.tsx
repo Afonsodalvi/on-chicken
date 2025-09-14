@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import chickenCollection from "@/assets/4.png";
+import chickenA from "@/assets/4.png";
+import chickenB from "@/assets/6.png";
 
 export const Collection = () => {
   const collections = [
@@ -10,22 +11,22 @@ export const Collection = () => {
       description: "A coleção original de 10.000 galinhas únicas tokenizadas na blockchain.",
       items: "10,000",
       floorPrice: "0.5 ETH",
-      image: chickenCollection,
+      image: chickenA,
     },
     {
       name: "Lil Chicks", 
       description: "5.000 pintinhos de descendência premium. Pequenos mas promissores.",
       items: "5,000",
       floorPrice: "0.2 ETH",
-      image: chickenCollection,
+      image: chickenB,
     },
   ];
 
   return (
-    <section id="collection" className="py-20 bg-secondary/20">
+    <section id="collection" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-6xl font-bold">
+          <h2 className="text-4xl md:text-6xl font-semibold font-display">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
               Nossas Coleções
             </span>
@@ -40,7 +41,7 @@ export const Collection = () => {
           {collections.map((collection, index) => (
             <Card 
               key={index} 
-              className="bg-gradient-card border-border hover:shadow-lg transition-all duration-300 group overflow-hidden"
+              className="surface hover:shadow-lg transition-all duration-300 group overflow-hidden"
             >
               <CardContent className="p-0">
                 <div className="relative overflow-hidden">
@@ -67,7 +68,7 @@ export const Collection = () => {
                       <div className="text-sm text-muted-foreground">Floor Price</div>
                       <div className="text-xl font-bold text-primary">{collection.floorPrice}</div>
                     </div>
-                    <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                    <Button variant="outline" className="border-border hover:bg-secondary">
                       Ver Coleção
                     </Button>
                   </div>

@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, MessageCircle, Trophy, Heart } from "lucide-react";
+import chickenPromo from "@/assets/23.png";
 
 export const Community = () => {
   const stats = [
@@ -31,10 +32,10 @@ export const Community = () => {
   ];
 
   return (
-    <section id="community" className="py-20 bg-secondary/20">
+    <section id="community" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-6xl font-bold">
+          <h2 className="text-4xl md:text-6xl font-semibold font-display">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
               A Comunidade
             </span>
@@ -49,7 +50,7 @@ export const Community = () => {
           {stats.map((stat, index) => (
             <Card 
               key={index} 
-              className="bg-gradient-card border-border hover:shadow-lg transition-all duration-300 text-center group"
+              className="surface hover:shadow-lg transition-all duration-300 text-center group"
             >
               <CardContent className="p-6 space-y-4">
                 <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -67,7 +68,7 @@ export const Community = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h3 className="text-3xl font-bold">Inove, Participe e Cultive</h3>
+            <h3 className="text-3xl font-semibold font-display">Inove, Participe e Cultive</h3>
             <p className="text-muted-foreground text-lg">
               A comunidade Pudgy Chickens é mais do que apenas holders de NFT. 
               Somos uma família global unidos pela sustentabilidade, inovação agrícola e o poder da tecnologia blockchain.
@@ -101,7 +102,7 @@ export const Community = () => {
           </div>
 
           <div className="relative">
-            <Card className="bg-gradient-card border-border p-8">
+            <Card className="surface p-8 overflow-hidden">
               <CardContent className="p-0 space-y-6">
                 <div className="text-center">
                   <h4 className="text-2xl font-bold mb-2">Pudgy Media</h4>
@@ -111,6 +112,10 @@ export const Community = () => {
                 </div>
                 
                 <div className="space-y-4">
+                  <div className="relative h-40 rounded-lg overflow-hidden border border-border">
+                    <img src={chickenPromo} alt="Promoção" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
+                  </div>
                   <div className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
                     <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center text-primary-foreground font-bold">
                       P

@@ -140,7 +140,7 @@ export const Shop = () => {
     <section id="shop" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-6xl font-bold">
+          <h2 className="text-4xl md:text-6xl font-semibold font-display">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
               Loja de Ativos
             </span>
@@ -155,7 +155,7 @@ export const Shop = () => {
           {products.map((product, index) => (
             <Card 
               key={product.id} 
-              className="bg-gradient-card border-border hover:shadow-lg transition-all duration-300 group overflow-hidden"
+              className="surface hover:shadow-lg transition-all duration-300 group overflow-hidden"
             >
               <CardContent className="p-0">
                 <div className="relative overflow-hidden bg-secondary/30">
@@ -231,7 +231,7 @@ export const Shop = () => {
         </div>
 
         <div className="text-center">
-          <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Button size="lg" variant="outline" className="border-border hover:bg-secondary">
             Ver Todos os Ativos
           </Button>
         </div>

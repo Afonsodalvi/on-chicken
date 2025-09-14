@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
+        display: ["Space Grotesk", "Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -89,6 +93,15 @@ export default {
           from: { opacity: "0", transform: "translateY(30px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "aurora": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "breath": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.8" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -96,11 +109,14 @@ export default {
         "float": "float 6s ease-in-out infinite",
         "glow": "glow 2s ease-in-out infinite",
         "slide-up": "slide-up 0.5s ease-out",
+        "aurora": "aurora 12s ease-in-out infinite",
+        "breath": "breath 6s ease-in-out infinite",
       },
       backgroundImage: {
         'gradient-hero': 'var(--gradient-hero)',
         'gradient-card': 'var(--gradient-card)',
         'gradient-accent': 'var(--gradient-accent)',
+        'grid': 'linear-gradient(to right, hsl(var(--border) / .2) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border) / .2) 1px, transparent 1px)'
       },
     },
   },
