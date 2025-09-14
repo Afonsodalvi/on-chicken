@@ -1,0 +1,341 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Sword, Users, Clock, Trophy, Zap } from "lucide-react";
+import { useBattleContext } from "@/contexts/BattleContext";
+import chickenCollection from "@/assets/4.png";
+
+interface NFT {
+  id: number;
+  name: string;
+  image: string;
+  attack: number;
+  defense: number;
+  speed: number;
+  health: number;
+  rarity: "common" | "rare" | "epic" | "legendary";
+  collection: string;
+  owner: string;
+}
+
+interface BattleRoom {
+  id: string;
+  creator: string;
+  creatorNFT: NFT;
+  status: "waiting" | "active" | "finished";
+  createdAt: Date;
+  winner?: NFT;
+  participant?: {
+    user: string;
+    nft: NFT;
+  };
+}
+
+interface BattleLobbyProps {
+  onJoinBattle: (battleId: string) => void;
+  onCreateBattle: (battleId: string) => void;
+  userNFTs: NFT[];
+  currentUser: string;
+}
+
+export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUser }: BattleLobbyProps) => {
+  const { battles, createBattle, joinBattle } = useBattleContext();
+  const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
+
+  // Filtrar batalhas disponíveis (aguardando participantes)
+  const availableBattles = battles.filter(battle => 
+    battle.status === "waiting" && 
+    !battle.participant
+  );
+
+  // Separar batalhas criadas pelo usuário atual das outras
+  const myBattles = availableBattles.filter(battle => battle.creator === currentUser);
+  const otherBattles = availableBattles.filter(battle => battle.creator !== currentUser);
+
+  const getRarityColor = (rarity: string) => {
+    switch (rarity) {
+      case "common": return "bg-gray-500";
+      case "rare": return "bg-blue-500";
+      case "epic": return "bg-purple-500";
+      case "legendary": return "bg-yellow-500";
+      default: return "bg-gray-500";
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "waiting": return "bg-yellow-500";
+      case "active": return "bg-green-500";
+      case "finished": return "bg-gray-500";
+      default: return "bg-gray-500";
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "waiting": return "Aguardando";
+      case "active": return "Ativa";
+      case "finished": return "Finalizada";
+      default: return "Desconhecido";
+    }
+  };
+
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return "Agora mesmo";
+    if (diffInMinutes < 60) return `${diffInMinutes}min atrás`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours}h atrás`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays}d atrás`;
+  };
+
+  const handleCreateBattle = () => {
+    if (selectedNFT) {
+      const battleId = createBattle(currentUser, selectedNFT);
+      onCreateBattle(battleId);
+    }
+  };
+
+  const handleJoinBattle = (battleId: string) => {
+    if (selectedNFT) {
+      const success = joinBattle(battleId, currentUser, selectedNFT);
+      if (success) {
+        onJoinBattle(battleId);
+      }
+    }
+  };
+
+  const NFTCard = ({ nft, isSelected, onSelect }: { 
+    nft: NFT; 
+    isSelected: boolean; 
+    onSelect: () => void;
+  }) => (
+    <Card 
+      className={`cursor-pointer transition-all duration-300 ${
+        isSelected ? 'ring-2 ring-primary shadow-lg' : 'hover:shadow-md'
+      }`}
+      onClick={onSelect}
+    >
+      <CardContent className="p-4">
+        <div className="relative">
+          <img
+            src={nft.image}
+            alt={nft.name}
+            className="w-full h-24 object-cover rounded-lg mb-3"
+          />
+          <Badge className={`absolute top-2 left-2 ${getRarityColor(nft.rarity)} text-white text-xs`}>
+            {nft.rarity}
+          </Badge>
+        </div>
+        
+        <div className="space-y-2">
+          <h3 className="font-bold text-sm">{nft.name}</h3>
+          <p className="text-xs text-muted-foreground">{nft.collection}</p>
+          
+          <div className="grid grid-cols-2 gap-1 text-xs">
+            <div className="flex items-center gap-1">
+              <Sword className="h-3 w-3 text-red-500" />
+              <span>{nft.attack}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Zap className="h-3 w-3 text-yellow-500" />
+              <span>{nft.speed}</span>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const BattleCard = ({ battle }: { battle: BattleRoom }) => (
+    <Card className={`hover:shadow-lg transition-all duration-300 ${
+      battle.creator === currentUser ? 'ring-2 ring-primary bg-primary/5' : ''
+    }`}>
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <img
+              src={battle.creatorNFT.image}
+              alt={battle.creatorNFT.name}
+              className="w-16 h-16 object-cover rounded-lg"
+            />
+            <div>
+              <h3 className="font-bold text-lg">{battle.creatorNFT.name}</h3>
+              <div className="flex items-center gap-2">
+                <Badge className={getRarityColor(battle.creatorNFT.rarity)}>
+                  {battle.creatorNFT.rarity}
+                </Badge>
+                <Badge className={getStatusColor(battle.status)}>
+                  {getStatusText(battle.status)}
+                </Badge>
+                {battle.creator === currentUser && (
+                  <Badge className="bg-primary text-primary-foreground">
+                    Sua Batalha
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-right text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Clock className="h-4 w-4" />
+              {formatTimeAgo(battle.createdAt)}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <Sword className="h-4 w-4 text-red-500" />
+              <span className="font-bold">{battle.creatorNFT.attack}</span>
+            </div>
+            <div className="text-xs text-muted-foreground">Ataque</div>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <Zap className="h-4 w-4 text-yellow-500" />
+              <span className="font-bold">{battle.creatorNFT.speed}</span>
+            </div>
+            <div className="text-xs text-muted-foreground">Velocidade</div>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <Users className="h-4 w-4 text-blue-500" />
+              <span className="font-bold">{battle.participant ? "2/2" : "1/2"}</span>
+            </div>
+            <div className="text-xs text-muted-foreground">Jogadores</div>
+          </div>
+        </div>
+
+        {battle.status === "waiting" && !battle.participant && (
+          <Button 
+            onClick={() => battle.creator === currentUser ? onJoinBattle(battle.id) : handleJoinBattle(battle.id)}
+            disabled={!selectedNFT && battle.creator !== currentUser}
+            className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90"
+          >
+            <Sword className="mr-2 h-4 w-4" />
+            Entrar na Batalha
+          </Button>
+        )}
+
+        {battle.status === "active" && (
+          <Alert>
+            <AlertDescription>
+              Batalha em andamento...
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {battle.status === "finished" && battle.winner && (
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Trophy className="h-5 w-5 text-yellow-500" />
+              <span className="font-bold">Vencedor: {battle.winner.name}</span>
+            </div>
+            <Badge className="bg-yellow-500 text-white">
+              Batalha Finalizada
+            </Badge>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  return (
+    <div className="space-y-8">
+      {/* Seleção de NFT */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-center">
+          <span className="bg-gradient-hero bg-clip-text text-transparent">
+            Selecione seu NFT
+          </span>
+        </h2>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {userNFTs.map((nft) => (
+            <NFTCard
+              key={nft.id}
+              nft={nft}
+              isSelected={selectedNFT?.id === nft.id}
+              onSelect={() => setSelectedNFT(nft)}
+            />
+          ))}
+        </div>
+
+        {selectedNFT && (
+          <div className="text-center">
+            <Button
+              onClick={handleCreateBattle}
+              size="lg"
+              className="bg-gradient-hero text-primary-foreground hover:opacity-90"
+            >
+              <Sword className="mr-2 h-5 w-5" />
+              Criar Nova Batalha
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Suas Batalhas */}
+      {myBattles.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-center">
+            <span className="bg-gradient-hero bg-clip-text text-transparent">
+              Suas Batalhas
+            </span>
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {myBattles.map((battle) => (
+              <BattleCard key={battle.id} battle={battle} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Lista de Batalhas Disponíveis */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-center">
+          <span className="bg-gradient-hero bg-clip-text text-transparent">
+            Batalhas Disponíveis
+          </span>
+        </h2>
+        
+        {otherBattles.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-bold mb-2">Nenhuma batalha disponível</h3>
+              <p className="text-muted-foreground">
+                Seja o primeiro a criar uma batalha e aguarde outros jogadores entrarem!
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6">
+            {otherBattles.map((battle) => (
+              <BattleCard key={battle.id} battle={battle} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {!selectedNFT && (
+        <Alert>
+          <AlertDescription>
+            Selecione um NFT para criar uma batalha ou participar de uma existente.
+          </AlertDescription>
+        </Alert>
+      )}
+    </div>
+  );
+};
