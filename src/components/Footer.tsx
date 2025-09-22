@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Twitter, Instagram, Youtube, MessageCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import farmLogo from "@/assets/futuristic_farm_logo_embedded.svg";
 
 export const Footer = () => {
+  const { t } = useLanguage();
   return (
     <footer className="relative surface">
       <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
@@ -15,8 +17,7 @@ export const Footer = () => {
               <span className="text-xl font-semibold font-display bg-gradient-hero bg-clip-text text-transparent">Pudgy Farms</span>
             </div>
             <p className="text-muted-foreground">
-              Uma plataforma nascida na web3 que promove sustentabilidade, 
-              inovação agrícola e comunidade através da tokenização de galinhas.
+              {t('footer.description')}
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="sm" className="p-2 hover:bg-white/5">
@@ -35,7 +36,7 @@ export const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">Coleções</h3>
+            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">{t('footer.collections')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -61,7 +62,7 @@ export const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">Loja</h3>
+            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">{t('footer.shop')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -87,17 +88,17 @@ export const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">Newsletter</h3>
+            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">{t('footer.newsletter')}</h3>
             <p className="text-muted-foreground text-sm">
-              Receba as últimas novidades sobre agricultura digital e drops exclusivos.
+              {t('footer.newsletter.subtitle')}
             </p>
             <div className="space-y-2">
               <Input
-                placeholder="Seu email"
+                placeholder={t('footer.newsletter.email')}
                 className="bg-secondary/40 border-border focus-visible:ring-primary"
               />
               <Button className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90">
-                Inscrever-se
+                {t('footer.newsletter.subscribe')}
               </Button>
             </div>
           </div>
@@ -105,17 +106,17 @@ export const Footer = () => {
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-sm text-muted-foreground">
-            © 2024 Pudgy Chickens. Todos os direitos reservados.
+            {t('footer.copyright')}
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">
-              Termos de Uso
+              {t('footer.links.terms')}
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
-              Política de Privacidade
+              {t('footer.links.privacy')}
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
-              Suporte
+              {t('footer.links.support')}
             </a>
           </div>
         </div>

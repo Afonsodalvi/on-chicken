@@ -6,7 +6,19 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Sword, Shield, Zap, Heart, Trophy, RotateCcw, Users, Clock } from "lucide-react";
 import { useBattleContext } from "@/contexts/BattleContext";
-import chickenCollection from "@/assets/4.png";
+import { useLanguage } from "@/contexts/LanguageContext";
+import chicken12 from "@/assets/12.png";
+import chicken13 from "@/assets/13.png";
+import chicken14 from "@/assets/14.png";
+import chicken15 from "@/assets/15.png";
+import chicken16 from "@/assets/16.png";
+import chicken17 from "@/assets/17.png";
+import chicken18 from "@/assets/18.png";
+import chicken19 from "@/assets/19.png";
+import chicken20 from "@/assets/20.png";
+import chicken21 from "@/assets/21.png";
+import chicken22 from "@/assets/22.png";
+import chicken23 from "@/assets/23.png";
 
 interface NFT {
   id: number;
@@ -41,6 +53,7 @@ interface BattleArenaProps {
 }
 
 export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onLeaveBattle }: BattleArenaProps) => {
+  const { t } = useLanguage();
   const { getBattle, updateBattleStatus, startBattle: startBattleInContext, battles } = useBattleContext();
   const [battleState, setBattleState] = useState<BattleState>({
     player1: null,
@@ -58,8 +71,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
   const availableNFTs: NFT[] = [
     {
       id: 1,
-      name: "Golden Rooster",
-      image: chickenCollection,
+      name: "Pudgy Chicken #012",
+      image: chicken12,
       attack: 85,
       defense: 70,
       speed: 60,
@@ -70,8 +83,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 2,
-      name: "Fire Chicken",
-      image: chickenCollection,
+      name: "Pudgy Chicken #013",
+      image: chicken13,
       attack: 90,
       defense: 50,
       speed: 80,
@@ -82,26 +95,122 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 3,
-      name: "Ice Hen",
-      image: chickenCollection,
+      name: "Pudgy Chicken #014",
+      image: chicken14,
       attack: 60,
       defense: 90,
       speed: 40,
       health: 100,
       rarity: "rare",
-      collection: "Lil Chicks",
+      collection: "Pudgy Chickens",
       owner: "currentUser"
     },
     {
       id: 4,
-      name: "Thunder Bird",
-      image: chickenCollection,
+      name: "Pudgy Chicken #015",
+      image: chicken15,
       attack: 75,
       defense: 60,
       speed: 95,
       health: 100,
       rarity: "epic",
-      collection: "Lil Chicks",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 5,
+      name: "Pudgy Chicken #016",
+      image: chicken16,
+      attack: 80,
+      defense: 75,
+      speed: 70,
+      health: 100,
+      rarity: "rare",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 6,
+      name: "Pudgy Chicken #017",
+      image: chicken17,
+      attack: 95,
+      defense: 55,
+      speed: 85,
+      health: 100,
+      rarity: "legendary",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 7,
+      name: "Pudgy Chicken #018",
+      image: chicken18,
+      attack: 70,
+      defense: 85,
+      speed: 50,
+      health: 100,
+      rarity: "epic",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 8,
+      name: "Pudgy Chicken #019",
+      image: chicken19,
+      attack: 65,
+      defense: 80,
+      speed: 75,
+      health: 100,
+      rarity: "rare",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 9,
+      name: "Pudgy Chicken #020",
+      image: chicken20,
+      attack: 88,
+      defense: 65,
+      speed: 90,
+      health: 100,
+      rarity: "legendary",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 10,
+      name: "Pudgy Chicken #021",
+      image: chicken21,
+      attack: 72,
+      defense: 78,
+      speed: 65,
+      health: 100,
+      rarity: "epic",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 11,
+      name: "Pudgy Chicken #022",
+      image: chicken22,
+      attack: 82,
+      defense: 72,
+      speed: 80,
+      health: 100,
+      rarity: "rare",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 12,
+      name: "Pudgy Chicken #023",
+      image: chicken23,
+      attack: 92,
+      defense: 68,
+      speed: 95,
+      health: 100,
+      rarity: "legendary",
+      collection: "Pudgy Chickens",
       owner: "currentUser"
     }
   ];
@@ -297,7 +406,7 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     <div className="grid grid-cols-3 gap-8 items-center">
       {/* Player 1 */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-center">Jogador 1</h3>
+        <h3 className="text-xl font-bold text-center">{t('battle.players')} 1</h3>
         {battleState.player1 ? (
           <Card className={`bg-gradient-card transition-all duration-300 ${
             battleState.winner?.id === battleState.player1.id ? 'ring-4 ring-yellow-400 shadow-2xl' : ''
@@ -347,7 +456,7 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
         ) : (
           <Card className="border-dashed border-2 border-muted-foreground/25">
             <CardContent className="p-8 text-center">
-              <p className="text-muted-foreground">Selecione um NFT para o Jogador 1</p>
+              <p className="text-muted-foreground">{t('battle.select.player1')}</p>
             </CardContent>
           </Card>
         )}
@@ -359,21 +468,21 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
         {battleState.isBattling && (
           <div className="flex items-center space-x-2">
             <Sword className="h-6 w-6 text-primary animate-spin" />
-            <span className="text-sm font-bold text-primary">BATALHANDO</span>
+            <span className="text-sm font-bold text-primary">{t('battle.battling')}</span>
             <Sword className="h-6 w-6 text-primary animate-spin" />
           </div>
         )}
         {battleState.winner && (
           <div className="text-center space-y-2">
             <Trophy className="h-12 w-12 mx-auto text-yellow-500 animate-bounce" />
-            <p className="text-lg font-bold text-yellow-600">VENCEDOR!</p>
+            <p className="text-lg font-bold text-yellow-600">{t('battle.winner')}!</p>
           </div>
         )}
       </div>
 
       {/* Player 2 */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-center">Jogador 2</h3>
+        <h3 className="text-xl font-bold text-center">{t('battle.players')} 2</h3>
         {battleState.player2 ? (
           <Card className={`bg-gradient-card transition-all duration-300 ${
             battleState.winner?.id === battleState.player2.id ? 'ring-4 ring-yellow-400 shadow-2xl' : ''
@@ -437,12 +546,11 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
         <div className="text-center mb-16 space-y-4">
           <h1 className="text-4xl md:text-6xl font-bold">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
-              Arena de Batalha
+              {t('battle.title')}
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Escolha seus NFTs favoritos e participe de batalhas épicas na arena. 
-            Cada NFT possui atributos únicos que determinam o resultado da batalha.
+            {t('battle.subtitle')}
           </p>
         </div>
 
@@ -492,7 +600,7 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
               <Alert className="max-w-md">
                 <Users className="h-4 w-4" />
                 <AlertDescription>
-                  Aguardando oponente entrar na batalha...
+                  {t('battle.waiting.opponent')}
                 </AlertDescription>
               </Alert>
               <Button
@@ -501,7 +609,7 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
                 size="lg"
               >
                 <RotateCcw className="mr-2 h-5 w-5" />
-                Voltar ao Lobby
+                {t('common.back')}
               </Button>
             </div>
           )}
@@ -514,14 +622,14 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
                   <div className="flex items-center justify-center gap-3">
                     <Trophy className="h-12 w-12 text-white animate-bounce" />
                     <span className="text-3xl font-bold text-white">
-                      VITÓRIA!
+                      {t('battle.victory')}
                     </span>
                   </div>
                   <div className="text-2xl font-bold text-white">
-                    {battleState.winner?.name} é o vencedor!
+                    {battleState.winner?.name} {t('battle.winner.is')}
                   </div>
                   <div className="text-lg text-yellow-100">
-                    Parabéns pela vitória épica!
+                    {t('battle.congratulations')}
                   </div>
                 </div>
               </div>
@@ -531,7 +639,7 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
                 className="bg-gradient-hero text-primary-foreground hover:opacity-90"
               >
                 <RotateCcw className="mr-2 h-5 w-5" />
-                Voltar ao Lobby
+                {t('common.back')}
               </Button>
             </div>
           )}
@@ -593,7 +701,7 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
                 size="lg"
               >
                 <RotateCcw className="mr-2 h-5 w-5" />
-                Voltar ao Lobby
+                {t('common.back')}
               </Button>
             </div>
           )}

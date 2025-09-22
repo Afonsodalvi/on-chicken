@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Sword, Users, Clock, Trophy, Zap } from "lucide-react";
 import { useBattleContext } from "@/contexts/BattleContext";
-import chickenCollection from "@/assets/4.png";
+import { useLanguage } from "@/contexts/LanguageContext";
+import chicken12 from "@/assets/12.png";
 
 interface NFT {
   id: number;
@@ -41,6 +42,7 @@ interface BattleLobbyProps {
 }
 
 export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUser }: BattleLobbyProps) => {
+  const { t } = useLanguage();
   const { battles, createBattle, joinBattle } = useBattleContext();
   const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
 
@@ -75,10 +77,10 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "waiting": return "Aguardando";
-      case "active": return "Ativa";
-      case "finished": return "Finalizada";
-      default: return "Desconhecido";
+      case "waiting": return t('battle.waiting');
+      case "active": return t('battle.active');
+      case "finished": return t('battle.finished');
+      default: return t('common.error');
     }
   };
 
@@ -198,21 +200,21 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
               <Sword className="h-4 w-4 text-red-500" />
               <span className="font-bold">{battle.creatorNFT.attack}</span>
             </div>
-            <div className="text-xs text-muted-foreground">Ataque</div>
+            <div className="text-xs text-muted-foreground">{t('battle.attack')}</div>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <Zap className="h-4 w-4 text-yellow-500" />
               <span className="font-bold">{battle.creatorNFT.speed}</span>
             </div>
-            <div className="text-xs text-muted-foreground">Velocidade</div>
+            <div className="text-xs text-muted-foreground">{t('battle.speed')}</div>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <Users className="h-4 w-4 text-blue-500" />
               <span className="font-bold">{battle.participant ? "2/2" : "1/2"}</span>
             </div>
-            <div className="text-xs text-muted-foreground">Jogadores</div>
+            <div className="text-xs text-muted-foreground">{t('battle.players')}</div>
           </div>
         </div>
 
@@ -223,14 +225,14 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
             className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90"
           >
             <Sword className="mr-2 h-4 w-4" />
-            Entrar na Batalha
+            {t('battle.join')}
           </Button>
         )}
 
         {battle.status === "active" && (
           <Alert>
             <AlertDescription>
-              Batalha em andamento...
+              {t('battle.active')}
             </AlertDescription>
           </Alert>
         )}
@@ -239,10 +241,10 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Trophy className="h-5 w-5 text-yellow-500" />
-              <span className="font-bold">Vencedor: {battle.winner.name}</span>
+              <span className="font-bold">{t('battle.winner')}: {battle.winner.name}</span>
             </div>
             <Badge className="bg-yellow-500 text-white">
-              Batalha Finalizada
+              {t('battle.finished')}
             </Badge>
           </div>
         )}
@@ -256,7 +258,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-center">
           <span className="bg-gradient-hero bg-clip-text text-transparent">
-            Selecione seu NFT
+            {t('battle.select')}
           </span>
         </h2>
         
@@ -279,7 +281,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
               className="bg-gradient-hero text-primary-foreground hover:opacity-90"
             >
               <Sword className="mr-2 h-5 w-5" />
-              Criar Nova Batalha
+              {t('battle.create')}
             </Button>
           </div>
         )}
@@ -290,7 +292,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-center">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
-              Suas Batalhas
+              {t('battle.your')}
             </span>
           </h2>
           
@@ -306,7 +308,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-center">
           <span className="bg-gradient-hero bg-clip-text text-transparent">
-            Batalhas Disponíveis
+            {t('battle.available')}
           </span>
         </h2>
         
@@ -314,9 +316,9 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
           <Card>
             <CardContent className="p-8 text-center">
               <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-bold mb-2">Nenhuma batalha disponível</h3>
+              <h3 className="text-lg font-bold mb-2">{t('battle.none')}</h3>
               <p className="text-muted-foreground">
-                Seja o primeiro a criar uma batalha e aguarde outros jogadores entrarem!
+                {t('battle.none.subtitle')}
               </p>
             </CardContent>
           </Card>
@@ -332,7 +334,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
       {!selectedNFT && (
         <Alert>
           <AlertDescription>
-            Selecione um NFT para criar uma batalha ou participar de uma existente.
+            {t('battle.select.nft')}
           </AlertDescription>
         </Alert>
       )}

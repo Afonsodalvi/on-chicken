@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Upload, MapPin, Leaf, Image, Hash, CheckCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CollectionFormData {
   name: string;
@@ -20,18 +21,23 @@ interface CollectionFormData {
 }
 
 const farmTypes = [
-  { value: "poultry", label: "Avicultura", icon: "🐔" },
-  { value: "cattle", label: "Pecuária", icon: "🐄" },
-  { value: "agriculture", label: "Agricultura", icon: "🌾" },
-  { value: "aquaculture", label: "Aquicultura", icon: "🐟" },
-  { value: "mixed", label: "Mista", icon: "🌿" },
+  { value: "poultry", label: "farm.type.poultry", icon: "🐔" },
+  { value: "cattle", label: "farm.type.cattle", icon: "🐄" },
+  { value: "agriculture", label: "farm.type.agriculture", icon: "🌾" },
+  { value: "aquaculture", label: "farm.type.aquaculture", icon: "🐟" },
+  { value: "mixed", label: "farm.type.mixed", icon: "🌿" },
 ];
 
 const regions = [
-  "Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"
+  { value: "north", label: "farm.region.north" },
+  { value: "northeast", label: "farm.region.northeast" },
+  { value: "centerwest", label: "farm.region.centerwest" },
+  { value: "southeast", label: "farm.region.southeast" },
+  { value: "south", label: "farm.region.south" }
 ];
 
 export const FarmCollection = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<CollectionFormData>({
     name: "",
     description: "",
@@ -66,8 +72,8 @@ export const FarmCollection = () => {
     // Simular criação da coleção
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    toast.success("Coleção criada com sucesso!", {
-      description: `Sua coleção "${formData.name}" foi criada e está sendo processada.`
+    toast.success(t('farm.collection.success.title'), {
+      description: t('farm.collection.success.description')
     });
     
     setIsSubmitting(false);
@@ -98,11 +104,10 @@ export const FarmCollection = () => {
               className="w-full h-full object-contain"
             />
           </div>
-          <h2 className="text-3xl font-bold">Tokenizar Seus Animais</h2>
+          <h2 className="text-3xl font-bold">{t('farm.collection.title')}</h2>
         </div>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Transforme seus animais em NFTs únicos! Crie coleções de RWAnimals (Real World Animals) 
-          e contribua para a revolução da agricultura digital. Comece sua jornada como as Pudgy Chickens!
+          {t('farm.collection.subtitle')}
         </p>
       </div>
 
@@ -112,17 +117,17 @@ export const FarmCollection = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Upload className="h-5 w-5" />
-              Informações dos RWAnimals
+              {t('farm.collection.info.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Nome da Coleção */}
               <div className="space-y-2">
-                <Label htmlFor="name">Nome da Coleção RWAnimals *</Label>
+                <Label htmlFor="name">{t('farm.collection.name.label')}</Label>
                 <Input
                   id="name"
-                  placeholder="Ex: Galinhas Douradas da Fazenda São José"
+                  placeholder={t('farm.collection.name.placeholder')}
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   className="bg-background/50"
@@ -131,10 +136,10 @@ export const FarmCollection = () => {
 
               {/* Descrição */}
               <div className="space-y-2">
-                <Label htmlFor="description">Descrição *</Label>
+                <Label htmlFor="description">{t('farm.collection.description.label')}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Descreva seus RWAnimals, suas características únicas, raça, origem e o que os torna especiais para a agricultura..."
+                  placeholder={t('farm.collection.description.placeholder')}
                   value={formData.description}
                   onChange={(e) => handleInputChange("description", e.target.value)}
                   className="bg-background/50 min-h-[100px]"
@@ -143,32 +148,32 @@ export const FarmCollection = () => {
 
               {/* Link das Imagens */}
               <div className="space-y-2">
-                <Label htmlFor="imageUrl">Link das Imagens dos RWAnimals *</Label>
+                <Label htmlFor="imageUrl">{t('farm.collection.image.label')}</Label>
                 <Input
                   id="imageUrl"
-                  placeholder="https://exemplo.com/imagens-animais"
+                  placeholder={t('farm.collection.image.placeholder')}
                   value={formData.imageUrl}
                   onChange={(e) => handleInputChange("imageUrl", e.target.value)}
                   className="bg-background/50"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Forneça um link para as imagens dos seus animais (IPFS, Google Drive, etc.)
+                  {t('farm.collection.image.help')}
                 </p>
               </div>
 
               {/* Região */}
               <div className="space-y-2">
-                <Label htmlFor="region">Região *</Label>
+                <Label htmlFor="region">{t('farm.collection.region.label')}</Label>
                 <Select value={formData.region} onValueChange={(value) => handleInputChange("region", value)}>
                   <SelectTrigger className="bg-background/50">
-                    <SelectValue placeholder="Selecione a região da sua fazenda" />
+                    <SelectValue placeholder={t('farm.collection.region.placeholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {regions.map((region) => (
-                      <SelectItem key={region} value={region}>
+                      <SelectItem key={region.value} value={region.value}>
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
-                          {region}
+                          {t(region.label)}
                         </div>
                       </SelectItem>
                     ))}
@@ -178,17 +183,17 @@ export const FarmCollection = () => {
 
               {/* Tipo de Farm */}
               <div className="space-y-2">
-                <Label htmlFor="farmType">Tipo de Fazenda *</Label>
+                <Label htmlFor="farmType">{t('farm.collection.type.label')}</Label>
                 <Select value={formData.farmType} onValueChange={(value) => handleInputChange("farmType", value)}>
                   <SelectTrigger className="bg-background/50">
-                    <SelectValue placeholder="Selecione o tipo da sua fazenda" />
+                    <SelectValue placeholder={t('farm.collection.type.placeholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {farmTypes.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         <div className="flex items-center gap-2">
                           <span>{type.icon}</span>
-                          {type.label}
+                          {t(type.label)}
                         </div>
                       </SelectItem>
                     ))}
@@ -198,7 +203,7 @@ export const FarmCollection = () => {
 
               {/* Total Supply */}
               <div className="space-y-2">
-                <Label htmlFor="totalSupply">Total de NFTs</Label>
+                <Label htmlFor="totalSupply">{t('farm.collection.supply.label')}</Label>
                 <Input
                   id="totalSupply"
                   type="number"
@@ -209,7 +214,7 @@ export const FarmCollection = () => {
                   className="bg-background/50"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Número máximo de RWAnimals que podem ser tokenizados nesta coleção
+                  {t('farm.collection.supply.help')}
                 </p>
               </div>
 
@@ -223,12 +228,12 @@ export const FarmCollection = () => {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Tokenizando RWAnimals...
+                    {t('farm.collection.submitting')}
                   </>
                 ) : (
                   <>
                     <CheckCircle className="mr-2 h-5 w-5" />
-                    Tokenizar RWAnimals
+                    {t('farm.collection.submit')}
                   </>
                 )}
               </Button>
@@ -241,7 +246,7 @@ export const FarmCollection = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Image className="h-5 w-5" />
-              Preview dos RWAnimals
+              {t('farm.collection.preview.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -268,10 +273,10 @@ export const FarmCollection = () => {
                   
                   <div>
                     <h3 className="font-bold text-lg">
-                      {formData.name || "Nome dos RWAnimals"}
+                      {formData.name || t('farm.collection.preview.name')}
                     </h3>
                     <p className="text-sm text-muted-foreground line-clamp-2">
-                      {formData.description || "Descrição dos seus animais aparecerá aqui..."}
+                      {formData.description || t('farm.collection.preview.description')}
                     </p>
                   </div>
                 </div>
@@ -281,13 +286,13 @@ export const FarmCollection = () => {
                   {formData.region && (
                     <Badge variant="secondary" className="flex items-center gap-1">
                       <MapPin className="h-3 w-3" />
-                      {formData.region}
+                      {t(`farm.region.${formData.region}`)}
                     </Badge>
                   )}
                   {selectedFarmType && (
                     <Badge variant="secondary" className="flex items-center gap-1">
                       <Leaf className="h-3 w-3" />
-                      {selectedFarmType.label}
+                      {t(selectedFarmType.label)}
                     </Badge>
                   )}
                   <Badge variant="secondary">
@@ -300,8 +305,7 @@ export const FarmCollection = () => {
               <Alert>
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Próximos passos:</strong> Após tokenizar seus RWAnimals, você poderá 
-                  fazer upload das imagens individuais e definir os metadados de cada animal NFT.
+                  <strong>{t('farm.collection.preview.steps.title')}</strong> {t('farm.collection.preview.steps.description')}
                 </AlertDescription>
               </Alert>
             </div>

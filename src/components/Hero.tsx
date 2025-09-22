@@ -1,8 +1,37 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import mainChicken from "@/assets/1.png";
+import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import chicken14 from "@/assets/14.png";
+import chicken15 from "@/assets/15.png";
+import chicken16 from "@/assets/16.png";
+import chicken17 from "@/assets/17.png";
+import chicken18 from "@/assets/18.png";
+import chicken19 from "@/assets/19.png";
+import chicken20 from "@/assets/20.png";
+import chicken21 from "@/assets/21.png";
+import chicken22 from "@/assets/22.png";
+import chicken23 from "@/assets/23.png";
 
 export const Hero = () => {
+  const { t } = useLanguage();
+  const chickenImages = [
+    chicken14, chicken15, chicken16, chicken17, chicken18,
+    chicken19, chicken20, chicken21, chicken22, chicken23
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % chickenImages.length
+      );
+    }, 3000); // 3 segundos
+
+    return () => clearInterval(interval);
+  }, [chickenImages.length]);
+
   return (
     <section id="home" className="min-h-screen pt-16 flex items-center justify-center overflow-hidden">
       <div className="container mx-auto px-4 py-20">
@@ -11,38 +40,37 @@ export const Hero = () => {
             <div className="space-y-4">
               <h1 className="font-display text-5xl md:text-7xl font-semibold leading-tight tracking-tight">
                 <span className="bg-gradient-hero bg-clip-text text-transparent">
-                  Pudgy Farms
+                  {t('hero.title')}
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-                O primeiro protocolo de tokenização de RWAnimals (Real World Animals). 
-                Começamos com as <strong>Pudgy Chickens</strong> e agora tokenizamos todos os animais da fazenda.
+                {t('hero.subtitle')}
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
-                Tokenizar RWAnimals
+                {t('hero.cta.primary')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button variant="outline" size="lg" className="border-border hover:bg-secondary">
                 <Play className="mr-2 h-5 w-5" />
-                Ver Pudgy Chickens
+                {t('hero.cta.secondary')}
               </Button>
             </div>
 
             <div className="flex items-center gap-8 text-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">10,000</div>
-                <div className="text-muted-foreground">Pudgy Chickens</div>
+                <div className="text-muted-foreground">{t('hero.stats.chickens')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">25K+</div>
-                <div className="text-muted-foreground">RWAnimals Tokenizados</div>
+                <div className="text-muted-foreground">{t('hero.stats.tokenized')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">50+</div>
-                <div className="text-muted-foreground">Fazendas Globais</div>
+                <div className="text-muted-foreground">{t('hero.stats.farms')}</div>
               </div>
             </div>
           </div>
@@ -56,14 +84,16 @@ export const Hero = () => {
               <div className="absolute inset-0 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent" />
               <div className="absolute inset-1 rounded-xl border border-accent/10" />
               
-              {/* Main image with subtle shadow */}
+              {/* Main image with subtle shadow and smooth transition */}
               <img
-                src={mainChicken}
+                src={chickenImages[currentImageIndex]}
                 alt="Pudgy Chicken destaque"
-                className="relative z-10 w-full rounded-xl animate-float"
+                className="relative z-10 w-full h-auto object-contain rounded-xl animate-float transition-opacity duration-500"
                 style={{ 
-                  filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.3)) drop-shadow(0 0 20px rgba(265, 92%, 68%, 0.1))"
+                  filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.3)) drop-shadow(0 0 20px rgba(265, 92%, 68%, 0.1))",
+                  maxHeight: "500px"
                 }}
+                key={currentImageIndex} // Force re-render for smooth transition
               />
             </div>
           </div>

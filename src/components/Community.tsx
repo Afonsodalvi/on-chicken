@@ -1,33 +1,35 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, MessageCircle, Trophy, Heart } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import chickenPromo from "@/assets/23.png";
 
 export const Community = () => {
+  const { t } = useLanguage();
   const stats = [
     {
       icon: Users,
       number: "25K+",
-      label: "Fazendeiros Ativos",
-      description: "Uma comunidade global de agricultores digitais",
+      label: t('community.stats.farmers'),
+      description: t('community.stats.farmers.desc'),
     },
     {
       icon: MessageCircle,
       number: "500K+",
-      label: "Mensagens/Mês",
-      description: "Conversas sobre agricultura sustentável",
+      label: t('community.stats.messages'),
+      description: t('community.stats.messages.desc'),
     },
     {
       icon: Trophy,
       number: "50+",
-      label: "Eventos",
-      description: "Workshops e conferências sobre tokenização",
+      label: t('community.stats.events'),
+      description: t('community.stats.events.desc'),
     },
     {
       icon: Heart,
       number: "∞",
-      label: "Sustentabilidade",
-      description: "Promovendo agricultura responsável",
+      label: t('community.stats.sustainability'),
+      description: t('community.stats.sustainability.desc'),
     },
   ];
 
@@ -37,12 +39,11 @@ export const Community = () => {
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-4xl md:text-6xl font-semibold font-display">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
-              A Comunidade
+              {t('community.title')}
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Junte-se à família Pudgy Chicken. Um lugar onde a tecnologia encontra a agricultura, 
-            criando um futuro mais sustentável para todos!
+            {t('community.subtitle')}
           </p>
         </div>
 
@@ -68,35 +69,34 @@ export const Community = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h3 className="text-3xl font-semibold font-display">Inove, Participe e Cultive</h3>
+            <h3 className="text-3xl font-semibold font-display">{t('community.innovate')}</h3>
             <p className="text-muted-foreground text-lg">
-              A comunidade Pudgy Chickens é mais do que apenas holders de NFT. 
-              Somos uma família global unidos pela sustentabilidade, inovação agrícola e o poder da tecnologia blockchain.
+              {t('community.description')}
             </p>
             <ul className="space-y-3">
               <li className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span>Acesso exclusivo a workshops de agricultura</span>
+                <span>{t('community.features.workshops')}</span>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span>Participe de decisões da comunidade</span>
+                <span>{t('community.features.decisions')}</span>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span>Colabore em projetos sustentáveis</span>
+                <span>{t('community.features.projects')}</span>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span>Conecte-se com fazendeiros do mundo todo</span>
+                <span>{t('community.features.connect')}</span>
               </li>
             </ul>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-                Entrar no Discord
+                {t('community.cta.discord')}
               </Button>
               <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                Seguir no Twitter
+                {t('community.cta.twitter')}
               </Button>
             </div>
           </div>
@@ -105,9 +105,9 @@ export const Community = () => {
             <Card className="surface p-8 overflow-hidden">
               <CardContent className="p-0 space-y-6">
                 <div className="text-center">
-                  <h4 className="text-2xl font-bold mb-2">Pudgy Media</h4>
+                  <h4 className="text-2xl font-bold mb-2">{t('community.media.title')}</h4>
                   <p className="text-muted-foreground">
-                    Acompanhe as últimas novidades, inovações agrícolas e conteúdo exclusivo.
+                    {t('community.media.subtitle')}
                   </p>
                 </div>
                 
@@ -138,7 +138,7 @@ export const Community = () => {
                 </div>
 
                 <Button className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90">
-                  Ver Pudgy Media
+                  {t('community.media.view')}
                 </Button>
               </CardContent>
             </Card>

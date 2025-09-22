@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import farmLogo from "@/assets/futuristic_farm_logo_embedded.svg";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <header className="fixed top-0 w-full z-50 glass">
@@ -24,25 +27,26 @@ export const Header = () => {
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-6 text-sm uppercase tracking-wide">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
-            Home
+            {t('nav.home')}
           </Link>
           <a href="#collection" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
-            Coleção
+            {t('nav.collection')}
           </a>
           <a href="#shop" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
-            Loja
+            {t('nav.shop')}
           </a>
           <Link to="/battle" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
-            Batalha
+            {t('nav.battle')}
           </Link>
           <Link to="/farm" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
-            Farm
+            {t('nav.farm')}
           </Link>
           <a href="#community" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
-            Comunidade
+            {t('nav.community')}
           </a>
+          <LanguageSelector />
           <Button variant="default" size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-            Conectar Carteira
+            {t('nav.connect')}
           </Button>
         </nav>
 
@@ -64,26 +68,29 @@ export const Header = () => {
         <div className="md:hidden glass border-t border-border animate-slide-up">
           <nav className="container mx-auto px-4 py-4 space-y-4">
             <Link to="/" className="block text-foreground/90 hover:text-foreground transition-colors">
-              Home
+              {t('nav.home')}
             </Link>
             <a href="#collection" className="block text-foreground/90 hover:text-foreground transition-colors">
-              Coleção
+              {t('nav.collection')}
             </a>
             <a href="#shop" className="block text-foreground/90 hover:text-foreground transition-colors">
-              Loja
+              {t('nav.shop')}
             </a>
             <Link to="/battle" className="block text-foreground/90 hover:text-foreground transition-colors">
-              Batalha
+              {t('nav.battle')}
             </Link>
             <Link to="/farm" className="block text-foreground/90 hover:text-foreground transition-colors">
-              Farm
+              {t('nav.farm')}
             </Link>
             <a href="#community" className="block text-foreground/90 hover:text-foreground transition-colors">
-              Comunidade
+              {t('nav.community')}
             </a>
-            <Button variant="default" size="sm" className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90">
-              Conectar Carteira
-            </Button>
+            <div className="flex gap-2">
+              <LanguageSelector />
+              <Button variant="default" size="sm" className="flex-1 bg-gradient-hero text-primary-foreground hover:opacity-90">
+                {t('nav.connect')}
+              </Button>
+            </div>
           </nav>
         </div>
       )}

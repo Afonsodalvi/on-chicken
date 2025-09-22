@@ -1,21 +1,23 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import chickenA from "@/assets/4.png";
-import chickenB from "@/assets/6.png";
+import { useLanguage } from "@/contexts/LanguageContext";
+import chickenA from "@/assets/12.png";
+import chickenB from "@/assets/14.png";
 
 export const Collection = () => {
+  const { t } = useLanguage();
   const collections = [
     {
       name: "Pudgy Chickens",
-      description: "A coleção original de 10.000 galinhas únicas tokenizadas na blockchain.",
+      description: t('collection.original'),
       items: "10,000",
       floorPrice: "0.5 ETH",
       image: chickenA,
     },
     {
-      name: "Lil Chicks", 
-      description: "5.000 pintinhos de descendência premium. Pequenos mas promissores.",
+      name: "Lil Chicks",
+      description: t('collection.lil'),
       items: "5,000",
       floorPrice: "0.2 ETH",
       image: chickenB,
@@ -28,12 +30,11 @@ export const Collection = () => {
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-4xl md:text-6xl font-semibold font-display">
             <span className="bg-gradient-hero bg-clip-text text-transparent">
-              Nossas Coleções
+              {t('collection.title')}
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Bem-vindo ao mundo dos Pudgy Chickens, uma plataforma nascida na web3 que promove 
-            sustentabilidade, inovação agrícola e comunidade através da tokenização de galinhas.
+            {t('collection.subtitle')}
           </p>
         </div>
 
@@ -52,7 +53,7 @@ export const Collection = () => {
                   />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-primary text-primary-foreground">
-                      {collection.items} itens
+                      {collection.items} {t('collection.items')}
                     </Badge>
                   </div>
                 </div>
@@ -65,11 +66,11 @@ export const Collection = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm text-muted-foreground">Floor Price</div>
+                      <div className="text-sm text-muted-foreground">{t('collection.floor')}</div>
                       <div className="text-xl font-bold text-primary">{collection.floorPrice}</div>
                     </div>
                     <Button variant="outline" className="border-border hover:bg-secondary">
-                      Ver Coleção
+                      {t('collection.view')}
                     </Button>
                   </div>
                 </div>
@@ -80,7 +81,7 @@ export const Collection = () => {
 
         <div className="text-center">
           <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-            Explorar Todas as Coleções
+            {t('collection.explore')}
           </Button>
         </div>
       </div>

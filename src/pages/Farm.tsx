@@ -3,8 +3,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FarmCollection } from "@/components/FarmCollection";
 import { FarmTokenization } from "@/components/FarmTokenization";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const Farm = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<"create" | "tokenize">("create");
 
   return (
@@ -27,13 +29,11 @@ export const Farm = () => {
               </div>
               <h1 className="text-4xl md:text-6xl font-bold">
                 <span className="bg-gradient-hero bg-clip-text text-transparent">
-                  Pudgy Farms Protocol
+                  {t('farm.title')}
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                O primeiro protocolo de tokenização de RWAnimals (Real World Animals). 
-                Começamos com as <strong>Pudgy Chickens</strong> e agora tokenizamos todos os animais da fazenda. 
-                Transforme seus animais em NFTs únicos e contribua para a agricultura mundial!
+                {t('farm.subtitle')}
               </p>
             </div>
 
@@ -48,7 +48,7 @@ export const Farm = () => {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  Tokenizar Animais
+                  {t('farm.tokenize')}
                 </button>
                 <button
                   onClick={() => setActiveTab("tokenize")}
@@ -58,7 +58,7 @@ export const Farm = () => {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  Consultoria RWAnimals
+                  {t('farm.create')}
                 </button>
               </div>
             </div>

@@ -3,7 +3,19 @@ import { Header } from "@/components/Header";
 import { BattleArena } from "@/components/BattleArena";
 import { BattleLobby } from "@/components/BattleLobby";
 import { Footer } from "@/components/Footer";
-import chickenCollection from "@/assets/4.png";
+import { useLanguage } from "@/contexts/LanguageContext";
+import chicken12 from "@/assets/12.png";
+import chicken13 from "@/assets/13.png";
+import chicken14 from "@/assets/14.png";
+import chicken15 from "@/assets/15.png";
+import chicken16 from "@/assets/16.png";
+import chicken17 from "@/assets/17.png";
+import chicken18 from "@/assets/18.png";
+import chicken19 from "@/assets/19.png";
+import chicken20 from "@/assets/20.png";
+import chicken21 from "@/assets/21.png";
+import chicken22 from "@/assets/22.png";
+import chicken23 from "@/assets/23.png";
 
 interface NFT {
   id: number;
@@ -19,6 +31,7 @@ interface NFT {
 }
 
 const Battle = () => {
+  const { t } = useLanguage();
   const [currentView, setCurrentView] = useState<"lobby" | "battle">("lobby");
   const [currentBattleId, setCurrentBattleId] = useState<string | null>(null);
   const [isCreator, setIsCreator] = useState(false);
@@ -27,8 +40,8 @@ const Battle = () => {
   const userNFTs: NFT[] = [
     {
       id: 1,
-      name: "Golden Rooster",
-      image: chickenCollection,
+      name: "Pudgy Chicken #012",
+      image: chicken12,
       attack: 85,
       defense: 70,
       speed: 60,
@@ -39,8 +52,8 @@ const Battle = () => {
     },
     {
       id: 2,
-      name: "Fire Chicken",
-      image: chickenCollection,
+      name: "Pudgy Chicken #013",
+      image: chicken13,
       attack: 90,
       defense: 50,
       speed: 80,
@@ -51,26 +64,122 @@ const Battle = () => {
     },
     {
       id: 3,
-      name: "Ice Hen",
-      image: chickenCollection,
+      name: "Pudgy Chicken #014",
+      image: chicken14,
       attack: 60,
       defense: 90,
       speed: 40,
       health: 100,
       rarity: "rare",
-      collection: "Lil Chicks",
+      collection: "Pudgy Chickens",
       owner: "currentUser"
     },
     {
       id: 4,
-      name: "Thunder Bird",
-      image: chickenCollection,
+      name: "Pudgy Chicken #015",
+      image: chicken15,
       attack: 75,
       defense: 60,
       speed: 95,
       health: 100,
       rarity: "epic",
-      collection: "Lil Chicks",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 5,
+      name: "Pudgy Chicken #016",
+      image: chicken16,
+      attack: 80,
+      defense: 75,
+      speed: 70,
+      health: 100,
+      rarity: "rare",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 6,
+      name: "Pudgy Chicken #017",
+      image: chicken17,
+      attack: 95,
+      defense: 55,
+      speed: 85,
+      health: 100,
+      rarity: "legendary",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 7,
+      name: "Pudgy Chicken #018",
+      image: chicken18,
+      attack: 70,
+      defense: 85,
+      speed: 50,
+      health: 100,
+      rarity: "epic",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 8,
+      name: "Pudgy Chicken #019",
+      image: chicken19,
+      attack: 65,
+      defense: 80,
+      speed: 75,
+      health: 100,
+      rarity: "rare",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 9,
+      name: "Pudgy Chicken #020",
+      image: chicken20,
+      attack: 88,
+      defense: 65,
+      speed: 90,
+      health: 100,
+      rarity: "legendary",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 10,
+      name: "Pudgy Chicken #021",
+      image: chicken21,
+      attack: 72,
+      defense: 78,
+      speed: 65,
+      health: 100,
+      rarity: "epic",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 11,
+      name: "Pudgy Chicken #022",
+      image: chicken22,
+      attack: 82,
+      defense: 72,
+      speed: 80,
+      health: 100,
+      rarity: "rare",
+      collection: "Pudgy Chickens",
+      owner: "currentUser"
+    },
+    {
+      id: 12,
+      name: "Pudgy Chicken #023",
+      image: chicken23,
+      attack: 92,
+      defense: 68,
+      speed: 95,
+      health: 100,
+      rarity: "legendary",
+      collection: "Pudgy Chickens",
       owner: "currentUser"
     }
   ];
@@ -108,12 +217,11 @@ const Battle = () => {
             <div className="text-center mb-16 space-y-4">
               <h1 className="text-4xl md:text-6xl font-bold">
                 <span className="bg-gradient-hero bg-clip-text text-transparent">
-                  Arena de Batalha
+                  {t('battle.title')}
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Escolha seus NFTs favoritos e participe de batalhas épicas na arena. 
-                Crie uma batalha ou participe de uma existente!
+                {t('battle.subtitle')}
               </p>
             </div>
             
