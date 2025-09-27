@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from "react-router-dom";
 import chicken14 from "@/assets/14.png";
 import chicken15 from "@/assets/15.png";
 import chicken16 from "@/assets/16.png";
@@ -49,11 +50,18 @@ export const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
-                {t('hero.cta.primary')}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="lg" className="border-border hover:bg-secondary">
+              <Link to="/farm">
+                <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
+                  {t('hero.cta.primary')}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-border hover:bg-secondary"
+                onClick={() => window.open('https://youtube.com/watch?v=HHwmYjLl8S8', '_blank')}
+              >
                 <Play className="mr-2 h-5 w-5" />
                 {t('hero.cta.secondary')}
               </Button>
@@ -61,15 +69,15 @@ export const Hero = () => {
 
             <div className="flex items-center gap-8 text-sm">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">10,000</div>
+                <div className="text-2xl font-bold text-primary">🐔</div>
                 <div className="text-muted-foreground">{t('hero.stats.chickens')}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">25K+</div>
+                <div className="text-2xl font-bold text-primary">⚡</div>
                 <div className="text-muted-foreground">{t('hero.stats.tokenized')}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">50+</div>
+                <div className="text-2xl font-bold text-primary">🎓</div>
                 <div className="text-muted-foreground">{t('hero.stats.farms')}</div>
               </div>
             </div>
