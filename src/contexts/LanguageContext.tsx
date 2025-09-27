@@ -282,6 +282,21 @@ const translations = {
     'farm.region.southeast': 'Sudeste',
     'farm.region.south': 'Sul',
     
+    // Wallet
+    'wallet.connected': 'Conectado',
+    'wallet.network': 'Rede',
+    'wallet.balance': 'Saldo',
+    'wallet.manage': 'Gerenciar',
+    'wallet.explorer': 'Explorer',
+    'wallet.disconnect': 'Desconectar',
+    'wallet.copy': 'Copiar',
+    'wallet.copied': 'Copiado!',
+    'wallet.switch': 'Trocar Carteira',
+    'wallet.unsupported': 'Rede não suportada',
+    'wallet.error': 'Erro na carteira',
+    'wallet.connecting': 'Conectando...',
+    'wallet.reconnecting': 'Reconectando...',
+    
     // Common
     'common.loading': 'Carregando...',
     'common.error': 'Erro',
@@ -568,6 +583,21 @@ const translations = {
     'farm.region.centerwest': 'Center-West',
     'farm.region.southeast': 'Southeast',
     'farm.region.south': 'South',
+    
+    // Wallet
+    'wallet.connected': 'Connected',
+    'wallet.network': 'Network',
+    'wallet.balance': 'Balance',
+    'wallet.manage': 'Manage',
+    'wallet.explorer': 'Explorer',
+    'wallet.disconnect': 'Disconnect',
+    'wallet.copy': 'Copy',
+    'wallet.copied': 'Copied!',
+    'wallet.switch': 'Switch Wallet',
+    'wallet.unsupported': 'Unsupported Network',
+    'wallet.error': 'Wallet Error',
+    'wallet.connecting': 'Connecting...',
+    'wallet.reconnecting': 'Reconnecting...',
     
     // Common
     'common.loading': 'Loading...',

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import farmLogo from "@/assets/futuristic_farm_logo_embedded.svg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { ConnectWallet } from "@/components/ConnectWallet";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,10 +45,8 @@ export const Header = () => {
           <a href="#community" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all">
             {t('nav.community')}
           </a>
-          <LanguageSelector />
-          <Button variant="default" size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-            {t('nav.connect')}
-          </Button>
+                 <LanguageSelector />
+                 <ConnectWallet size="sm" />
         </nav>
 
         {/* Mobile Menu Button */}
@@ -85,12 +84,10 @@ export const Header = () => {
             <a href="#community" className="block text-foreground/90 hover:text-foreground transition-colors">
               {t('nav.community')}
             </a>
-            <div className="flex gap-2">
-              <LanguageSelector />
-              <Button variant="default" size="sm" className="flex-1 bg-gradient-hero text-primary-foreground hover:opacity-90">
-                {t('nav.connect')}
-              </Button>
-            </div>
+                   <div className="flex gap-2">
+                     <LanguageSelector />
+                     <ConnectWallet size="sm" className="flex-1" />
+                   </div>
           </nav>
         </div>
       )}
