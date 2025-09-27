@@ -140,3 +140,8 @@ export const FARM_TOKEN_ABI = [
   // TODO: Add Farm Token contract ABI
   ...ERC20_ABI,
 ] as const;
+
+export const EGG_COIN_ABI = [
+  // TODO: Add Egg Coin contract ABI
+  ...ERC20_ABI,
+] as const;
