@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Twitter, Instagram, Youtube, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import farmLogo from "@/assets/futuristic_farm_logo_embedded.svg";
+import omnesLogo from "@/assets/logo omnes.svg";
 
 export const Footer = () => {
   const { t } = useLanguage();
@@ -100,6 +101,42 @@ export const Footer = () => {
               <Button className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90">
                 {t('footer.newsletter.subscribe')}
               </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Projeto Omnes */}
+        <div className="border-t border-border pt-8 mb-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <img src={omnesLogo} alt="Omnes" className="w-12 h-12" />
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">{t('footer.omnes.developedBy')}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {t('footer.omnes.description')}
+                </p>
+                <a 
+                  href="https://omnes.dev" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+                >
+                  Visite omnes.dev →
+                </a>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-muted-foreground mb-2">
+                {t('footer.omnes.educational')}
+              </p>
+              <a 
+                href="https://youtube.com/watch?v=HHwmYjLl8S8" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+              >
+                Veja nosso galinheiro →
+              </a>
             </div>
           </div>
         </div>

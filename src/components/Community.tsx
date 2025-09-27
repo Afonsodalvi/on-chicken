@@ -9,25 +9,25 @@ export const Community = () => {
   const stats = [
     {
       icon: Users,
-      number: "25K+",
+      number: "🌱",
       label: t('community.stats.farmers'),
       description: t('community.stats.farmers.desc'),
     },
     {
       icon: MessageCircle,
-      number: "500K+",
+      number: "💬",
       label: t('community.stats.messages'),
       description: t('community.stats.messages.desc'),
     },
     {
       icon: Trophy,
-      number: "50+",
+      number: "🏆",
       label: t('community.stats.events'),
       description: t('community.stats.events.desc'),
     },
     {
       icon: Heart,
-      number: "∞",
+      number: "♾️",
       label: t('community.stats.sustainability'),
       description: t('community.stats.sustainability.desc'),
     },
@@ -121,8 +121,8 @@ export const Community = () => {
                       P
                     </div>
                     <div>
-                      <div className="font-semibold">Novo sistema de tokenização!</div>
-                      <div className="text-sm text-muted-foreground">Há 2 horas</div>
+                      <div className="font-semibold">{t('community.media.tokenization')}</div>
+                      <div className="text-sm text-muted-foreground">{t('community.media.hoursAgo')}</div>
                     </div>
                   </div>
                   
@@ -131,8 +131,8 @@ export const Community = () => {
                       L
                     </div>
                     <div>
-                      <div className="font-semibold">Workshop de agricultura sustentável</div>
-                      <div className="text-sm text-muted-foreground">Há 5 horas</div>
+                      <div className="font-semibold">{t('community.media.workshop')}</div>
+                      <div className="text-sm text-muted-foreground">{t('community.media.hoursAgo2')}</div>
                     </div>
                   </div>
                 </div>
