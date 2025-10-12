@@ -31,6 +31,9 @@ const translations = {
     'hero.stats.tokenized': 'Tokenização Real',
     'hero.stats.farms': 'Projeto Educacional',
     
+    // Detailed Description
+    'hero.detailed.description': 'A PudgyFarm representa uma revolução completa no ecossistema Web3 brasileiro, combinando tokenização de ativos reais, gamificação educacional e desenvolvimento sustentável da agricultura. Os holders terão benefícios exclusivos em todas as tokenizações futuras da PudgyFarm, incluindo produtos e animais reais e seus insumos, com a única restrição sendo a disponibilidade regional. Nossa plataforma é totalmente interativa, permitindo batalhas entre colecionáveis onde você pode vencer mesmo com ativos menos raros, baseado em histórico de vitórias e interação com o ecossistema. Quanto mais ativo e engajado você for, maior será sua reputação, proporcionando ainda mais benefícios e chances de vitória. Além das batalhas, você pode apostar EggCoin, nossa stablecoin atrelada ao valor real dos ovos. A PudgyFarm oferece um sistema de tokenização próprio, permitindo que qualquer pessoa digitalize seus animais reais sem conhecimento técnico de blockchain, participando de todo o ecossistema e seus benefícios. É um ecossistema completo: tokenização de ativos reais, colecionáveis com raridades e habilidades únicas, sistema de reputação, batalhas justas e moeda própria atrelada ao valor do ovo. Tudo isso apoiado por um curso educacional com o objetivo de formar mais desenvolvedores e impulsionar o crescimento do ecossistema Web3 no Brasil. Participe da whitelist e faça parte desta "Revolução dos Bichos Web3" focada em crescimento econômico e educacional.',
+    
     // Animated Section
     'gifs.title': 'GIFs da Coleção',
     'gifs.subtitle': 'Baixe e compartilhe os GIFs animados',
@@ -307,7 +310,7 @@ const translations = {
     
     // Whitelist
     'whitelist.title': 'Solicitar Acesso à Whitelist',
-    'whitelist.description': 'VAGAS LIMITADAS! Preencha o formulário abaixo para garantir sua vaga na whitelist do Pudgy Farms.',
+    'whitelist.description': 'VAGAS LIMITADAS! Preencha o formulário abaixo para garantir sua vaga na whitelist do Pudgy Chickens.',
     'whitelist.connectWalletFirst': 'Conecte sua carteira primeiro',
     'whitelist.nameRequired': 'Nome é obrigatório',
     'whitelist.submittedSuccessfully': 'Solicitação enviada com sucesso!',
@@ -338,7 +341,7 @@ const translations = {
     'whitelist.pending': 'Pendente',
     'whitelist.unknown': 'Desconhecido',
     'whitelist.benefits.title': 'Mint Gratuito + Curso Educacional',
-    'whitelist.benefits.description': 'Mint gratuito da sua galinha NFT real, acesso ao curso completo de desenvolvimento de smart contracts open-source e desconto em produtos educacionais da Omnes.',
+    'whitelist.benefits.description': 'Mint gratuito da sua galinha NFT real, desconto especial no curso completo de desenvolvimento de smart contracts open-source e desconto em produtos educacionais da Omnes.',
     'whitelist.process.title': 'Projeto Real + Open Source',
     'whitelist.process.description': 'Cada NFT representa uma galinha física em nosso galinheiro. Smart contracts totalmente open-source para aprendizado e desenvolvimento educacional.',
     'whitelist.community.title': 'Comunidade Premium',
@@ -349,7 +352,7 @@ const translations = {
     'whitelist.suggestedMessage.title': 'Mensagem Sugerida para Compartilhar',
     'whitelist.suggestedMessage.text': 'Use esta mensagem ao compartilhar o projeto nas suas redes sociais:',
     'whitelist.suggestedMessage.example': 'Vou participar da primeira tokenização de galinhas REAIS do mundo! 🐔 Cada NFT representa uma galinha física em nosso galinheiro. Projeto educacional com smart contracts open-source da Omnes. Vagas LIMITADAS para free mint! Veja nosso galinheiro: https://youtube.com/watch?v=HHwmYjLl8S8 🚀 #PudgyFarms #RealWorldAnimals #Tokenização #Omnes #OpenSource',
-    'whitelist.lgpd.consent': 'Concordo com o tratamento dos meus dados pessoais conforme a LGPD. Os dados serão utilizados estritamente para benefícios e envio de informações sobre cursos e produtos do ecossistema Pudgy Farms.',
+    'whitelist.lgpd.consent': 'Concordo com o tratamento dos meus dados pessoais conforme a LGPD. Os dados serão utilizados estritamente para benefícios e envio de informações sobre cursos e produtos do ecossistema Pudgy Chickens.',
     'whitelist.limitedSpots.title': 'VAGAS LIMITADAS',
     'whitelist.limitedSpots.description': 'Vagas limitadas para mint gratuito. Garante já sua vaga!',
     
@@ -388,6 +391,9 @@ const translations = {
     'hero.stats.chickens': 'Pudgy Chicken Collection',
     'hero.stats.tokenized': 'Real Tokenization',
     'hero.stats.farms': 'Educational Project',
+    
+    // Detailed Description
+    'hero.detailed.description': 'PudgyFarm represents a complete revolution in the Brazilian Web3 ecosystem, combining real asset tokenization, educational gamification and sustainable agricultural development.  Holders will have exclusive benefits in all future PudgyFarm tokenizations, including real products and animals and their inputs, with the only restriction being regional availability. Our platform is fully interactive, allowing battles between collectibles where you can win even with less rare assets, based on victory history and ecosystem interaction. The more active and engaged you are, the higher your reputation will be, providing even more benefits and chances of victory. In addition to battles, you can bet EggCoin, our stablecoin pegged to the real value of eggs. PudgyFarm offers its own tokenization system, allowing anyone to digitize their real animals without technical blockchain knowledge, participating in the entire ecosystem and its benefits. It\'s a complete ecosystem: real asset tokenization, collectibles with unique rarities and abilities, reputation system, fair battles and proprietary currency pegged to egg value. All of this supported by an educational course with the goal of training more developers and boosting the growth of the Web3 ecosystem in Brazil. Join the whitelist and be part of this "Web3 Animals Revolution" focused on economic and educational growth.',
     
     // Animated Section
     'gifs.title': 'Collection GIFs',
@@ -665,7 +671,7 @@ const translations = {
     
     // Whitelist
     'whitelist.title': 'Request Whitelist Access',
-    'whitelist.description': 'LIMITED SPOTS! Fill out the form below to secure your spot in the Pudgy Farms whitelist.',
+    'whitelist.description': 'LIMITED SPOTS! Fill out the form below to secure your spot in the Pudgy Chickens whitelist.',
     'whitelist.connectWalletFirst': 'Connect your wallet first',
     'whitelist.nameRequired': 'Name is required',
     'whitelist.submittedSuccessfully': 'Request submitted successfully!',
@@ -707,7 +713,7 @@ const translations = {
     'whitelist.suggestedMessage.title': 'Suggested Message to Share',
     'whitelist.suggestedMessage.text': 'Use this message when sharing the project on your social media:',
     'whitelist.suggestedMessage.example': 'I will participate in the world\'s first REAL chicken tokenization! 🐔 Each NFT represents a physical chicken in our farm. Educational project with open-source smart contracts by Omnes. LIMITED spots for free mint! See our farm: https://youtube.com/watch?v=HHwmYjLl8S8 🚀 #PudgyFarms #RealWorldAnimals #Tokenization #Omnes #OpenSource',
-    'whitelist.lgpd.consent': 'I agree to the processing of my personal data in accordance with LGPD. The data will be used strictly for benefits and sending information about courses and products from the Pudgy Farms ecosystem.',
+    'whitelist.lgpd.consent': 'I agree to the processing of my personal data in accordance with LGPD. The data will be used strictly for benefits and sending information about courses and products from the Pudgy Chickens ecosystem.',
     'whitelist.limitedSpots.title': 'LIMITED SPOTS',
     'whitelist.limitedSpots.description': 'Limited spots for free mint. Secure your spot now!',
     

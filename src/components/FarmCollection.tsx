@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Upload, MapPin, Leaf, Image, Hash, CheckCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { submitRWAnimalsCollection } from "@/services/supabase";
 
 interface CollectionFormData {
   name: string;
@@ -18,6 +19,9 @@ interface CollectionFormData {
   region: string;
   farmType: string;
   totalSupply: number;
+  ownerEmail: string;
+  ownerName: string;
+  farmName: string;
 }
 
 const farmTypes = [
@@ -44,7 +48,10 @@ export const FarmCollection = () => {
     imageUrl: "",
     region: "",
     farmType: "",
-    totalSupply: 1000
+    totalSupply: 1000,
+    ownerEmail: "",
+    ownerName: "",
+    farmName: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -54,7 +61,9 @@ export const FarmCollection = () => {
                   formData.description.length > 0 && 
                   formData.imageUrl.length > 0 && 
                   formData.region.length > 0 && 
-                  formData.farmType.length > 0;
+                  formData.farmType.length > 0 &&
+                  formData.ownerEmail.length > 0 &&
+                  formData.ownerEmail.includes("@");
     setIsValid(valid);
   };
 
@@ -69,25 +78,48 @@ export const FarmCollection = () => {
 
     setIsSubmitting(true);
     
-    // Simular criação da coleção
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast.success(t('farm.collection.success.title'), {
-      description: t('farm.collection.success.description')
-    });
-    
-    setIsSubmitting(false);
-    
-    // Reset form
-    setFormData({
-      name: "",
-      description: "",
-      imageUrl: "",
-      region: "",
-      farmType: "",
-      totalSupply: 1000
-    });
-    setIsValid(false);
+    try {
+      const result = await submitRWAnimalsCollection({
+        collection_name: formData.name,
+        description: formData.description,
+        images_link: formData.imageUrl,
+        region: formData.region,
+        farm_type: formData.farmType,
+        total_nfts: formData.totalSupply,
+        owner_email: formData.ownerEmail,
+        owner_name: formData.ownerName || undefined,
+        farm_name: formData.farmName || undefined
+      });
+      
+      if (result.success) {
+        toast.success("Coleção submetida com sucesso!", {
+          description: "Sua coleção de RWAnimals foi enviada para análise. Você receberá um email de confirmação em breve."
+        });
+        
+        // Reset form
+        setFormData({
+          name: "",
+          description: "",
+          imageUrl: "",
+          region: "",
+          farmType: "",
+          totalSupply: 1000,
+          ownerEmail: "",
+          ownerName: "",
+          farmName: ""
+        });
+        setIsValid(false);
+      } else {
+        toast.error("Erro ao submeter a coleção", {
+          description: result.error || "Tente novamente mais tarde"
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting collection:", error);
+      toast.error("Erro inesperado ao submeter a coleção");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const selectedFarmType = farmTypes.find(type => type.value === formData.farmType);
@@ -218,6 +250,48 @@ export const FarmCollection = () => {
                 </p>
               </div>
 
+              {/* Owner Information */}
+              <div className="space-y-4 pt-4 border-t border-border/50">
+                <h3 className="text-lg font-semibold text-foreground">{t('farm.collection.owner.title')}</h3>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="ownerEmail">{t('farm.collection.owner.email')} *</Label>
+                  <Input
+                    id="ownerEmail"
+                    type="email"
+                    placeholder={t('farm.collection.owner.email.placeholder')}
+                    value={formData.ownerEmail}
+                    onChange={(e) => handleInputChange("ownerEmail", e.target.value)}
+                    className="bg-background/50"
+                    required
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="ownerName">{t('farm.collection.owner.name')}</Label>
+                    <Input
+                      id="ownerName"
+                      placeholder={t('farm.collection.owner.name.placeholder')}
+                      value={formData.ownerName}
+                      onChange={(e) => handleInputChange("ownerName", e.target.value)}
+                      className="bg-background/50"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="farmName">{t('farm.collection.owner.farm')}</Label>
+                    <Input
+                      id="farmName"
+                      placeholder={t('farm.collection.owner.farm.placeholder')}
+                      value={formData.farmName}
+                      onChange={(e) => handleInputChange("farmName", e.target.value)}
+                      className="bg-background/50"
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Submit Button */}
               <Button
                 type="submit"
@@ -261,8 +335,8 @@ export const FarmCollection = () => {
                         alt="Collection preview" 
                         className="w-full h-full object-cover rounded-full"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling!.style.display = 'flex';
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          ((e.currentTarget as HTMLImageElement).nextElementSibling as HTMLElement).style.display = 'flex';
                         }}
                       />
                     ) : null}

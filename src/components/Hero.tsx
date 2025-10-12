@@ -49,9 +49,9 @@ export const Hero = () => {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/farm">
-                <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center sm:justify-start">
+              <Link to="/farm" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
                   {t('hero.cta.primary')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -59,7 +59,7 @@ export const Hero = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="border-border hover:bg-secondary"
+                className="w-full sm:w-auto border-border hover:bg-secondary"
                 onClick={() => window.open('https://youtube.com/watch?v=HHwmYjLl8S8', '_blank')}
               >
                 <Play className="mr-2 h-5 w-5" />
@@ -80,6 +80,18 @@ export const Hero = () => {
                 <div className="text-2xl font-bold text-primary">🎓</div>
                 <div className="text-muted-foreground">{t('hero.stats.farms')}</div>
               </div>
+            </div>
+
+            {/* Botão Saiba Mais alinhado com os outros elementos */}
+            <div className="flex justify-center sm:justify-start">
+              <Link to="/details">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-accent to-accent/80 text-accent-foreground hover:from-accent/90 hover:to-accent/70 transition-all shadow-lg hover:shadow-xl"
+                >
+                  {t('hero.cta.learnMore')}
+                </Button>
+              </Link>
             </div>
           </div>
 

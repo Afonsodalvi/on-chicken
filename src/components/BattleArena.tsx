@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Sword, Shield, Zap, Heart, Trophy, RotateCcw, Users, Clock } from "lucide-react";
+import { Sword, Shield, Zap, Heart, Trophy, RotateCcw, Users, Clock, Coins } from "lucide-react";
 import { useBattleContext } from "@/contexts/BattleContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import chicken12 from "@/assets/12.png";
@@ -54,7 +54,7 @@ interface BattleArenaProps {
 
 export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onLeaveBattle }: BattleArenaProps) => {
   const { t } = useLanguage();
-  const { getBattle, updateBattleStatus, startBattle: startBattleInContext, battles } = useBattleContext();
+  const { getBattle, updateBattleStatus, startBattle: startBattleInContext, battles, getTotalEggCoinBet } = useBattleContext();
   const [battleState, setBattleState] = useState<BattleState>({
     player1: null,
     player2: null,
@@ -218,7 +218,10 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
   // Atualizar estado quando a batalha muda no contexto
   useEffect(() => {
     if (battleId) {
+      console.log("BattleArena: Loading battle with ID:", battleId);
       const battle = getBattle(battleId);
+      console.log("BattleArena: Found battle:", battle);
+      
       if (battle) {
         setBattleState(prev => ({
           ...prev,
@@ -233,6 +236,9 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
             ? [`${battle.participant.nft.name} entrou na batalha! Ambos estão prontos.`]
             : prev.battleLog
         }));
+        console.log("BattleArena: Battle state updated");
+      } else {
+        console.warn("BattleArena: Battle not found with ID:", battleId);
       }
     }
   }, [battleId, battles]);
@@ -560,6 +566,37 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
           <BattleField />
         </div>
 
+        {/* EggCoin Bet Display */}
+        {battleState.battleId && (
+          <div className="mb-8">
+            <div className="max-w-2xl mx-auto">
+              <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-accent/10">
+                <CardContent className="p-6">
+                  <div className="text-center space-y-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <Coins className="h-6 w-6 text-primary" />
+                      <h3 className="text-xl font-bold">{t('battle.betting.arena.title')}</h3>
+                    </div>
+                    
+                    <div className="bg-primary/20 border border-primary/30 rounded-lg p-4">
+                      <div className="text-3xl font-bold text-primary mb-2">
+                        {getTotalEggCoinBet(battleState.battleId)} 🥚
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {t('battle.betting.arena.pot')}
+                      </div>
+                    </div>
+                    
+                    <div className="text-sm text-muted-foreground">
+                      {t('battle.betting.arena.winner')}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
+
 
 
         {/* Battle Controls */}
@@ -631,6 +668,24 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
                   <div className="text-lg text-yellow-100">
                     {t('battle.congratulations')}
                   </div>
+                  
+                  {/* EggCoin Rewards */}
+                  {battleState.battleId && getTotalEggCoinBet(battleState.battleId) > 0 && (
+                    <div className="bg-white/20 border border-white/30 rounded-lg p-4 mt-4">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <Coins className="h-6 w-6 text-yellow-200" />
+                        <span className="text-lg font-bold text-white">
+                          {t('battle.betting.rewards')}
+                        </span>
+                      </div>
+                      <div className="text-2xl font-bold text-yellow-200">
+                        +{getTotalEggCoinBet(battleState.battleId)} 🥚
+                      </div>
+                      <div className="text-sm text-yellow-100">
+                        {t('battle.betting.rewards.description')}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <Button

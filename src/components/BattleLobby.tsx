@@ -3,9 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Sword, Users, Clock, Trophy, Zap } from "lucide-react";
+import { Sword, Users, Clock, Trophy, Zap, Coins } from "lucide-react";
 import { useBattleContext } from "@/contexts/BattleContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { EggCoinBetSelector } from "@/components/EggCoinBetSelector";
 import chicken12 from "@/assets/12.png";
 
 interface NFT {
@@ -45,6 +46,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
   const { t } = useLanguage();
   const { battles, createBattle, joinBattle } = useBattleContext();
   const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
+  const [betAmount, setBetAmount] = useState<number | null>(null);
 
   // Filtrar batalhas disponíveis (aguardando participantes)
   const availableBattles = battles.filter(battle => 
@@ -100,17 +102,26 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
 
   const handleCreateBattle = () => {
     if (selectedNFT) {
-      const battleId = createBattle(currentUser, selectedNFT);
+      const battleId = createBattle(currentUser, selectedNFT, betAmount || undefined);
       onCreateBattle(battleId);
     }
   };
 
   const handleJoinBattle = (battleId: string) => {
     if (selectedNFT) {
-      const success = joinBattle(battleId, currentUser, selectedNFT);
+      console.log("Attempting to join battle:", battleId, "with NFT:", selectedNFT.name, "bet:", betAmount);
+      const success = joinBattle(battleId, currentUser, selectedNFT, betAmount || undefined);
+      console.log("Join battle success:", success);
       if (success) {
+        console.log("Calling onJoinBattle with ID:", battleId);
         onJoinBattle(battleId);
+      } else {
+        console.error("Failed to join battle");
+        // You could add a toast notification here
       }
+    } else {
+      console.warn("No NFT selected for joining battle");
+      // You could add a toast notification here
     }
   };
 
@@ -218,14 +229,43 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
           </div>
         </div>
 
+        {/* EggCoin Bet Display */}
+        {battle.eggCoinBet && (
+          <div className="mb-4 p-3 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Coins className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">{t('battle.betting.pot')}</span>
+              </div>
+              <div className="text-lg font-bold text-primary">
+                {battle.eggCoinBet.amount} 🥚
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {t('battle.betting.creator')}: {battle.eggCoinBet.creatorBet} 🥚
+              {battle.eggCoinBet.participantBet > 0 && (
+                <span> | {t('battle.betting.participant')}: {battle.eggCoinBet.participantBet} 🥚</span>
+              )}
+            </div>
+          </div>
+        )}
+
         {battle.status === "waiting" && !battle.participant && (
           <Button 
-            onClick={() => battle.creator === currentUser ? onJoinBattle(battle.id) : handleJoinBattle(battle.id)}
+            onClick={() => {
+              if (battle.creator === currentUser) {
+                console.log("Creator joining own battle:", battle.id);
+                onJoinBattle(battle.id);
+              } else {
+                console.log("Participant joining battle:", battle.id);
+                handleJoinBattle(battle.id);
+              }
+            }}
             disabled={!selectedNFT && battle.creator !== currentUser}
-            className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90"
+            className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90 transition-all duration-300 hover:scale-105"
           >
             <Sword className="mr-2 h-4 w-4" />
-            {t('battle.join')}
+            {battle.creator === currentUser ? t('battle.enter') : t('battle.join')}
           </Button>
         )}
 
@@ -274,15 +314,28 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
         </div>
 
         {selectedNFT && (
-          <div className="text-center">
-            <Button
-              onClick={handleCreateBattle}
-              size="lg"
-              className="bg-gradient-hero text-primary-foreground hover:opacity-90"
-            >
-              <Sword className="mr-2 h-5 w-5" />
-              {t('battle.create')}
-            </Button>
+          <div className="space-y-6">
+            {/* EggCoin Bet Selector */}
+            <EggCoinBetSelector
+              onBetChange={setBetAmount}
+              maxAmount={1000}
+            />
+            
+            <div className="text-center">
+              <Button
+                onClick={handleCreateBattle}
+                size="lg"
+                className="bg-gradient-hero text-primary-foreground hover:opacity-90"
+              >
+                <Sword className="mr-2 h-5 w-5" />
+                {t('battle.create')}
+                {betAmount && (
+                  <span className="ml-2 text-sm">
+                    (+{betAmount} 🥚)
+                  </span>
+                )}
+              </Button>
+            </div>
           </div>
         )}
       </div>
