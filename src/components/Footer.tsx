@@ -1,17 +1,51 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Twitter, Instagram, Youtube, MessageCircle } from "lucide-react";
+import { Twitter, Instagram, Youtube, MessageCircle, CheckCircle, AlertCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { subscribeToDevelopmentCourse } from "@/services/supabase";
+import { toast } from "sonner";
 import farmLogo from "@/assets/futuristic_farm_logo_embedded.svg";
 import omnesLogo from "@/assets/logo omnes.svg";
 
 export const Footer = () => {
   const { t } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes("@")) {
+      toast.error("Por favor, insira um email válido");
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const result = await subscribeToDevelopmentCourse(email);
+      
+      if (result.success) {
+        setIsSubscribed(true);
+        setEmail("");
+        toast.success("Inscrição realizada com sucesso! Você receberá informações sobre o curso.");
+      } else {
+        toast.error(result.error || "Erro ao se inscrever no curso");
+      }
+    } catch (error) {
+      console.error("Error subscribing:", error);
+      toast.error("Erro inesperado ao se inscrever no curso");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <footer className="relative surface">
       <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <img src={farmLogo} alt="Pudgy Farms" className="w-8 h-8" />
@@ -63,45 +97,44 @@ export const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">{t('footer.shop')}</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Brinquedos
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Roupas
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Acessórios
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Arte Digital
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
             <h3 className="text-lg font-semibold tracking-wide uppercase text-foreground/90">{t('footer.newsletter')}</h3>
             <p className="text-muted-foreground text-sm">
               {t('footer.newsletter.subtitle')}
             </p>
-            <div className="space-y-2">
-              <Input
-                placeholder={t('footer.newsletter.email')}
-                className="bg-secondary/40 border-border focus-visible:ring-primary"
-              />
-              <Button className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90">
-                {t('footer.newsletter.subscribe')}
-              </Button>
-            </div>
+            
+            {isSubscribed ? (
+              <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                <span className="text-sm text-green-600 font-medium">
+                  Inscrito com sucesso!
+                </span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="space-y-2">
+                <Input
+                  type="email"
+                  placeholder={t('footer.newsletter.email')}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-secondary/40 border-border focus-visible:ring-primary"
+                  required
+                />
+                <Button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Inscrivendo...
+                    </div>
+                  ) : (
+                    t('footer.newsletter.subscribe')
+                  )}
+                </Button>
+              </form>
+            )}
           </div>
         </div>
 

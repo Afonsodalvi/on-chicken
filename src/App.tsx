@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Battle from "./pages/Battle";
 import { Farm } from "./pages/Farm";
 import Whitelist from "./pages/Whitelist";
+import Details from "./pages/Details";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
                 <Route path="/battle" element={<Battle />} />
                 <Route path="/farm" element={<Farm />} />
                 <Route path="/whitelist" element={<Whitelist />} />
+                <Route path="/details" element={<Details />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

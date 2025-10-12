@@ -35,6 +35,7 @@ const Battle = () => {
   const [currentView, setCurrentView] = useState<"lobby" | "battle">("lobby");
   const [currentBattleId, setCurrentBattleId] = useState<string | null>(null);
   const [isCreator, setIsCreator] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Mock NFTs do usuário atual
   const userNFTs: NFT[] = [
@@ -185,15 +186,33 @@ const Battle = () => {
   ];
 
   const handleCreateBattle = (battleId: string) => {
+    console.log("Creating battle with ID:", battleId);
+    setIsLoading(true);
     setCurrentBattleId(battleId);
     setIsCreator(true);
-    setCurrentView("battle");
+    
+    // Small delay to show loading state
+    setTimeout(() => {
+      setCurrentView("battle");
+      setIsLoading(false);
+      // Scroll to top when entering battle
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 300);
   };
 
   const handleJoinBattle = (battleId: string) => {
+    console.log("Joining battle with ID:", battleId);
+    setIsLoading(true);
     setCurrentBattleId(battleId);
     setIsCreator(false);
-    setCurrentView("battle");
+    
+    // Small delay to show loading state
+    setTimeout(() => {
+      setCurrentView("battle");
+      setIsLoading(false);
+      // Scroll to top when entering battle
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 300);
   };
 
   const handleBattleComplete = (winner: NFT) => {
@@ -211,7 +230,15 @@ const Battle = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {currentView === "lobby" ? (
+      {isLoading ? (
+        <section className="py-20 bg-secondary/20 min-h-screen flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <h2 className="text-xl font-semibold">Entrando na Arena...</h2>
+            <p className="text-muted-foreground">Preparando sua batalha</p>
+          </div>
+        </section>
+      ) : currentView === "lobby" ? (
         <section className="py-20 bg-secondary/20 min-h-screen">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16 space-y-4">

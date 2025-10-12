@@ -24,16 +24,22 @@ interface BattleRoom {
     user: string;
     nft: NFT;
   };
+  eggCoinBet?: {
+    amount: number;
+    creatorBet: number;
+    participantBet: number;
+  };
 }
 
 interface BattleContextType {
   battles: BattleRoom[];
-  createBattle: (creator: string, nft: NFT) => string;
-  joinBattle: (battleId: string, participant: string, nft: NFT) => boolean;
+  createBattle: (creator: string, nft: NFT, eggCoinBet?: number) => string;
+  joinBattle: (battleId: string, participant: string, nft: NFT, eggCoinBet?: number) => boolean;
   startBattle: (battleId: string) => boolean;
   updateBattleStatus: (battleId: string, status: "waiting" | "active" | "finished", winner?: NFT) => void;
   getBattle: (battleId: string) => BattleRoom | undefined;
   removeBattle: (battleId: string) => void;
+  getTotalEggCoinBet: (battleId: string) => number;
 }
 
 const BattleContext = createContext<BattleContextType | undefined>(undefined);
@@ -74,21 +80,28 @@ export const BattleProvider = ({ children }: BattleProviderProps) => {
     localStorage.setItem("pudgy-chicken-battles", JSON.stringify(battles));
   }, [battles]);
 
-  const createBattle = (creator: string, nft: NFT): string => {
+  const createBattle = (creator: string, nft: NFT, eggCoinBet?: number): string => {
     const battleId = `battle-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newBattle: BattleRoom = {
       id: battleId,
       creator,
       creatorNFT: nft,
       status: "waiting",
-      createdAt: new Date()
+      createdAt: new Date(),
+      ...(eggCoinBet && {
+        eggCoinBet: {
+          amount: eggCoinBet,
+          creatorBet: eggCoinBet,
+          participantBet: 0
+        }
+      })
     };
 
     setBattles(prev => [...prev, newBattle]);
     return battleId;
   };
 
-  const joinBattle = (battleId: string, participant: string, nft: NFT): boolean => {
+  const joinBattle = (battleId: string, participant: string, nft: NFT, eggCoinBet?: number): boolean => {
     let success = false;
     
     setBattles(prev => prev.map(battle => {
@@ -97,12 +110,19 @@ export const BattleProvider = ({ children }: BattleProviderProps) => {
         return {
           ...battle,
           participant: { user: participant, nft },
-          status: "waiting" // Mantém como waiting até alguém iniciar
+          status: "waiting", // Mantém como waiting até alguém iniciar
+          ...(battle.eggCoinBet && eggCoinBet && {
+            eggCoinBet: {
+              ...battle.eggCoinBet,
+              participantBet: eggCoinBet,
+              amount: battle.eggCoinBet.creatorBet + eggCoinBet
+            }
+          })
         };
       }
       return battle;
     }));
-
+    
     return success;
   };
 
@@ -144,6 +164,11 @@ export const BattleProvider = ({ children }: BattleProviderProps) => {
     setBattles(prev => prev.filter(battle => battle.id !== battleId));
   };
 
+  const getTotalEggCoinBet = (battleId: string): number => {
+    const battle = getBattle(battleId);
+    return battle?.eggCoinBet?.amount || 0;
+  };
+
   const value: BattleContextType = {
     battles,
     createBattle,
@@ -151,7 +176,8 @@ export const BattleProvider = ({ children }: BattleProviderProps) => {
     startBattle,
     updateBattleStatus,
     getBattle,
-    removeBattle
+    removeBattle,
+    getTotalEggCoinBet
   };
 
   return (

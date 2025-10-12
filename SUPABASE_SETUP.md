@@ -1,79 +1,62 @@
-# 🔧 Configuração do Supabase - Guia Completo
+# Configuração do Supabase
 
-## 📋 Passo a Passo para Configurar o Supabase
+## Variáveis de Ambiente Necessárias
 
-### 1. Acesse o Supabase Dashboard
-- Vá para: https://supabase.com/dashboard
-- Faça login na sua conta
-
-### 2. Selecione seu Projeto
-- Clique no projeto: `nwtqiiktatowmolwglfl`
-- Ou crie um novo projeto se necessário
-
-### 3. Obtenha as Chaves API
-- Vá para **Settings** → **API**
-- Copie a **URL** do projeto
-- Copie a **anon public** key
-
-### 4. Configure o arquivo .env
-Crie um arquivo `.env` na raiz do projeto com:
+Crie um arquivo `.env.local` na raiz do projeto com as seguintes variáveis:
 
 ```env
-# Database Configuration
-VITE_SUPABASE_URL=https://nwtqiiktatowmolwglfl.supabase.co
-VITE_SUPABASE_ANON_KEY=SUA_CHAVE_ANON_AQUI
-DATABASE_URL=postgresql://postgres:OmnesOnChicken06@db.nwtqiiktatowmolwglfl.supabase.co:5432/postgres
+VITE_SUPABASE_URL=your-supabase-project-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-### 5. Execute o SQL no Supabase
-- Vá para **SQL Editor** no Supabase
-- Cole o conteúdo do arquivo `supabase_final_schema.sql`
-- Execute o comando
+## Exemplo de Configuração
 
-### 6. Configure as Políticas de Segurança
-- Vá para **SQL Editor** no Supabase
-- Cole o conteúdo do arquivo `supabase_policies.sql`
-- Execute o comando
-- Isso resolve o erro 406 (Not Acceptable)
-
-### 7. Verifique as Permissões
-- Vá para **Authentication** → **Policies**
-- Certifique-se de que a tabela `wallet_whitelist` tem as políticas corretas
-
-## 🔑 Onde Encontrar a Chave API
-
-1. **Dashboard Supabase** → **Seu Projeto**
-2. **Settings** (ícone de engrenagem)
-3. **API** (no menu lateral)
-4. **Project URL**: `https://nwtqiiktatowmolwglfl.supabase.co`
-5. **anon public**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` (copie esta chave)
-
-## 🚨 Solução de Problemas
-
-### Erro: "Invalid API key"
-- ✅ Verifique se a chave está correta
-- ✅ Certifique-se de que é a chave **anon public**
-- ✅ Não use a chave **service_role** no frontend
-
-### Erro: "Cannot read properties of undefined"
-- ✅ Já corrigido no código
-- ✅ Adicionado optional chaining (`?.`)
-
-### Erro 406 (Not Acceptable)
-- ✅ Execute o arquivo `supabase_policies.sql`
-- ✅ Configure as políticas RLS (Row Level Security)
-- ✅ Permita leitura e escrita para usuários anônimos
-
-### Erro de CORS
-- ✅ Configure as URLs permitidas no Supabase
-- ✅ Adicione `http://localhost:8081` nas configurações
-
-## 📊 Verificação Final
-
-Execute esta query no SQL Editor para testar:
-
-```sql
-SELECT * FROM wallet_whitelist LIMIT 5;
+```env
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-Se retornar dados (mesmo que vazio), está funcionando!
+## Como Obter as Chaves
+
+1. Acesse o painel do Supabase
+2. Vá em Settings > API
+3. Copie a URL do projeto
+4. Copie a chave anon/public
+
+## Tabelas Criadas
+
+### 1. development_course_subscriptions
+- Armazena emails de inscrição no curso de desenvolvimento
+- Campos: id, email, subscribed_at, is_active, created_at
+
+### 2. rwanimals_collections
+- Armazena informações das coleções de RWAnimals
+- Campos: id, collection_name, description, images_link, region, farm_type, total_nfts, owner_email, owner_name, farm_name, status, created_at
+
+## Funcionalidades Implementadas
+
+### Development Course
+- ✅ Formulário de inscrição no Footer
+- ✅ Validação de email
+- ✅ Feedback visual de sucesso
+- ✅ Inserção no banco de dados
+
+### RWAnimals
+- ✅ Página completa de submissão
+- ✅ Formulário com validação
+- ✅ Seleção de região e tipo de fazenda
+- ✅ Upload de imagens via link
+- ✅ Inserção no banco de dados
+- ✅ Página de confirmação
+
+## Rotas Adicionadas
+
+- `/rwanimals` - Página de submissão de RWAnimals
+- Link no Header para acesso fácil
+
+## Próximos Passos
+
+1. Configure as variáveis de ambiente
+2. Teste as funcionalidades
+3. Verifique os dados no painel do Supabase
+4. Implemente notificações por email (opcional)
