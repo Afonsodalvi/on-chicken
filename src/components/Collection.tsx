@@ -12,14 +12,14 @@ export const Collection = () => {
       name: "Pudgy Chickens",
       description: t('collection.original'),
       items: "10,000",
-      floorPrice: "0.5 ETH",
+      floorPrice: "$100",
       image: chickenA,
     },
     {
       name: "Lil Chicks",
       description: t('collection.lil'),
       items: "5,000",
-      floorPrice: "0.2 ETH",
+      floorPrice: "$50",
       image: chickenB,
     },
   ];
