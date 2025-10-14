@@ -137,6 +137,99 @@ All colors MUST be HSL.
   }
 }
 
+/* Simple feather fall animation for hero background */
+@keyframes feather-fall {
+  0% {
+    transform: translateY(-20vh) translateX(0px) rotate(0deg);
+    opacity: 0;
+  }
+  10% { 
+    opacity: 0.3;
+    transform: translateY(-10vh) translateX(2px) rotate(10deg);
+  }
+  50% {
+    transform: translateY(50vh) translateX(-2px) rotate(90deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(110vh) translateX(0px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+.feather-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.feather {
+  position: absolute;
+  width: 14px;
+  height: 28px;
+  background: 
+    radial-gradient(ellipse at 35% 25%, rgba(255,255,255,0.95), rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 80%),
+    linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2), rgba(255,255,255,0.05), rgba(255,255,255,0));
+  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+  backdrop-filter: blur(1px);
+  opacity: 0.3;
+  transform: rotate(-10deg);
+  animation: feather-fall linear infinite;
+}
+
+.feather::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 2px;
+  width: 0.8px;
+  height: 90%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  transform: translateX(-50%);
+  border-radius: 0.4px;
+}
+
+.feather::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1.2px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  transform: translateX(-50%);
+  border-radius: 0.6px;
+}
+
+/* Feather variations for natural look */
+.feather:nth-child(odd) {
+  width: 12px;
+  height: 24px;
+  opacity: 0.25;
+}
+
+.feather:nth-child(3n) {
+  width: 16px;
+  height: 32px;
+  opacity: 0.35;
+}
+
+.feather:nth-child(5n) {
+  width: 10px;
+  height: 20px;
+  opacity: 0.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feather { animation: none; display: none; }
+}
+
+@media (max-width: 768px) {
+  .feather-container { display: none; }
+}
+
+
 /* Wizard Chicken Animations */
 @keyframes wizard-float {
   0%, 100% { 

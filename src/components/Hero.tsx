@@ -34,7 +34,22 @@ export const Hero = () => {
   }, [chickenImages.length]);
 
   return (
-    <section id="home" className="min-h-screen pt-16 flex items-center justify-center overflow-hidden">
+    <section id="home" className="min-h-screen pt-16 flex items-center justify-center overflow-hidden relative">
+      {/* Simple falling feathers */}
+      <div aria-hidden className="feather-container">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={i}
+            className="feather"
+            style={{
+              left: `${(i * 12 + 5) % 100}%`,
+              animationDuration: `${12 + (i % 4) * 2}s`,
+              animationDelay: `${i * 1.2}s`,
+              transform: `rotate(${(-15 + i * 8)}deg)`
+            }}
+          />
+        ))}
+      </div>
       <div className="container mx-auto px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 animate-slide-up">
