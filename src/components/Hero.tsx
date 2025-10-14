@@ -82,14 +82,22 @@ export const Hero = () => {
               </div>
             </div>
 
-            {/* Botão Saiba Mais alinhado com os outros elementos */}
-            <div className="flex justify-center sm:justify-start">
+            {/* Botões Saiba Mais e Whitelist alinhados */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
               <Link to="/details">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-to-r from-accent to-accent/80 text-accent-foreground hover:from-accent/90 hover:to-accent/70 transition-all shadow-lg hover:shadow-xl"
+                  className="w-full sm:w-auto bg-gradient-to-r from-accent to-accent/80 text-accent-foreground hover:from-accent/90 hover:to-accent/70 transition-all shadow-lg hover:shadow-xl"
                 >
                   {t('hero.cta.learnMore')}
+                </Button>
+              </Link>
+              <Link to="/whitelist">
+                <Button 
+                  size="lg" 
+                  className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl border-0"
+                >
+                  🎯 {t('hero.cta.whitelist')}
                 </Button>
               </Link>
             </div>

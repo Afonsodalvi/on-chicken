@@ -24,10 +24,11 @@ const translations = {
     
     // Hero
     'hero.title': 'Pudgy Farms',
-    'hero.subtitle': 'Começamos com a coleção Pudgy Chickens - a primeira tokenização de galinhas REAIS do mundo! Cada NFT representa uma galinha física em nosso galinheiro. Projeto educacional com smart contracts open-source desenvolvido pela Omnes.',
+    'hero.subtitle': 'Começamos com a coleção Pudgy Chickens - a primeira tokenização de galinhas REAIS do mundo! Cada NFT representa uma galinha física em nosso galinheiro. Projeto totalmente open-source.',
     'hero.cta.primary': 'Tokenizar seu RWAnimal',
     'hero.cta.secondary': 'Ver Nosso Galinheiro',
     'hero.cta.learnMore': 'Saiba Mais',
+    'hero.cta.whitelist': 'Entrar na Whitelist',
     'hero.stats.chickens': 'Coleção Pudgy Chickens',
     'hero.stats.tokenized': 'Tokenização Real',
     'hero.stats.farms': 'Projeto Educacional',
@@ -92,6 +93,7 @@ const translations = {
     'shop.buy': 'Comprar',
     'shop.viewAll': 'Ver Todos os Ativos',
     'shop.reviews': 'avaliações',
+    'shop.reputation': 'Reputação',
     
     // Community
     'community.title': 'A Comunidade',
@@ -467,10 +469,11 @@ const translations = {
     
     // Hero
     'hero.title': 'Pudgy Farms',
-    'hero.subtitle': 'We started with the Pudgy Chickens collection - the world\'s first REAL chicken tokenization! Each NFT represents a physical chicken in our farm. Educational project with open-source smart contracts developed by Omnes.',
+    'hero.subtitle': 'We started with the Pudgy Chickens collection - the world\'s first REAL chicken tokenization! Each NFT represents a physical chicken in our farm. Fully open-source project.',
     'hero.cta.primary': 'Tokenize your RWAnimal',
     'hero.cta.secondary': 'View Our Farm',
     'hero.cta.learnMore': 'Discover More',
+    'hero.cta.whitelist': 'Join Whitelist',
     'hero.stats.chickens': 'Pudgy Chickens Collection',
     'hero.stats.tokenized': 'Real Tokenization',
     'hero.stats.farms': 'Educational Project',
@@ -535,6 +538,7 @@ const translations = {
     'shop.buy': 'Buy',
     'shop.viewAll': 'View All Assets',
     'shop.reviews': 'reviews',
+    'shop.reputation': 'Reputation',
     
     // Community
     'community.title': 'The Community',
