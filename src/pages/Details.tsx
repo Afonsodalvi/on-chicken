@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Target, Users, Zap, Coins, Shield, BookOpen, Globe, User, Award, Code } from "lucide-react";
@@ -214,10 +215,10 @@ const Details = () => {
                       {/* Childhood Photo */}
                       <div className="relative group">
                         <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 p-2">
-                          <img 
-                            src="/src/assets/eu.jpeg" 
+                          <OptimizedImage 
+                            src="/images/afonso-childhood.jpg" 
                             alt="Afonso criança com galinha"
-                            className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full font-medium">
@@ -228,10 +229,10 @@ const Details = () => {
                       {/* Adult Photo */}
                       <div className="relative group">
                         <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-accent/20 to-primary/20 p-2">
-                          <img 
-                            src="/src/assets/eu2.jpeg" 
+                          <OptimizedImage 
+                            src="/images/afonso-today.jpg" 
                             alt="Afonso adulto com galinha"
-                            className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground text-xs px-2 py-1 rounded-full font-medium">
