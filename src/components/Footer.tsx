@@ -55,17 +55,50 @@ export const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex space-x-4">
-              <Button variant="ghost" size="sm" className="p-2 hover:bg-white/5">
-                <Twitter className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="p-2 hover:bg-white/5"
+                asChild
+              >
+                <a 
+                  href="https://www.instagram.com/afonsod.eth/?hl=en" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm" className="p-2 hover:bg-white/5">
-                <Instagram className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="p-2 hover:bg-white/5"
+                asChild
+              >
+                <a 
+                  href="https://www.linkedin.com/in/afonso-dalvi-711635112/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm" className="p-2 hover:bg-white/5">
-                <Youtube className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="sm" className="p-2 hover:bg-white/5">
-                <MessageCircle className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="p-2 hover:bg-white/5"
+                asChild
+              >
+                <a 
+                  href="https://www.youtube.com/@OmnesTech" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="h-5 w-5" />
+                </a>
               </Button>
             </div>
           </div>

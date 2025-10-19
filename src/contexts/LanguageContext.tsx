@@ -64,6 +64,14 @@ const translations = {
     'details.cta.whitelist': 'Participar da Whitelist',
     'details.cta.explore': 'Explorar Projeto',
     
+    // Creator Section
+    'details.creator.title': 'Sobre o Criador',
+    'details.creator.subtitle': 'Conheça a história por trás do primeiro galinheiro tokenizado',
+    'details.creator.name': 'Afonso Dalvi',
+    'details.creator.role': 'Criador do Primeiro Galinheiro Tokenizado',
+    'details.creator.experience': '7+ anos de experiência em tecnologia',
+    'details.creator.description': 'Afonso é o criador do Pudgy Farm, desde pequeno sempre gostou de animais e quando cresceu se apaixonou por tecnologia. Com mais de 7 anos de experiência na área, decidiu juntar essas duas paixões com o objetivo de ajudar o agronegócio mundial e o crescimento do Web3 através de um projeto open-source e desenvolvimento de cursos educacionais.',
+    
     // Vision Section
     'details.vision.title': 'Nossa Visão',
     'details.vision.ecosystem.title': 'Ecossistema Completo',
@@ -112,8 +120,7 @@ const translations = {
     'community.features.decisions': 'Participe de decisões da comunidade',
     'community.features.projects': 'Colabore em projetos sustentáveis',
     'community.features.connect': 'Conecte-se com fazendeiros do mundo todo',
-    'community.cta.discord': 'Entrar no Discord',
-    'community.cta.twitter': 'Seguir no Twitter',
+    'community.cta.twitter': 'Seguir no X',
     'community.media.title': 'Pudgy Media',
     'community.media.subtitle': 'Acompanhe as últimas novidades, inovações agrícolas e conteúdo exclusivo.',
     'community.media.view': 'Ver Pudgy Media',
@@ -148,7 +155,7 @@ const translations = {
     'footer.collections': 'Coleções',
     'footer.shop': 'Loja',
     'footer.newsletter': 'Curso de Desenvolvimento',
-    'footer.newsletter.subtitle': 'Inscreva-se para receber informações sobre o curso de desenvolvimento blockchain e benefícios exclusivos.',
+    'footer.newsletter.subtitle': 'Inscreva-se para receber informações sobre o PudgyFarms, curso de desenvolvimento blockchain, novidades do projeto e benefícios exclusivos.',
     'footer.newsletter.email': 'Seu email',
     'footer.newsletter.subscribe': 'Inscrever-se',
     'footer.copyright': '© 2024 Pudgy Chickens. Todos os direitos reservados.',
@@ -509,6 +516,14 @@ const translations = {
     'details.cta.whitelist': 'Join Whitelist',
     'details.cta.explore': 'Explore Project',
     
+    // Creator Section
+    'details.creator.title': 'About the Creator',
+    'details.creator.subtitle': 'Meet the story behind the first tokenized chicken coop',
+    'details.creator.name': 'Afonso Dalvi',
+    'details.creator.role': 'Creator of the First Tokenized Chicken Coop',
+    'details.creator.experience': '7+ years of technology experience',
+    'details.creator.description': 'Afonso is the creator of Pudgy Farm, since childhood he has always loved animals and when he grew up he fell in love with technology. With more than 7 years of experience in the field, he decided to combine these two passions with the goal of helping global agribusiness and Web3 growth through an open-source project and educational course development.',
+    
     // Vision Section
     'details.vision.title': 'Our Vision',
     'details.vision.ecosystem.title': 'Complete Ecosystem',
@@ -557,8 +572,7 @@ const translations = {
     'community.features.decisions': 'Participate in community decisions',
     'community.features.projects': 'Collaborate on sustainable projects',
     'community.features.connect': 'Connect with farmers from around the world',
-    'community.cta.discord': 'Join Discord',
-    'community.cta.twitter': 'Follow on Twitter',
+    'community.cta.twitter': 'Follow on X',
     'community.media.title': 'Pudgy Media',
     'community.media.subtitle': 'Follow the latest news, agricultural innovations and exclusive content.',
     'community.media.view': 'View Pudgy Media',
@@ -593,7 +607,7 @@ const translations = {
     'footer.collections': 'Collections',
     'footer.shop': 'Shop',
     'footer.newsletter': 'Development Course',
-    'footer.newsletter.subtitle': 'Subscribe to receive information about the blockchain development course and exclusive benefits.',
+    'footer.newsletter.subtitle': 'Subscribe to receive information about PudgyFarms, blockchain development course, project updates and exclusive benefits.',
     'footer.newsletter.email': 'Your email',
     'footer.newsletter.subscribe': 'Subscribe',
     'footer.copyright': '© 2024 Pudgy Chickens. All rights reserved.',

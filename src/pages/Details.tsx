@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Target, Users, Zap, Coins, Shield, BookOpen, Globe } from "lucide-react";
+import { ArrowLeft, Target, Users, Zap, Coins, Shield, BookOpen, Globe, User, Award, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Details = () => {
@@ -186,7 +186,120 @@ const Details = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Creator Section */}
+      <section className="py-16 bg-gradient-to-b from-transparent to-primary/5">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">
+                <span className="bg-gradient-hero bg-clip-text text-transparent">
+                  {t('details.creator.title')}
+                </span>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('details.creator.subtitle')}
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-card/60 to-card/40 backdrop-blur-sm border border-border/50 rounded-3xl p-8 md:p-12 shadow-2xl">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                {/* Photos Section */}
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Childhood Photo */}
+                      <div className="relative group">
+                        <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 p-2">
+                          <img 
+                            src="/src/assets/eu.jpeg" 
+                            alt="Afonso criança com galinha"
+                            className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full font-medium">
+                          Infância
+                        </div>
+                      </div>
+
+                      {/* Adult Photo */}
+                      <div className="relative group">
+                        <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-accent/20 to-primary/20 p-2">
+                          <img 
+                            src="/src/assets/eu2.jpeg" 
+                            alt="Afonso adulto com galinha"
+                            className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground text-xs px-2 py-1 rounded-full font-medium">
+                          Hoje
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content Section */}
+                <div className="space-y-6">
+                  <div className="text-center lg:text-left">
+                    <h3 className="text-2xl md:text-3xl font-bold mb-2">
+                      <span className="bg-gradient-hero bg-clip-text text-transparent">
+                        {t('details.creator.name')}
+                      </span>
+                    </h3>
+                    <p className="text-lg text-primary font-semibold mb-4">
+                      {t('details.creator.role')}
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <User className="h-5 w-5 text-primary" />
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        {t('details.creator.experience')}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Award className="h-5 w-5 text-accent" />
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        Pioneiro em Tokenização de Animais
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Code className="h-5 w-5 text-primary" />
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        Desenvolvedor Full-Stack & Blockchain
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/20 rounded-2xl p-6">
+                    <p className="text-muted-foreground leading-relaxed text-sm">
+                      {t('details.creator.description')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
             <div className="bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-2xl p-8">
               <h3 className="text-2xl font-bold mb-4">{t('details.cta.title')}</h3>
               <p className="text-lg text-muted-foreground mb-6">
