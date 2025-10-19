@@ -17,6 +17,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const handleError = () => {
+    console.log('Image failed to load:', src);
     setImageError(true);
     setIsLoading(false);
   };

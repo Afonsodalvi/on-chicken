@@ -215,10 +215,14 @@ const Details = () => {
                       {/* Childhood Photo */}
                       <div className="relative group">
                         <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 p-2">
-                          <OptimizedImage 
+                          <img 
                             src="/images/afonso-childhood.jpg" 
                             alt="Afonso criança com galinha"
-                            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              console.log('Childhood image failed, trying fallback');
+                              (e.target as HTMLImageElement).src = '/src/assets/eu.jpeg';
+                            }}
                           />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full font-medium">
@@ -229,10 +233,14 @@ const Details = () => {
                       {/* Adult Photo */}
                       <div className="relative group">
                         <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-accent/20 to-primary/20 p-2">
-                          <OptimizedImage 
+                          <img 
                             src="/images/afonso-today.jpg" 
                             alt="Afonso adulto com galinha"
-                            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              console.log('Today image failed, trying fallback');
+                              (e.target as HTMLImageElement).src = '/src/assets/eu2.jpeg';
+                            }}
                           />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground text-xs px-2 py-1 rounded-full font-medium">
