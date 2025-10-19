@@ -71,6 +71,8 @@ const translations = {
     'details.creator.role': 'Criador do Primeiro Galinheiro Tokenizado',
     'details.creator.experience': '7+ anos de experiência em tecnologia',
     'details.creator.description': 'Afonso é o criador do Pudgy Farm, desde pequeno sempre gostou de animais e quando cresceu se apaixonou por tecnologia. Com mais de 7 anos de experiência na área, decidiu juntar essas duas paixões com o objetivo de ajudar o agronegócio mundial e o crescimento do Web3 através de um projeto open-source e desenvolvimento de cursos educacionais.',
+    'details.creator.childhood': 'Infância',
+    'details.creator.today': 'Hoje',
     
     // Vision Section
     'details.vision.title': 'Nossa Visão',
@@ -523,6 +525,8 @@ const translations = {
     'details.creator.role': 'Creator of the First Tokenized Chicken Coop',
     'details.creator.experience': '7+ years of technology experience',
     'details.creator.description': 'Afonso is the creator of Pudgy Farm, since childhood he has always loved animals and when he grew up he fell in love with technology. With more than 7 years of experience in the field, he decided to combine these two passions with the goal of helping global agribusiness and Web3 growth through an open-source project and educational course development.',
+    'details.creator.childhood': 'Childhood',
+    'details.creator.today': 'Today',
     
     // Vision Section
     'details.vision.title': 'Our Vision',
