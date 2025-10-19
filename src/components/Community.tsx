@@ -91,12 +91,24 @@ export const Community = () => {
                 <span>{t('community.features.connect')}</span>
               </li>
             </ul>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-                {t('community.cta.discord')}
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                {t('community.cta.twitter')}
+            <div className="flex justify-start">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl border-0 font-semibold px-8 py-3"
+                asChild
+              >
+                <a 
+                  href="https://x.com/PudgyFarms" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Follow on X"
+                  className="flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.548 11.142H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  {t('community.cta.twitter')}
+                </a>
               </Button>
             </div>
           </div>
