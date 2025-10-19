@@ -1,0 +1,6 @@
+# Force Vercel to rebuild everything
+node_modules
+.next
+.cache
+dist
+build
