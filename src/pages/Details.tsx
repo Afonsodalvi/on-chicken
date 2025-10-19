@@ -221,7 +221,7 @@ const Details = () => {
                           />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full font-medium">
-                          Infância
+                          {t('details.creator.childhood')}
                         </div>
                       </div>
 
@@ -235,7 +235,7 @@ const Details = () => {
                           />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground text-xs px-2 py-1 rounded-full font-medium">
-                          Hoje
+                          {t('details.creator.today')}
                         </div>
                       </div>
                     </div>
