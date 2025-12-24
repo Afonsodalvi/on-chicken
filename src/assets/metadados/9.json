@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #9 — Rock & Golden Egg",
+  "description": "Leather jacket, guitar on the back, and a golden egg in hand. This rockstar chicken knows how to rock the stage while holding onto the most precious treasure — a legendary golden egg that shines like a spotlight.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/9.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/9",
+  "background_color": "C9792B",
+  "attributes": [
+    { "trait_type": "Role", "value": "Rockstar" },
+    { "trait_type": "Eyewear", "value": "Sunglasses" },
+    { "trait_type": "Outfit", "value": "Leather Jacket" },
+    { "trait_type": "Back Item", "value": "Guitar" },
+    { "trait_type": "Hand Item", "value": "Golden Egg" },
+    { "trait_type": "Vibe", "value": "Cool" },
+    { "trait_type": "Background", "value": "Sunset Orange" }
+  ]
+}
+

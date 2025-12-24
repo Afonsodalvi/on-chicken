@@ -1,0 +1,16 @@
+{
+  "name": "PudgyFarms Chicken #2 — Crimson Ronin",
+  "description": "An elegant silhouette with a crimson tie and a blade on its back. This ronin chicken walks a solitary path, combining sophistication with deadly precision in a world where honor meets action.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/2.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/2",
+  "background_color": "D33A37",
+  "attributes": [
+    { "trait_type": "Role", "value": "Ronin Agent" },
+    { "trait_type": "Style", "value": "Silhouette" },
+    { "trait_type": "Outfit", "value": "Black Suit" },
+    { "trait_type": "Accessory", "value": "Red Tie" },
+    { "trait_type": "Weapon", "value": "Katana" },
+    { "trait_type": "Vibe", "value": "Silent" },
+    { "trait_type": "Background", "value": "Crimson Flat" }
+  ]
+}

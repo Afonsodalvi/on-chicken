@@ -18,7 +18,7 @@ const translations = {
     'nav.shop': 'Loja',
     'nav.battle': 'Batalha',
     'nav.farm': 'Farm',
-    'nav.whitelist': 'Whitelist',
+    'nav.whitelist': 'Mint',
     'nav.community': 'Comunidade',
     'nav.connect': 'Conectar Carteira',
     
@@ -28,7 +28,7 @@ const translations = {
     'hero.cta.primary': 'Tokenizar seu RWAnimal',
     'hero.cta.secondary': 'Ver Nosso Galinheiro',
     'hero.cta.learnMore': 'Saiba Mais',
-    'hero.cta.whitelist': 'Entrar na Whitelist',
+    'hero.cta.mint': 'Mint seu PudgyChicken',
     'hero.stats.chickens': 'Coleção Pudgy Chickens',
     'hero.stats.tokenized': 'Tokenização Real',
     'hero.stats.farms': 'Projeto Educacional',
@@ -61,7 +61,7 @@ const translations = {
     'details.ecosystem.education.description': 'Curso educacional focado em formar desenvolvedores e impulsionar o crescimento do ecossistema Web3 no Brasil.',
     'details.cta.title': 'Faça Parte da Revolução',
     'details.cta.description': 'Junte-se à primeira plataforma de tokenização de animais reais do mundo e seja parte do futuro do agronegócio.',
-    'details.cta.whitelist': 'Participar da Whitelist',
+    'details.cta.mint': 'Mint seu PudgyChicken',
     'details.cta.explore': 'Explorar Projeto',
     
     // Creator Section
@@ -472,7 +472,7 @@ const translations = {
     'nav.shop': 'Shop',
     'nav.battle': 'Battle',
     'nav.farm': 'Farm',
-    'nav.whitelist': 'Whitelist',
+    'nav.whitelist': 'Mint',
     'nav.community': 'Community',
     'nav.connect': 'Connect Wallet',
     
@@ -482,7 +482,7 @@ const translations = {
     'hero.cta.primary': 'Tokenize your RWAnimal',
     'hero.cta.secondary': 'View Our Farm',
     'hero.cta.learnMore': 'Discover More',
-    'hero.cta.whitelist': 'Join Whitelist',
+    'hero.cta.mint': 'Mint your PudgyChicken',
     'hero.stats.chickens': 'Pudgy Chickens Collection',
     'hero.stats.tokenized': 'Real Tokenization',
     'hero.stats.farms': 'Educational Project',
@@ -515,7 +515,7 @@ const translations = {
     'details.ecosystem.education.description': 'Educational course focused on training developers and boosting the growth of the Web3 ecosystem in Brazil.',
     'details.cta.title': 'Join the Revolution',
     'details.cta.description': 'Join the world\'s first real animal tokenization platform and be part of the future of agribusiness.',
-    'details.cta.whitelist': 'Join Whitelist',
+    'details.cta.mint': 'Mint your PudgyChicken',
     'details.cta.explore': 'Explore Project',
     
     // Creator Section

@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #4 — Star Wizard",
+  "description": "A celestial wizard wielding a luminous staff with golden eyes that see beyond the veil. This mystical chicken channels the power of the stars, weaving spells that bridge the gap between worlds.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/4.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/4",
+  "background_color": "0B1A3A",
+  "attributes": [
+    { "trait_type": "Role", "value": "Wizard" },
+    { "trait_type": "Headwear", "value": "Star Hat" },
+    { "trait_type": "Outfit", "value": "Wizard Robe" },
+    { "trait_type": "Prop", "value": "Glowing Staff" },
+    { "trait_type": "Eyes", "value": "Golden Glow" },
+    { "trait_type": "Theme", "value": "Magic" },
+    { "trait_type": "Background", "value": "Night Sky" }
+  ]
+}
+

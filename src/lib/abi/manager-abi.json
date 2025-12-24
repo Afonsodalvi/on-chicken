@@ -1,0 +1,805 @@
+[
+    {
+        "type": "constructor",
+        "inputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "addTrustedBeaconAdmin",
+        "inputs": [
+            {
+                "name": "admin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "createMatchById",
+        "inputs": [
+            {
+                "name": "id",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "player",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "battleType",
+                "type": "uint8",
+                "internalType": "uint8"
+            },
+            {
+                "name": "betAmount",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "paymentType",
+                "type": "uint8",
+                "internalType": "uint8"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "deployImplAndSetBeacon",
+        "inputs": [
+            {
+                "name": "implementation",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "beaconAdmin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "deployPDC",
+        "inputs": [
+            {
+                "name": "adminPudgyChicken",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "baseURI",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "eggCoin",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "salt",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "newCollection",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "deployPDCPaying",
+        "inputs": [
+            {
+                "name": "adminPudgyChicken",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "baseURI",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "eggCoin",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "salt",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "paymentType",
+                "type": "uint8",
+                "internalType": "uint8"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "newCollection",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "getBeacon",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getBeaconImplementation",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getDeploymentPriceETH",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getDeploymentPriceUSDC",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getPudgyChicken",
+        "inputs": [
+            {
+                "name": "id",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getPudgyChickenByContract",
+        "inputs": [
+            {
+                "name": "collection",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "initialize",
+        "inputs": [
+            {
+                "name": "owner_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "joinMatchById",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "id",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "lockBeaconOwnership",
+        "inputs": [],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "pudgyChickenBeacon",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "removeTrustedBeaconAdmin",
+        "inputs": [
+            {
+                "name": "admin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setAdminManagerFarm",
+        "inputs": [
+            {
+                "name": "newAdmin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setBeacon",
+        "inputs": [
+            {
+                "name": "implementation",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setBeaconWithAdmin",
+        "inputs": [
+            {
+                "name": "implementation",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "beaconAdmin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setFightContract",
+        "inputs": [
+            {
+                "name": "fight_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setPrice",
+        "inputs": [
+            {
+                "name": "price",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setPriceFeeds",
+        "inputs": [
+            {
+                "name": "usdcPriceFeed",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "brlPriceFeed",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "ethPriceFeed",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "usdtPriceFeed",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setTokenAddresses",
+        "inputs": [
+            {
+                "name": "usdcAddress",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "usdtAddress",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "transferBeaconOwnership",
+        "inputs": [
+            {
+                "name": "newAdmin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "event",
+        "name": "AdminManagerFarmChanged",
+        "inputs": [
+            {
+                "name": "newAdmin",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "BeaconInitialized",
+        "inputs": [
+            {
+                "name": "beacon",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "implementation",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "admin",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "BeaconOwnershipLocked",
+        "inputs": [],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "BeaconOwnershipTransferred",
+        "inputs": [
+            {
+                "name": "newAdmin",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "BeaconUpgraded",
+        "inputs": [
+            {
+                "name": "implementation",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "FightContractSet",
+        "inputs": [
+            {
+                "name": "fightContract",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "Initialized",
+        "inputs": [
+            {
+                "name": "version",
+                "type": "uint64",
+                "indexed": false,
+                "internalType": "uint64"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "PriceFeedsSet",
+        "inputs": [
+            {
+                "name": "usdcPriceFeed",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "brlPriceFeed",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "ethPriceFeed",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "usdtPriceFeed",
+                "type": "address",
+                "indexed": false,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "PriceSet",
+        "inputs": [
+            {
+                "name": "price",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "PudgyChickenDeployed",
+        "inputs": [
+            {
+                "name": "id",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "proxy",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "baseURI",
+                "type": "string",
+                "indexed": false,
+                "internalType": "string"
+            },
+            {
+                "name": "eggCoin",
+                "type": "address",
+                "indexed": false,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "PudgyChickenDeployedWithPayment",
+        "inputs": [
+            {
+                "name": "id",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "collection",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "baseURI",
+                "type": "string",
+                "indexed": false,
+                "internalType": "string"
+            },
+            {
+                "name": "eggCoin",
+                "type": "address",
+                "indexed": false,
+                "internalType": "address"
+            },
+            {
+                "name": "paymentType",
+                "type": "uint8",
+                "indexed": false,
+                "internalType": "uint8"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TokenAddressesSet",
+        "inputs": [
+            {
+                "name": "usdcAddress",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "usdtAddress",
+                "type": "address",
+                "indexed": false,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TrustedBeaconAdminAdded",
+        "inputs": [
+            {
+                "name": "admin",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TrustedBeaconAdminRemoved",
+        "inputs": [
+            {
+                "name": "admin",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "error",
+        "name": "BeaconNotSet",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "BeaconNotSet",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "BeaconOwnershipLockedError",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "BeaconOwnershipLockedError",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "CollectionNotFound",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "CollectionNotFound",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "FightNotSet",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InsufficientPayment",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InvalidAddress",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InvalidInitialization",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InvalidPaymentType",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "NotAdmin",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "NotInitializing",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "PudgyChickenNotFound",
+        "inputs": [
+            {
+                "name": "collection",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "ReentrancyGuardReentrantCall",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "UntrustedBeaconAdmin",
+        "inputs": [
+            {
+                "name": "admin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "UntrustedBeaconAdmin",
+        "inputs": [
+            {
+                "name": "admin",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    }
+]

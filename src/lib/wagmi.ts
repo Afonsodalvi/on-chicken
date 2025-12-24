@@ -1,16 +1,17 @@
 import { createConfig, http } from "wagmi";
-import { mainnet, polygon, base, sepolia } from "wagmi/chains";
+import { mainnet, polygon, base, sepolia, baseSepolia } from "wagmi/chains";
 import { getDefaultConfig } from "@rabby-wallet/rabbykit";
 
 // Environment variables para configuração das chains
 const walletConnectProjectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || "";
 
-// Chains que suportaremos - simplificado para evitar erros
+// Chains que suportaremos - incluindo Base Sepolia para testnet
 const chains = [
   mainnet,
   polygon, 
   base,
-  sepolia
+  sepolia,
+  baseSepolia, // Base Sepolia Testnet (Chain ID: 84532)
 ] as const;
 
 // Configuração das RPCs - usando RPCs públicas confiáveis
@@ -24,6 +25,7 @@ export const wagmiConfig = createConfig(
       [polygon.id]: http("https://polygon-rpc.com"),
       [base.id]: http("https://mainnet.base.org"),
       [sepolia.id]: http("https://rpc.sepolia.org"),
+      [baseSepolia.id]: http("https://sepolia.base.org"),
     },
   })
 );

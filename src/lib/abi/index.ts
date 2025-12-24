@@ -1,7 +1,8 @@
 // ABI exports for smart contracts
-// TODO: Import real ABIs after contract deployment
+import managerAbi from "./manager-abi.json";
+import pudgyChickenAbi from "./pudgychicken-abi.json";
 
-// ERC-20 ABI (for USDC and Farm Token)
+// ERC-20 ABI (for USDC, USDT, and EggCoin)
 export const ERC20_ABI = [
   {
     type: "function",
@@ -63,47 +64,38 @@ export const ERC20_ABI = [
   },
 ] as const;
 
-// ERC-721 ABI (for NFTs)
-export const ERC721_ABI = [
+// ERC-1155 ABI (for PudgyChicken NFTs - it's an ERC1155 contract)
+export const ERC1155_ABI = [
   {
     type: "function",
     name: "balanceOf",
     stateMutability: "view",
-    inputs: [{ name: "owner", type: "address" }],
+    inputs: [
+      { name: "account", type: "address" },
+      { name: "id", type: "uint256" },
+    ],
     outputs: [{ name: "", type: "uint256" }],
   },
   {
     type: "function",
-    name: "ownerOf",
+    name: "balanceOfBatch",
     stateMutability: "view",
-    inputs: [{ name: "tokenId", type: "uint256" }],
-    outputs: [{ name: "", type: "address" }],
+    inputs: [
+      { name: "accounts", type: "address[]" },
+      { name: "ids", type: "uint256[]" },
+    ],
+    outputs: [{ name: "", type: "uint256[]" }],
   },
   {
     type: "function",
-    name: "tokenURI",
-    stateMutability: "view",
-    inputs: [{ name: "tokenId", type: "uint256" }],
-    outputs: [{ name: "", type: "string" }],
-  },
-  {
-    type: "function",
-    name: "transferFrom",
+    name: "safeTransferFrom",
     stateMutability: "nonpayable",
     inputs: [
       { name: "from", type: "address" },
       { name: "to", type: "address" },
-      { name: "tokenId", type: "uint256" },
-    ],
-    outputs: [],
-  },
-  {
-    type: "function",
-    name: "approve",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "to", type: "address" },
-      { name: "tokenId", type: "uint256" },
+      { name: "id", type: "uint256" },
+      { name: "value", type: "uint256" },
+      { name: "data", type: "bytes" },
     ],
     outputs: [],
   },
@@ -117,31 +109,34 @@ export const ERC721_ABI = [
     ],
     outputs: [],
   },
+  {
+    type: "function",
+    name: "isApprovedForAll",
+    stateMutability: "view",
+    inputs: [
+      { name: "account", type: "address" },
+      { name: "operator", type: "address" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "uri",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ name: "", type: "string" }],
+  },
 ] as const;
 
-// Placeholder ABIs for our custom contracts
-// TODO: Replace with real ABIs after deployment
+// Real ABIs from deployed contracts
+export const CHICKEN_MANAGER_FARM_ABI = managerAbi;
+export const PUDGY_CHICKEN_ABI = pudgyChickenAbi;
 
-export const PUDGY_CHICKENS_ABI = [
-  // TODO: Add Pudgy Chickens contract ABI
-  ...ERC721_ABI,
-] as const;
+// Type exports for better TypeScript support
+export type ChickenManagerFarmABI = typeof CHICKEN_MANAGER_FARM_ABI;
+export type PudgyChickenABI = typeof PUDGY_CHICKEN_ABI;
 
-export const RW_ANIMALS_ABI = [
-  // TODO: Add RWAnimals tokenization contract ABI
-  ...ERC721_ABI,
-] as const;
-
-export const BATTLE_ARENA_ABI = [
-  // TODO: Add Battle Arena contract ABI
-] as const;
-
-export const FARM_TOKEN_ABI = [
-  // TODO: Add Farm Token contract ABI
-  ...ERC20_ABI,
-] as const;
-
-export const EGG_COIN_ABI = [
-  // TODO: Add Egg Coin contract ABI
-  ...ERC20_ABI,
-] as const;
+// Legacy exports for backward compatibility
+export const PUDGY_CHICKENS_ABI = PUDGY_CHICKEN_ABI;
+export const BATTLE_ARENA_ABI = [] as const; // TODO: Add Fight contract ABI when available
+export const EGG_COIN_ABI = ERC20_ABI; // EggCoin is an ERC-20 token

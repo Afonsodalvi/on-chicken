@@ -3,22 +3,22 @@ import { ArrowRight, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
-import chicken14 from "@/assets/14.png";
-import chicken15 from "@/assets/15.png";
-import chicken16 from "@/assets/16.png";
-import chicken17 from "@/assets/17.png";
-import chicken18 from "@/assets/18.png";
-import chicken19 from "@/assets/19.png";
-import chicken20 from "@/assets/20.png";
-import chicken21 from "@/assets/21.png";
-import chicken22 from "@/assets/22.png";
-import chicken23 from "@/assets/23.png";
+import chicken1 from "@/assets/1.png";
+import chicken2 from "@/assets/2.png";
+import chicken3 from "@/assets/3.png";
+import chicken4 from "@/assets/4.png";
+import chicken5 from "@/assets/5.png";
+import chicken6 from "@/assets/6.png";
+import chicken7 from "@/assets/7.png";
+import chicken8 from "@/assets/8.png";
+import chicken9 from "@/assets/9.png";
+import chicken10 from "@/assets/10.png";
 
 export const Hero = () => {
   const { t } = useLanguage();
   const chickenImages = [
-    chicken14, chicken15, chicken16, chicken17, chicken18,
-    chicken19, chicken20, chicken21, chicken22, chicken23
+    chicken1, chicken2, chicken3, chicken4, chicken5,
+    chicken6, chicken7, chicken8, chicken9, chicken10
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -97,7 +97,7 @@ export const Hero = () => {
               </div>
             </div>
 
-            {/* Botões Saiba Mais e Whitelist alinhados */}
+            {/* Botões Saiba Mais e Mint alinhados */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
               <Link to="/details">
                 <Button 
@@ -112,7 +112,7 @@ export const Hero = () => {
                   size="lg" 
                   className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl border-0"
                 >
-                  🎯 {t('hero.cta.whitelist')}
+                  🐔 {t('hero.cta.mint')}
                 </Button>
               </Link>
             </div>

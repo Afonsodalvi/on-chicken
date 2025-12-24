@@ -196,7 +196,7 @@ export const Footer = () => {
                 {t('footer.omnes.educational')}
               </p>
               <a 
-                href="https://youtube.com/watch?v=HHwmYjLl8S8" 
+                href="https://br.cointelegraph.com/news/brazilian-tokenizes-chicken-coop-and-pays-holders-with-the-sale-of-eggs-and-chickens" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
