@@ -7,9 +7,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export const EggCoinSection = () => {
   const { t } = useLanguage();
 
-  const handleBuyEggCoin = () => {
-    // TODO: Implement EggCoin purchase logic
-    console.log("Buy EggCoin clicked");
+  const handleGetPudgyEggs = () => {
+    // TODO: Implement PudgyEggs acquisition logic
+    console.log("Get PudgyEggs clicked");
   };
 
   return (
@@ -19,7 +19,7 @@ export const EggCoinSection = () => {
           {/* Header */}
           <div className="mb-12">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-primary/20">
-              <Coins className="w-4 h-4" />
+              <span className="text-lg">🥚</span>
               {t('eggcoin.badge')}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -93,11 +93,11 @@ export const EggCoinSection = () => {
             
             <div className="mt-8 flex justify-center">
               <Button 
-                onClick={handleBuyEggCoin}
+                onClick={handleGetPudgyEggs}
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3"
               >
-                <Coins className="w-5 h-5 mr-2" />
+                <span className="text-xl mr-2">🥚</span>
                 {t('eggcoin.cta.buy')}
               </Button>
             </div>

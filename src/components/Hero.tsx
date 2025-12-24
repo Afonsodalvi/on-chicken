@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Info, GraduationCap, Target, Gift } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import chicken1 from "@/assets/1.png";
 import chicken2 from "@/assets/2.png";
 import chicken3 from "@/assets/3.png";
@@ -59,9 +67,38 @@ export const Hero = () => {
                   {t('hero.title')}
                 </span>
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-                {t('hero.subtitle')}
-              </p>
+              <div className="flex items-start gap-2">
+                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl flex-1">
+                  {t('hero.subtitle')}
+                </p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full hover:bg-muted shrink-0 mt-1"
+                      aria-label={t('hero.info.title')}
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>{t('hero.info.title')}</DialogTitle>
+                      <DialogDescription className="pt-4 space-y-4">
+                        <p className="text-base leading-relaxed">
+                          {t('hero.info.description')}
+                        </p>
+                        <div className="mt-4 p-4 bg-muted rounded-lg border border-border">
+                          <p className="text-sm font-medium text-foreground">
+                            {t('hero.info.disclaimer')}
+                          </p>
+                        </div>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center sm:justify-start">
@@ -94,6 +131,37 @@ export const Hero = () => {
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">🎓</div>
                 <div className="text-muted-foreground">{t('hero.stats.farms')}</div>
+              </div>
+            </div>
+
+            {/* Seção Educacional Destacada */}
+            <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 border border-primary/20 rounded-2xl p-6 space-y-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-gradient-hero rounded-lg">
+                  <GraduationCap className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">{t('hero.education.title')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('hero.education.subtitle')}</p>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {t('hero.education.description')}
+              </p>
+              <div className="p-3 bg-muted/50 border border-border/50 rounded-lg">
+                <p className="text-xs leading-relaxed text-foreground font-medium">
+                  {t('hero.education.disclaimer')}
+                </p>
+              </div>
+              <div className="flex items-center gap-4 pt-2 border-t border-border/50">
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">{t('hero.education.goal')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Gift className="h-4 w-4 text-accent" />
+                  <span className="text-sm font-medium">{t('hero.education.benefits')}</span>
+                </div>
               </div>
             </div>
 

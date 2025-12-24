@@ -147,7 +147,7 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
       } else {
         // Mint com pagamento
         // Para ETH, precisamos enviar o valor junto com a transação
-        // Para outros tokens (USDC, USDT, EggCoin), o valor será 0 pois o contrato fará a transferência do token
+        // Para outros tokens (USDC, USDT, PudgyEggs), o valor será 0 pois o contrato fará a transferência do token
         const value = paymentType === PaymentType.ETH ? undefined : 0n;
         
         writeContract({
@@ -175,7 +175,7 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
       case PaymentType.USDT:
         return "USDT";
       case PaymentType.EGG_COIN:
-        return "EggCoin";
+        return "PudgyEggs";
       default:
         return "Desconhecido";
     }
@@ -385,8 +385,8 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
                   </SelectItem>
                   <SelectItem value={PaymentType.EGG_COIN.toString()}>
                     <div className="flex items-center gap-2">
-                      <Coins className="h-4 w-4" />
-                      EggCoin
+                      <span className="text-lg">🥚</span>
+                      PudgyEggs
                     </div>
                   </SelectItem>
                 </SelectContent>

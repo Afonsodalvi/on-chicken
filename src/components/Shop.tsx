@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, ShieldCheck } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { MintModal } from "@/components/MintModal";
 
@@ -154,25 +154,6 @@ export const Shop = () => {
     }
   };
 
-  const getReputationScore = (rarity: string) => {
-    switch (rarity) {
-      case "Comum":
-        return 100;
-      case "Raro":
-        return 200;
-      case "Épico":
-        return 300;
-      case "Lendário":
-        return 400;
-      case "Mítico":
-        return 500;
-      case "Legendário":
-        return 600;
-      default:
-        return 100;
-    }
-  };
-
   return (
     <section id="shop" className="py-20">
       <div className="container mx-auto px-4">
@@ -238,11 +219,6 @@ export const Shop = () => {
                 <div className="p-6 space-y-4">
                   <div>
                     <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">{t('shop.reputation')}</span>
-                      <span className="text-xs text-muted-foreground">{getReputationScore(product.rarity)} pts</span>
-                    </div>
                   </div>
                   
                   <div className="flex items-center justify-between">

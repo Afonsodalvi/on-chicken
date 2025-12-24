@@ -4,6 +4,16 @@ import { BattleArena } from "@/components/BattleArena";
 import { BattleLobby } from "@/components/BattleLobby";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Info, Zap, Shield, Heart, Sparkles, Egg } from "lucide-react";
 import chicken1 from "@/assets/1.png";
 import chicken2 from "@/assets/2.png";
 import chicken3 from "@/assets/3.png";
@@ -34,6 +44,7 @@ const Battle = () => {
   const [currentBattleId, setCurrentBattleId] = useState<string | null>(null);
   const [isCreator, setIsCreator] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
 
   // Mock NFTs do usuário atual (usando apenas tokens 1-10)
   const userNFTs: NFT[] = [
@@ -224,6 +235,101 @@ const Battle = () => {
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 {t('battle.subtitle')}
               </p>
+              <Dialog open={isHowItWorksOpen} onOpenChange={setIsHowItWorksOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="mt-4 border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary hover:text-primary-foreground font-medium"
+                  >
+                    <Info className="mr-2 h-4 w-4" />
+                    {t('battle.howItWorks.button')}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold">
+                      {t('battle.howItWorks.title')}
+                    </DialogTitle>
+                    <DialogDescription className="pt-4 space-y-6">
+                      {/* Raridade */}
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                          <Sparkles className="h-5 w-5 text-primary" />
+                          {t('battle.howItWorks.rarity.title')}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {t('battle.howItWorks.rarity.description')}
+                        </p>
+                      </div>
+
+                      {/* Skills */}
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                          <Zap className="h-5 w-5 text-yellow-500" />
+                          {t('battle.howItWorks.skills.title')}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {t('battle.howItWorks.skills.description')}
+                        </p>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-3">
+                          <div className="p-3 bg-muted rounded-lg text-center">
+                            <div className="text-xs text-muted-foreground mb-1">Power</div>
+                            <div className="text-lg font-bold text-foreground">⚡</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg text-center">
+                            <div className="text-xs text-muted-foreground mb-1">Speed</div>
+                            <div className="text-lg font-bold text-foreground">🏃</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg text-center">
+                            <div className="text-xs text-muted-foreground mb-1">Health</div>
+                            <div className="text-lg font-bold text-foreground">❤️</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg text-center">
+                            <div className="text-xs text-muted-foreground mb-1">Clucking</div>
+                            <div className="text-lg font-bold text-foreground">🐔</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg text-center">
+                            <div className="text-xs text-muted-foreground mb-1">Brood Power</div>
+                            <div className="text-lg font-bold text-foreground">🥚</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* VRF */}
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                          <Shield className="h-5 w-5 text-blue-500" />
+                          {t('battle.howItWorks.vrf.title')}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {t('battle.howItWorks.vrf.description')}
+                        </p>
+                      </div>
+
+                      {/* Gameplay */}
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                          <Heart className="h-5 w-5 text-red-500" />
+                          {t('battle.howItWorks.gameplay.title')}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {t('battle.howItWorks.gameplay.description')}
+                        </p>
+                      </div>
+
+                      {/* Dica */}
+                      <div className="p-4 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 border border-primary/20 rounded-lg space-y-2">
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {t('battle.howItWorks.tip.title')}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-foreground">
+                          {t('battle.howItWorks.tip.description')}
+                        </p>
+                      </div>
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
             </div>
             
             <BattleLobby
