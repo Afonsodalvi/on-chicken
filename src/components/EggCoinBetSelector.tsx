@@ -19,21 +19,21 @@ export const EggCoinBetSelector = ({
   disabled = false 
 }: EggCoinBetSelectorProps) => {
   const { t } = useLanguage();
-  const [isBettingEnabled, setIsBettingEnabled] = useState(false);
-  const [betAmount, setBetAmount] = useState<number>(0);
+  const [isContributionEnabled, setIsContributionEnabled] = useState(false);
+  const [contributionAmount, setContributionAmount] = useState<number>(0);
   const [customAmount, setCustomAmount] = useState<string>("");
 
-  const handleToggleBetting = (enabled: boolean) => {
-    setIsBettingEnabled(enabled);
+  const handleToggleContribution = (enabled: boolean) => {
+    setIsContributionEnabled(enabled);
     if (!enabled) {
-      setBetAmount(0);
+      setContributionAmount(0);
       setCustomAmount("");
       onBetChange(null);
     }
   };
 
   const handleAmountChange = (amount: number) => {
-    setBetAmount(amount);
+    setContributionAmount(amount);
     setCustomAmount("");
     onBetChange(amount);
   };
@@ -42,7 +42,7 @@ export const EggCoinBetSelector = ({
     setCustomAmount(value);
     const numValue = parseFloat(value);
     if (!isNaN(numValue) && numValue > 0) {
-      setBetAmount(numValue);
+      setContributionAmount(numValue);
       onBetChange(numValue);
     }
   };
@@ -59,13 +59,13 @@ export const EggCoinBetSelector = ({
               <h3 className="text-lg font-semibold">{t('battle.betting.title')}</h3>
             </div>
             <Switch
-              checked={isBettingEnabled}
-              onCheckedChange={handleToggleBetting}
+              checked={isContributionEnabled}
+              onCheckedChange={handleToggleContribution}
               disabled={disabled}
             />
           </div>
 
-          {isBettingEnabled && (
+          {isContributionEnabled && (
             <div className="space-y-4">
               <div className="text-sm text-muted-foreground">
                 {t('battle.betting.description')}
@@ -78,7 +78,7 @@ export const EggCoinBetSelector = ({
                   {presetAmounts.map((amount) => (
                     <Button
                       key={amount}
-                      variant={betAmount === amount ? "default" : "outline"}
+                      variant={contributionAmount === amount ? "default" : "outline"}
                       size="sm"
                       onClick={() => handleAmountChange(amount)}
                       disabled={disabled}
@@ -111,21 +111,21 @@ export const EggCoinBetSelector = ({
                 </div>
               </div>
 
-              {/* Current Bet Display */}
-              {betAmount > 0 && (
+              {/* Current Contribution Display */}
+              {contributionAmount > 0 && (
                 <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
                   <div className="flex items-center gap-2 text-primary font-medium">
                     <Zap className="h-4 w-4" />
-                    <span>{t('battle.betting.current')}: {betAmount} 🥚</span>
+                    <span>{t('battle.betting.current')}: {contributionAmount} 🥚</span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {t('battle.betting.reward')}: {betAmount * 2} 🥚
+                    {t('battle.betting.reward')}: {contributionAmount * 2} 🥚
                   </div>
                 </div>
               )}
 
               {/* Max Amount Warning */}
-              {betAmount > maxAmount && (
+              {contributionAmount > maxAmount && (
                 <div className="text-xs text-destructive">
                   {t('battle.betting.maxWarning', { max: maxAmount })}
                 </div>

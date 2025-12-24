@@ -14,20 +14,20 @@ export const EggCoinButton: React.FC<EggCoinButtonProps> = ({
 }) => {
   const { t } = useLanguage();
 
-  const handleEggCoinClick = () => {
-    // TODO: Implement EggCoin purchase logic
-    console.log("EggCoin purchase clicked");
+  const handlePudgyEggsClick = () => {
+    // TODO: Implement PudgyEggs acquisition logic
+    console.log("PudgyEggs acquisition clicked");
   };
 
   return (
     <Button
-      onClick={handleEggCoinClick}
+      onClick={handlePudgyEggsClick}
       variant="outline"
       size={size}
       className={`border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary hover:text-primary-foreground font-medium px-4 py-2 min-w-[100px] ${className}`}
     >
-      <Coins className="w-4 h-4 mr-2" />
-      <span className="text-sm">EggCoin</span>
+      <span className="text-lg mr-2">🥚</span>
+      <span className="text-sm">PudgyEggs</span>
     </Button>
   );
 };

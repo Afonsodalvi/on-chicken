@@ -1,13 +1,82 @@
+import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Target, Users, Zap, Coins, Shield, BookOpen, Globe, User, Award, Code } from "lucide-react";
+import { ArrowLeft, Target, Users, Zap, Coins, Shield, BookOpen, Globe, User, Award, Code, GraduationCap, Gift, Trophy, CheckCircle2, Users2, HandHeart, TrendingUp, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
+import { usePublicClient, useChainId } from "wagmi";
+import { getContractAddress } from "@/lib/contracts";
+import { PUDGY_CHICKEN_ABI } from "@/lib/abi";
+import { Address } from "viem";
 
 const Details = () => {
   const { t } = useLanguage();
+  const publicClient = usePublicClient();
+  const chainId = useChainId();
+  const [totalMints, setTotalMints] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+
+  const TARGET_MINTS = 1800;
+
+  // Função para buscar os supplies dos tokens 1-10
+  const fetchTotalMints = useCallback(async () => {
+    if (!publicClient) {
+      console.warn("Public client not available");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const collectionAddress = getContractAddress("PUDGY_CHICKEN_COLLECTION", chainId);
+      
+      if (!collectionAddress) {
+        console.warn("Collection address not found for chain:", chainId);
+        setIsLoading(false);
+        return;
+      }
+
+      // Buscar supplies dos tokens 1-10 em paralelo
+      const tokenIds = Array.from({ length: 10 }, (_, i) => i + 1);
+      const supplyPromises = tokenIds.map((tokenId) =>
+        publicClient.readContract({
+          address: collectionAddress as Address,
+          abi: PUDGY_CHICKEN_ABI,
+          functionName: "getSupply",
+          args: [BigInt(tokenId)],
+        }).catch((error) => {
+          console.error(`Error fetching supply for token ${tokenId}:`, error);
+          return 0n;
+        })
+      );
+
+      const supplies = await Promise.all(supplyPromises);
+      
+      // Somar todos os supplies
+      const total = supplies.reduce((sum, supply) => {
+        return sum + (typeof supply === 'bigint' ? Number(supply) : 0);
+      }, 0);
+
+      setTotalMints(total);
+      setLastUpdate(new Date());
+    } catch (error) {
+      console.error("Error fetching total mints:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [publicClient, chainId]);
+
+  // Buscar automaticamente quando a página carregar ou quando o chainId mudar
+  useEffect(() => {
+    if (publicClient && chainId) {
+      fetchTotalMints();
+    }
+  }, [publicClient, chainId, fetchTotalMints]);
+
+  // Calcular porcentagem
+  const percentage = Math.min((totalMints / TARGET_MINTS) * 100, 100);
 
   const features = [
     {
@@ -305,14 +374,203 @@ const Details = () => {
         </div>
       </section>
 
+      {/* Educational Project Section */}
+      <section className="py-16 bg-gradient-to-b from-primary/5 via-accent/5 to-primary/5">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center p-3 bg-gradient-hero rounded-full mb-4">
+                <GraduationCap className="h-8 w-8 text-primary-foreground" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">
+                <span className="bg-gradient-hero bg-clip-text text-transparent">
+                  {t('details.education.title')}
+                </span>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                {t('details.education.subtitle')}
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8 mb-12">
+              {/* Left: Course Description */}
+              <div className="bg-gradient-to-br from-card/60 to-card/40 backdrop-blur-sm border border-border/50 rounded-2xl p-8 shadow-xl">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <BookOpen className="h-6 w-6 text-primary" />
+                    <h3 className="text-xl font-semibold">{t('details.education.title')}</h3>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t('details.education.description')}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Goal Progress */}
+              <div className="bg-gradient-to-br from-primary/10 to-accent/10 border-2 border-primary/30 rounded-2xl p-8 shadow-xl">
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <Target className="h-12 w-12 text-primary mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">{t('details.education.goal.title')}</h3>
+                    <p className="text-muted-foreground text-sm mb-6">
+                      {t('details.education.goal.description')}
+                    </p>
+                  </div>
+                  
+                  {/* Progress Bar */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-sm mb-2">
+                      <span className="text-muted-foreground">
+                        {t('details.education.goal.current')}: {totalMints.toLocaleString()}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        {lastUpdate && (
+                          <span className="text-xs text-muted-foreground">
+                            {lastUpdate.toLocaleTimeString()}
+                          </span>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={fetchTotalMints}
+                          disabled={isLoading}
+                          className="h-7 w-7 p-0 hover:bg-primary/10"
+                          title="Atualizar"
+                        >
+                          <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex justify-end text-sm mb-1">
+                      <span className="font-semibold text-primary">
+                        {t('details.education.goal.target')}: {TARGET_MINTS.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-4 overflow-hidden">
+                      <div 
+                        className="bg-gradient-hero h-full rounded-full transition-all duration-500 flex items-center justify-center"
+                        style={{ width: `${percentage}%` }}
+                      >
+                        {percentage > 5 && (
+                          <span className="text-xs font-semibold text-primary-foreground">
+                            {percentage.toFixed(1)}%
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {percentage < 5 && (
+                      <div className="text-center">
+                        <span className="text-xs font-semibold text-primary">
+                          {percentage.toFixed(1)}%
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Collaborative Project Section */}
+            <div className="bg-gradient-to-br from-accent/10 via-primary/5 to-accent/10 border-2 border-accent/30 rounded-2xl p-8 md:p-12 shadow-xl mb-8">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-accent to-primary rounded-full mb-4">
+                  <HandHeart className="h-6 w-6 text-primary-foreground" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">
+                  <span className="bg-gradient-hero bg-clip-text text-transparent">
+                    {t('details.education.collaborative.title')}
+                  </span>
+                </h3>
+                <p className="text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+                  {t('details.education.collaborative.description')}
+                </p>
+              </div>
+            </div>
+
+            {/* Funds Allocation Section */}
+            <div className="bg-gradient-to-br from-card/60 to-card/40 backdrop-blur-sm border border-border/50 rounded-2xl p-8 md:p-12 shadow-xl mb-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-gradient-hero rounded-lg">
+                  <TrendingUp className="h-6 w-6 text-primary-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">{t('details.education.funds.title')}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{t('details.education.funds.description')}</p>
+                </div>
+              </div>
+              <ul className="space-y-3">
+                {t('details.education.funds.list').split('\n').map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <div className="p-1.5 bg-primary/10 rounded-full mt-0.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-muted-foreground flex-1">{item.replace('• ', '')}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Benefits Section */}
+            <div className="bg-gradient-to-br from-card/60 to-card/40 backdrop-blur-sm border border-border/50 rounded-2xl p-8 md:p-12 shadow-xl">
+              <h3 className="text-2xl font-bold text-center mb-8">
+                <span className="bg-gradient-hero bg-clip-text text-transparent">
+                  {t('details.education.benefits.title')}
+                </span>
+              </h3>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Holders Benefits */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Gift className="h-5 w-5 text-primary" />
+                    </div>
+                    <h4 className="text-lg font-semibold">{t('details.education.benefits.holders')}</h4>
+                  </div>
+                  <ul className="space-y-2">
+                    {t('details.education.benefits.holders.list').split('\n').map((item, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                        <span className="text-muted-foreground text-sm">{item.replace('• ', '')}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Players Benefits */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-accent/10 rounded-lg">
+                      <Trophy className="h-5 w-5 text-accent" />
+                    </div>
+                    <h4 className="text-lg font-semibold">{t('details.education.benefits.players')}</h4>
+                  </div>
+                  <ul className="space-y-2">
+                    {t('details.education.benefits.players.list').split('\n').map((item, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                        <span className="text-muted-foreground text-sm">{item.replace('• ', '')}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-2xl p-8">
               <h3 className="text-2xl font-bold mb-4">{t('details.cta.title')}</h3>
-              <p className="text-lg text-muted-foreground mb-6">
+              <p className="text-lg text-muted-foreground mb-2">
                 {t('details.cta.description')}
+              </p>
+              <p className="text-base font-semibold text-primary mb-6">
+                {t('details.education.cta')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/whitelist">
@@ -337,3 +595,4 @@ const Details = () => {
 };
 
 export default Details;
+

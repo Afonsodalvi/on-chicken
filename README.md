@@ -1,6 +1,6 @@
 # 🐔 Pudgy Farms - Web3 Agricultural Platform
 
-Uma plataforma completa de tokenização de animais reais (RWAnimals) com sistema de batalhas, apostas EggCoin e curso educacional de desenvolvimento blockchain.
+Uma plataforma completa de tokenização de animais reais (RWAnimals) com sistema de batalhas, apostas PudgyEggs e curso educacional de desenvolvimento blockchain.
 
 ## 📋 Índice
 
@@ -22,7 +22,7 @@ Uma plataforma completa de tokenização de animais reais (RWAnimals) com sistem
 O Pudgy Farms é uma plataforma Web3 que permite:
 
 - **Tokenização de Animais Reais (RWAnimals)**: Digitalização de animais físicos em NFTs
-- **Sistema de Batalhas**: Combates entre NFTs com apostas EggCoin
+- **Sistema de Batalhas**: Combates entre NFTs com apostas PudgyEggs
 - **Curso Educacional**: Inscrições para curso de desenvolvimento blockchain
 - **Whitelist**: Sistema de aprovação para acesso exclusivo
 - **Fazenda Digital**: Interface para gerenciar coleções de animais
@@ -225,7 +225,7 @@ npm run preview
 ### 3. Sistema de Batalhas
 - **Lobby de batalhas** com lista de salas
 - **Criação de batalhas** com NFTs
-- **Sistema de apostas** EggCoin
+- **Sistema de apostas** PudgyEggs
 - **Arena de combate** com animações
 - **Cálculo de vencedor** baseado em atributos
 
@@ -249,7 +249,7 @@ npm run preview
 // - Menu responsivo
 // - Seletor de idioma
 // - Conectar carteira
-// - Botão EggCoin
+// - Botão PudgyEggs
 ```
 
 ### Hero

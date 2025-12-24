@@ -119,7 +119,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
       case PaymentType.USDT:
         return "USDT";
       case PaymentType.EGG_COIN:
-        return "EggCoin";
+        return "PudgyEggs";
       default:
         return "Desconhecido";
     }
@@ -221,8 +221,8 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
                   </SelectItem>
                   <SelectItem value={PaymentType.EGG_COIN.toString()}>
                     <div className="flex items-center gap-2">
-                      <Coins className="h-4 w-4" />
-                      EggCoin
+                      <span className="text-lg">🥚</span>
+                      PudgyEggs
                     </div>
                   </SelectItem>
                 </SelectContent>

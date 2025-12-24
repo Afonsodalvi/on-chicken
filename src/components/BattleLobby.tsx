@@ -150,17 +150,6 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
         <div className="space-y-2">
           <h3 className="font-bold text-sm">{nft.name}</h3>
           <p className="text-xs text-muted-foreground">{nft.collection}</p>
-          
-          <div className="grid grid-cols-2 gap-1 text-xs">
-            <div className="flex items-center gap-1">
-              <Sword className="h-3 w-3 text-red-500" />
-              <span>{nft.attack}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Zap className="h-3 w-3 text-yellow-500" />
-              <span>{nft.speed}</span>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
@@ -204,21 +193,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle, userNFTs, currentUse
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 mb-1">
-              <Sword className="h-4 w-4 text-red-500" />
-              <span className="font-bold">{battle.creatorNFT.attack}</span>
-            </div>
-            <div className="text-xs text-muted-foreground">{t('battle.attack')}</div>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 mb-1">
-              <Zap className="h-4 w-4 text-yellow-500" />
-              <span className="font-bold">{battle.creatorNFT.speed}</span>
-            </div>
-            <div className="text-xs text-muted-foreground">{t('battle.speed')}</div>
-          </div>
+        <div className="mb-4 text-sm">
           <div className="text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <Users className="h-4 w-4 text-blue-500" />
