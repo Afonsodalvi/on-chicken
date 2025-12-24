@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #1 — Shadow Lock",
+  "description": "A discreet hacker protecting secrets with style and silence. This stealthy chicken operates in the shadows, guarding digital fortresses with unmatched precision and an air of mystery.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/1.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/1",
+  "background_color": "1E3B35",
+  "attributes": [
+    { "trait_type": "Role", "value": "Stealth Hacker" },
+    { "trait_type": "Headwear", "value": "Beanie" },
+    { "trait_type": "Eyewear", "value": "Neon Shades" },
+    { "trait_type": "Prop", "value": "Locked Laptop" },
+    { "trait_type": "Vibe", "value": "Incognito" },
+    { "trait_type": "Theme", "value": "Cybersecurity" },
+    { "trait_type": "Background", "value": "Dark Teal Lines" }
+  ]
+}
+

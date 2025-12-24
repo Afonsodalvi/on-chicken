@@ -317,7 +317,7 @@ const Details = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/whitelist">
                   <Button size="lg" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-                    {t('details.cta.whitelist')}
+                    {t('details.cta.mint')}
                   </Button>
                 </Link>
                 <Link to="/farm">

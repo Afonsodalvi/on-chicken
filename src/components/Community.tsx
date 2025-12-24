@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, MessageCircle, Trophy, Heart } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import chickenPromo from "@/assets/23.png";
+import chickenPromo from "@/assets/10.png";
 
 export const Community = () => {
   const { t } = useLanguage();
@@ -149,7 +149,10 @@ export const Community = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90">
+                <Button 
+                  className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90"
+                  onClick={() => window.open('https://br.cointelegraph.com/news/brazilian-tokenizes-chicken-coop-and-pays-holders-with-the-sale-of-eggs-and-chickens', '_blank')}
+                >
                   {t('community.media.view')}
                 </Button>
               </CardContent>

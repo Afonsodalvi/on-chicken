@@ -1,157 +1,137 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { MintModal } from "@/components/MintModal";
 
-// Importando as imagens das galinhas (12 em diante)
-import chicken12 from "@/assets/12.png";
-import chicken13 from "@/assets/13.png";
-import chicken14 from "@/assets/14.png";
-import chicken15 from "@/assets/15.png";
-import chicken16 from "@/assets/16.png";
-import chicken17 from "@/assets/17.png";
-import chicken18 from "@/assets/18.png";
-import chicken19 from "@/assets/19.png";
-import chicken20 from "@/assets/20.png";
-import chicken21 from "@/assets/21.png";
-import chicken22 from "@/assets/22.png";
-import chicken23 from "@/assets/23.png";
+// Importando as imagens das galinhas (1-10)
+import chicken1 from "@/assets/1.png";
+import chicken2 from "@/assets/2.png";
+import chicken3 from "@/assets/3.png";
+import chicken4 from "@/assets/4.png";
+import chicken5 from "@/assets/5.png";
+import chicken6 from "@/assets/6.png";
+import chicken7 from "@/assets/7.png";
+import chicken8 from "@/assets/8.png";
+import chicken9 from "@/assets/9.png";
+import chicken10 from "@/assets/10.png";
 
 export const Shop = () => {
   const { t } = useLanguage();
+  const [selectedTokenId, setSelectedTokenId] = useState<number | null>(null);
+  const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const products = [
     {
       id: 1,
-      name: "Pudgy Chicken #012",
-      price: "$20",
-      originalPrice: "$25",
-      rating: 4.8,
-      reviews: 1247,
-      image: chicken12,
-      badge: "Mais Vendido",
-      rarity: "Comum",
-    },
-    {
-      id: 2,
-      name: "Pudgy Chicken #013",
-      price: "$25",
-      originalPrice: "$30",
-      rating: 4.9,
-      reviews: 856,
-      image: chicken13,
-      badge: "Novo",
-      rarity: "Comum",
-    },
-    {
-      id: 3,
-      name: "Pudgy Chicken #014",
-      price: "$30",
-      originalPrice: "$35",
-      rating: 4.7,
-      reviews: 623,
-      image: chicken14,
-      badge: "Limitado",
-      rarity: "Raro",
-    },
-    {
-      id: 4,
-      name: "Pudgy Chicken #015",
-      price: "$35",
-      originalPrice: "$40",
-      rating: 4.9,
-      reviews: 892,
-      image: chicken15,
-      badge: "Popular",
-      rarity: "Raro",
-    },
-    {
-      id: 5,
-      name: "Pudgy Chicken #016",
-      price: "$40",
-      originalPrice: "$45",
-      rating: 4.8,
-      reviews: 756,
-      image: chicken16,
-      badge: "Exclusivo",
-      rarity: "Épico",
-    },
-    {
-      id: 6,
-      name: "Pudgy Chicken #017",
-      price: "$45",
-      originalPrice: "$50",
+      name: "Pudgy Chicken #001",
+      price: "$65",
+      originalPrice: "$70",
       rating: 5.0,
-      reviews: 445,
-      image: chicken17,
-      badge: "Lendário",
-      rarity: "Lendário",
-    },
-    {
-      id: 7,
-      name: "Pudgy Chicken #018",
-      price: "$50",
-      originalPrice: "$55",
-      rating: 4.9,
-      reviews: 334,
-      image: chicken18,
-      badge: "Mítico",
-      rarity: "Mítico",
-    },
-    {
-      id: 8,
-      name: "Pudgy Chicken #019",
-      price: "$55",
-      originalPrice: "$60",
-      rating: 4.8,
-      reviews: 278,
-      image: chicken19,
-      badge: "Único",
-      rarity: "Mítico",
-    },
-    {
-      id: 9,
-      name: "Pudgy Chicken #020",
-      price: "$60",
-      originalPrice: "$65",
-      rating: 5.0,
-      reviews: 156,
-      image: chicken20,
+      reviews: 234,
+      image: chicken1,
       badge: "Legendário",
       rarity: "Legendário",
     },
     {
-      id: 10,
-      name: "Pudgy Chicken #021",
-      price: "$65",
-      originalPrice: "$70",
-      rating: 4.9,
-      reviews: 234,
-      image: chicken21,
-      badge: "Raro",
-      rarity: "Legendário",
-    },
-    {
-      id: 11,
-      name: "Pudgy Chicken #022",
-      price: "$70",
-      originalPrice: "$75",
+      id: 2,
+      name: "Pudgy Chicken #002",
+      price: "$60",
+      originalPrice: "$65",
       rating: 5.0,
-      reviews: 189,
-      image: chicken22,
-      badge: "Épico",
+      reviews: 156,
+      image: chicken2,
+      badge: "Mítico",
       rarity: "Mítico",
     },
     {
-      id: 12,
-      name: "Pudgy Chicken #023",
-      price: "$75",
-      originalPrice: "$80",
+      id: 3,
+      name: "Pudgy Chicken #003",
+      price: "$55",
+      originalPrice: "$60",
+      rating: 4.9,
+      reviews: 334,
+      image: chicken3,
+      badge: "Mítico",
+      rarity: "Mítico",
+    },
+    {
+      id: 4,
+      name: "Pudgy Chicken #004",
+      price: "$50",
+      originalPrice: "$55",
+      rating: 4.8,
+      reviews: 278,
+      image: chicken4,
+      badge: "Lendário",
+      rarity: "Lendário",
+    },
+    {
+      id: 5,
+      name: "Pudgy Chicken #005",
+      price: "$45",
+      originalPrice: "$50",
       rating: 5.0,
-      reviews: 98,
-      image: chicken23,
-      badge: "Único",
-      rarity: "Legendário",
+      reviews: 445,
+      image: chicken5,
+      badge: "Épico",
+      rarity: "Épico",
+    },
+    {
+      id: 6,
+      name: "Pudgy Chicken #006",
+      price: "$40",
+      originalPrice: "$45",
+      rating: 4.8,
+      reviews: 756,
+      image: chicken6,
+      badge: "Exclusivo",
+      rarity: "Épico",
+    },
+    {
+      id: 7,
+      name: "Pudgy Chicken #007",
+      price: "$35",
+      originalPrice: "$40",
+      rating: 4.9,
+      reviews: 892,
+      image: chicken7,
+      badge: "Popular",
+      rarity: "Raro",
+    },
+    {
+      id: 8,
+      name: "Pudgy Chicken #008",
+      price: "$30",
+      originalPrice: "$35",
+      rating: 4.7,
+      reviews: 623,
+      image: chicken8,
+      badge: "Limitado",
+      rarity: "Raro",
+    },
+    {
+      id: 9,
+      name: "Pudgy Chicken #009",
+      price: "$25",
+      originalPrice: "$30",
+      rating: 4.9,
+      reviews: 856,
+      image: chicken9,
+      badge: "Novo",
+      rarity: "Comum",
+    },
+    {
+      id: 10,
+      name: "Pudgy Chicken #010",
+      price: "$20",
+      originalPrice: "$25",
+      rating: 4.8,
+      reviews: 1247,
+      image: chicken10,
+      badge: "Mais Vendido",
+      rarity: "Comum",
     },
   ];
 
@@ -272,8 +252,14 @@ export const Shop = () => {
                         {product.originalPrice}
                       </div>
                     </div>
-                    <Button className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-                      {t('shop.buy')}
+                    <Button 
+                      className="bg-gradient-hero text-primary-foreground hover:opacity-90"
+                      onClick={() => {
+                        setSelectedTokenId(product.id);
+                        setIsMintModalOpen(true);
+                      }}
+                    >
+                      Mint
                     </Button>
                   </div>
                 </div>
@@ -288,6 +274,15 @@ export const Shop = () => {
           </Button>
         </div>
       </div>
+
+      {/* Modal de Mint */}
+      {selectedTokenId && (
+        <MintModal
+          open={isMintModalOpen}
+          onOpenChange={setIsMintModalOpen}
+          tokenId={selectedTokenId}
+        />
+      )}
     </section>
   );
 };

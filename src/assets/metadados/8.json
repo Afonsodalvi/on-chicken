@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #8 — Beach Surfer",
+  "description": "Hawaiian shirt, flower lei, and a surfboard ready for the next wave. This sunny chicken lives for the perfect ride, catching waves and spreading good vibes along the tropical shores.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/8.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/8",
+  "background_color": "66C7C9",
+  "attributes": [
+    { "trait_type": "Role", "value": "Surfer" },
+    { "trait_type": "Outfit", "value": "Hawaiian Shirt" },
+    { "trait_type": "Accessory", "value": "Flower Lei" },
+    { "trait_type": "Prop", "value": "Surfboard" },
+    { "trait_type": "Vibe", "value": "Sunny" },
+    { "trait_type": "Theme", "value": "Tropical" },
+    { "trait_type": "Background", "value": "Aqua Flat" }
+  ]
+}
+

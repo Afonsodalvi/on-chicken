@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { WhitelistForm } from '../components/WhitelistForm'
+import { MintChicken } from '../components/MintChicken'
 import { useLanguage } from '../contexts/LanguageContext'
 import { Button } from '../components/ui/button'
 import farmLogo from '../assets/futuristic_farm_logo_embedded.svg'
@@ -42,10 +42,10 @@ const Whitelist: React.FC = () => {
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              {t('whitelist.title')}
+              Mint sua PudgyChicken
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-              {t('whitelist.description')}
+              Conecte sua carteira e faça o mint da sua primeira PudgyChicken NFT
             </p>
             
             {/* Contador de Vagas Limitadas */}
@@ -64,13 +64,11 @@ const Whitelist: React.FC = () => {
         </div>
       </div>
 
-      {/* Whitelist Form Section */}
+      {/* Mint Section */}
       <div className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center">
-            <div className="w-full max-w-md">
-              <WhitelistForm />
-            </div>
+            <MintChicken />
           </div>
         </div>
       </div>

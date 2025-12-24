@@ -7,18 +7,16 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Sword, Shield, Zap, Heart, Trophy, RotateCcw, Users, Clock, Coins } from "lucide-react";
 import { useBattleContext } from "@/contexts/BattleContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import chicken12 from "@/assets/12.png";
-import chicken13 from "@/assets/13.png";
-import chicken14 from "@/assets/14.png";
-import chicken15 from "@/assets/15.png";
-import chicken16 from "@/assets/16.png";
-import chicken17 from "@/assets/17.png";
-import chicken18 from "@/assets/18.png";
-import chicken19 from "@/assets/19.png";
-import chicken20 from "@/assets/20.png";
-import chicken21 from "@/assets/21.png";
-import chicken22 from "@/assets/22.png";
-import chicken23 from "@/assets/23.png";
+import chicken1 from "@/assets/1.png";
+import chicken2 from "@/assets/2.png";
+import chicken3 from "@/assets/3.png";
+import chicken4 from "@/assets/4.png";
+import chicken5 from "@/assets/5.png";
+import chicken6 from "@/assets/6.png";
+import chicken7 from "@/assets/7.png";
+import chicken8 from "@/assets/8.png";
+import chicken9 from "@/assets/9.png";
+import chicken10 from "@/assets/10.png";
 
 interface NFT {
   id: number;
@@ -67,12 +65,12 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     battleStatus: "waiting"
   });
 
-  // Mock NFTs para demonstração
+  // Mock NFTs para demonstração (usando apenas tokens 1-10)
   const availableNFTs: NFT[] = [
     {
       id: 1,
-      name: "Pudgy Chicken #012",
-      image: chicken12,
+      name: "Pudgy Chicken #001",
+      image: chicken1,
       attack: 85,
       defense: 70,
       speed: 60,
@@ -83,8 +81,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 2,
-      name: "Pudgy Chicken #013",
-      image: chicken13,
+      name: "Pudgy Chicken #002",
+      image: chicken2,
       attack: 90,
       defense: 50,
       speed: 80,
@@ -95,8 +93,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 3,
-      name: "Pudgy Chicken #014",
-      image: chicken14,
+      name: "Pudgy Chicken #003",
+      image: chicken3,
       attack: 60,
       defense: 90,
       speed: 40,
@@ -107,8 +105,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 4,
-      name: "Pudgy Chicken #015",
-      image: chicken15,
+      name: "Pudgy Chicken #004",
+      image: chicken4,
       attack: 75,
       defense: 60,
       speed: 95,
@@ -119,8 +117,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 5,
-      name: "Pudgy Chicken #016",
-      image: chicken16,
+      name: "Pudgy Chicken #005",
+      image: chicken5,
       attack: 80,
       defense: 75,
       speed: 70,
@@ -131,8 +129,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 6,
-      name: "Pudgy Chicken #017",
-      image: chicken17,
+      name: "Pudgy Chicken #006",
+      image: chicken6,
       attack: 95,
       defense: 55,
       speed: 85,
@@ -143,8 +141,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 7,
-      name: "Pudgy Chicken #018",
-      image: chicken18,
+      name: "Pudgy Chicken #007",
+      image: chicken7,
       attack: 70,
       defense: 85,
       speed: 50,
@@ -155,8 +153,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 8,
-      name: "Pudgy Chicken #019",
-      image: chicken19,
+      name: "Pudgy Chicken #008",
+      image: chicken8,
       attack: 65,
       defense: 80,
       speed: 75,
@@ -167,8 +165,8 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 9,
-      name: "Pudgy Chicken #020",
-      image: chicken20,
+      name: "Pudgy Chicken #009",
+      image: chicken9,
       attack: 88,
       defense: 65,
       speed: 90,
@@ -179,37 +177,13 @@ export const BattleArena = ({ battleId, isCreator = false, onBattleComplete, onL
     },
     {
       id: 10,
-      name: "Pudgy Chicken #021",
-      image: chicken21,
+      name: "Pudgy Chicken #010",
+      image: chicken10,
       attack: 72,
       defense: 78,
       speed: 65,
       health: 100,
       rarity: "epic",
-      collection: "Pudgy Chickens",
-      owner: "currentUser"
-    },
-    {
-      id: 11,
-      name: "Pudgy Chicken #022",
-      image: chicken22,
-      attack: 82,
-      defense: 72,
-      speed: 80,
-      health: 100,
-      rarity: "rare",
-      collection: "Pudgy Chickens",
-      owner: "currentUser"
-    },
-    {
-      id: 12,
-      name: "Pudgy Chicken #023",
-      image: chicken23,
-      attack: 92,
-      defense: 68,
-      speed: 95,
-      health: 100,
-      rarity: "legendary",
       collection: "Pudgy Chickens",
       owner: "currentUser"
     }

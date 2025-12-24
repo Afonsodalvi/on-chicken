@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #6 — Green Lab",
+  "description": "A scientist in a lab coat testing a bubbling green potion. This curious chicken is always experimenting, pushing the boundaries of alchemy and discovery in pursuit of the perfect formula.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/6.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/6",
+  "background_color": "B7D65A",
+  "attributes": [
+    { "trait_type": "Role", "value": "Scientist" },
+    { "trait_type": "Outfit", "value": "Lab Coat" },
+    { "trait_type": "Eyewear", "value": "Big Glasses" },
+    { "trait_type": "Prop", "value": "Green Flask" },
+    { "trait_type": "Vibe", "value": "Curious" },
+    { "trait_type": "Theme", "value": "Alchemy" },
+    { "trait_type": "Background", "value": "Lime Gradient" }
+  ]
+}
+

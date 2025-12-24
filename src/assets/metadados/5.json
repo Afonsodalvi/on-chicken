@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #5 — ETH Dev",
+  "description": "Sunglasses on, Ethereum tee, and code scrolling across the screen. This chill developer chicken is building the next generation of smart contracts while keeping it cool and staying ahead of the curve.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/5.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/5",
+  "background_color": "7A9AA0",
+  "attributes": [
+    { "trait_type": "Role", "value": "Ethereum Builder" },
+    { "trait_type": "Eyewear", "value": "Sunglasses" },
+    { "trait_type": "Outfit", "value": "Ethereum Tee" },
+    { "trait_type": "Prop", "value": "Code Laptop" },
+    { "trait_type": "Vibe", "value": "Chill" },
+    { "trait_type": "Symbol", "value": "Ethereum" },
+    { "trait_type": "Background", "value": "Cool Teal" }
+  ]
+}
+

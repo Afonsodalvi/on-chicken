@@ -1,0 +1,17 @@
+{
+  "name": "PudgyFarms Chicken #10 — BTC Egg Holder",
+  "description": "Holding a Bitcoin coin as if it were the rarest egg in the coop. This cheerful chicken understands the true value of digital gold, treating each satoshi with the reverence it deserves.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/10.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/10",
+  "background_color": "E6C996",
+  "attributes": [
+    { "trait_type": "Role", "value": "Bitcoin Holder" },
+    { "trait_type": "Outfit", "value": "BTC Hoodie" },
+    { "trait_type": "Hand Item", "value": "Bitcoin Coin" },
+    { "trait_type": "Expression", "value": "Cheerful" },
+    { "trait_type": "Symbol", "value": "Bitcoin" },
+    { "trait_type": "Finish", "value": "Soft Grain" },
+    { "trait_type": "Background", "value": "Warm Beige" }
+  ]
+}
+

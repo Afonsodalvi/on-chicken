@@ -7,7 +7,6 @@ import { Sword, Users, Clock, Trophy, Zap, Coins } from "lucide-react";
 import { useBattleContext } from "@/contexts/BattleContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { EggCoinBetSelector } from "@/components/EggCoinBetSelector";
-import chicken12 from "@/assets/12.png";
 
 interface NFT {
   id: number;

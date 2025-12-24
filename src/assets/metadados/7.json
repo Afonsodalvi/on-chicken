@@ -1,0 +1,16 @@
+{
+  "name": "PudgyFarms Chicken #7 — Space Explorer",
+  "description": "An adorable astronaut holding a tiny ringed planet. This cosmic explorer chicken journeys through the stars, discovering new worlds and bringing back stories from the far reaches of the universe.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/7.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/7",
+  "background_color": "0E2146",
+  "attributes": [
+    { "trait_type": "Role", "value": "Astronaut" },
+    { "trait_type": "Outfit", "value": "Spacesuit" },
+    { "trait_type": "Prop", "value": "Ringed Planet" },
+    { "trait_type": "Vibe", "value": "Explorer" },
+    { "trait_type": "Theme", "value": "Cosmic" },
+    { "trait_type": "Background", "value": "Deep Space" }
+  ]
+}
+

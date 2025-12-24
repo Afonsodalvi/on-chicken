@@ -333,6 +333,32 @@ npm run preview
 
 ## 🚀 Deploy
 
+### Deploy Automático no Vercel (Recomendado)
+
+O projeto está configurado para **deploy automático** no Vercel. Cada commit na branch `main` gera um novo deploy automaticamente.
+
+#### ⚡ Quick Start
+1. Conecte seu repositório GitHub ao Vercel: https://vercel.com/new
+2. Configure as variáveis de ambiente (veja `DEPLOY_QUICK_START.md`)
+3. Clique em "Deploy"
+4. ✅ Pronto! Deploys automáticos ativados
+
+#### 📚 Documentação Completa
+- **Guia Rápido**: Veja `DEPLOY_QUICK_START.md`
+- **Guia Completo**: Veja `VERCEL_DEPLOY.md`
+
+#### 🔄 Como Funciona
+```bash
+# Fazer commit e push
+git add .
+git commit -m "feat: nova funcionalidade"
+git push origin main
+
+# ✅ Deploy automático será iniciado no Vercel!
+```
+
+### Deploy Manual
+
 ### Lovable (Recomendado)
 1. Acesse [Lovable](https://lovable.dev)
 2. Conecte o repositório

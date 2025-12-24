@@ -1,0 +1,16 @@
+{
+  "name": "PudgyFarms Chicken #3 — BTC Hoodie Coder",
+  "description": "Hoodie up, focus locked, and a laptop running Bitcoin code — ready to compile the next block. This crypto developer chicken is all about building the future of decentralized finance, one line of code at a time.",
+  "image": "https://yellow-concrete-pigeon-738.mypinata.cloud/ipfs/bafybeieg3zs5f7644uznxaioinplnf42gfoniygs5nnwdd442v6muxlqre/3.png",
+  "external_url": "https://pudgyfarms.xyz/chickens/3",
+  "background_color": "B6AFE3",
+  "attributes": [
+    { "trait_type": "Role", "value": "Crypto Coder" },
+    { "trait_type": "Outfit", "value": "Dark Hoodie" },
+    { "trait_type": "Prop", "value": "Bitcoin Laptop" },
+    { "trait_type": "Expression", "value": "Determined" },
+    { "trait_type": "Symbol", "value": "Bitcoin" },
+    { "trait_type": "Theme", "value": "Onchain Work" },
+    { "trait_type": "Background", "value": "Lavender Gradient" }
+  ]
+}
