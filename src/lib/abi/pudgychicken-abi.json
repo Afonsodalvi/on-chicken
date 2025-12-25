@@ -186,19 +186,6 @@
     },
     {
         "type": "function",
-        "name": "finalizeCustomNFTCycle",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
         "name": "finalizeCycle",
         "inputs": [
             {
@@ -257,101 +244,6 @@
     },
     {
         "type": "function",
-        "name": "getCustomNFTExpirationTimestamp",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "getCustomNFTLifespanPercentage",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "getCustomNFTMintTimestamp",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "getCustomNFTRemainingLifespan",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "getCustomNFTURI",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "string",
-                "internalType": "string"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
         "name": "getETHPrice",
         "inputs": [
             {
@@ -403,6 +295,57 @@
                 "name": "",
                 "type": "uint256",
                 "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getInstanceSkills",
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "tuple",
+                "internalType": "struct IPudgyChicken.skills",
+                "components": [
+                    {
+                        "name": "power",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "speed",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "health",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "clucking",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "broodPower",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ]
             }
         ],
         "stateMutability": "view"
@@ -503,6 +446,52 @@
                 "name": "",
                 "type": "bytes32",
                 "internalType": "bytes32"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getSkillsByInstanceId",
+        "inputs": [
+            {
+                "name": "instanceId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "tuple",
+                "internalType": "struct IPudgyChicken.skills",
+                "components": [
+                    {
+                        "name": "power",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "speed",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "health",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "clucking",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "broodPower",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ]
             }
         ],
         "stateMutability": "view"
@@ -838,63 +827,6 @@
     },
     {
         "type": "function",
-        "name": "isCustomNFT",
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool",
-                "internalType": "bool"
-            }
-        ],
-        "stateMutability": "pure"
-    },
-    {
-        "type": "function",
-        "name": "isCustomNFTAlive",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool",
-                "internalType": "bool"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "isCustomNFTCycleFinalized",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool",
-                "internalType": "bool"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
         "name": "isCycleFinalized",
         "inputs": [
             {
@@ -1034,66 +966,6 @@
         ],
         "outputs": [],
         "stateMutability": "payable"
-    },
-    {
-        "type": "function",
-        "name": "mintCustomNFT",
-        "inputs": [
-            {
-                "name": "to",
-                "type": "address",
-                "internalType": "address"
-            },
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "quantity",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "customURI",
-                "type": "string",
-                "internalType": "string"
-            },
-            {
-                "name": "customSkills",
-                "type": "tuple",
-                "internalType": "struct IPudgyChicken.skills",
-                "components": [
-                    {
-                        "name": "power",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "speed",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "health",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "clucking",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "broodPower",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    }
-                ]
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
     },
     {
         "type": "function",
@@ -1388,24 +1260,6 @@
     },
     {
         "type": "function",
-        "name": "setCustomNFTBroodPower",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "broodPower",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
         "name": "setFreeMintMinTierAllowed",
         "inputs": [
             {
@@ -1589,105 +1443,6 @@
                 "name": "newBattleWins",
                 "type": "uint256",
                 "internalType": "uint256"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
-        "name": "updateCustomNFTBattleWins",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "newBattleWins",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
-        "name": "updateCustomNFTIncubationStatus",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "isIncubating",
-                "type": "bool",
-                "internalType": "bool"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
-        "name": "updateCustomNFTMetadata",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "newCustomURI",
-                "type": "string",
-                "internalType": "string"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
-        "name": "updateCustomNFTSkills",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "newSkills",
-                "type": "tuple",
-                "internalType": "struct IPudgyChicken.skills",
-                "components": [
-                    {
-                        "name": "power",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "speed",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "health",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "clucking",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "broodPower",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    }
-                ]
             }
         ],
         "outputs": [],
@@ -1894,111 +1649,6 @@
                 "type": "bool",
                 "indexed": false,
                 "internalType": "bool"
-            }
-        ],
-        "anonymous": false
-    },
-    {
-        "type": "event",
-        "name": "CustomNFTCycleCompleted",
-        "inputs": [
-            {
-                "name": "owner",
-                "type": "address",
-                "indexed": true,
-                "internalType": "address"
-            },
-            {
-                "name": "subId",
-                "type": "uint256",
-                "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "expirationTimestamp",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            },
-            {
-                "name": "timestamp",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            }
-        ],
-        "anonymous": false
-    },
-    {
-        "type": "event",
-        "name": "CustomNFTMinted",
-        "inputs": [
-            {
-                "name": "to",
-                "type": "address",
-                "indexed": true,
-                "internalType": "address"
-            },
-            {
-                "name": "subId",
-                "type": "uint256",
-                "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "quantity",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            },
-            {
-                "name": "customURI",
-                "type": "string",
-                "indexed": false,
-                "internalType": "string"
-            }
-        ],
-        "anonymous": false
-    },
-    {
-        "type": "event",
-        "name": "CustomNFTSkillsSet",
-        "inputs": [
-            {
-                "name": "subId",
-                "type": "uint256",
-                "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "power",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            },
-            {
-                "name": "speed",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            },
-            {
-                "name": "health",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            },
-            {
-                "name": "clucking",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
-            },
-            {
-                "name": "broodPower",
-                "type": "uint256",
-                "indexed": false,
-                "internalType": "uint256"
             }
         ],
         "anonymous": false

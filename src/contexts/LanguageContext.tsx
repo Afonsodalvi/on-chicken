@@ -37,7 +37,7 @@ const translations = {
     'hero.stats.farms': 'Projeto Educacional',
     'hero.education.title': 'Projeto Colaborativo & Educacional',
     'hero.education.subtitle': 'Curso Completo de Smart Contracts',
-    'hero.education.description': 'Este é um projeto colaborativo e educacional que inclui um curso completo sobre os smart contracts desenvolvidos. Ao atingirmos 1.800 mints dos colecionáveis, o curso será disponibilizado totalmente gratuito no YouTube para todos! Ao ultrapassarmos esse número, parte do valor será destinado a projetos desenvolvidos pelos alunos, comunidade e farms do ecossistema.',
+    'hero.education.description': 'Este é um projeto colaborativo e educacional que inclui um curso completo sobre os smart contracts desenvolvidos. Quando atingirmos 1.800 mints, o curso será disponibilizado totalmente gratuito no YouTube para todos! Após ultrapassarmos essa meta, parte do valor arrecadado será destinada a projetos desenvolvidos pelos alunos do curso, pela comunidade e pelas farms do ecossistema.',
     'hero.education.disclaimer': '⚠️ Importante: Este é um projeto totalmente colaborativo, sem expectativa de retorno financeiro. Todos os participantes terão benefícios em tudo que for desenvolvido e produzido nas farms do ecossistema.',
     'hero.education.goal': 'Meta: 1.800 Mints',
     'hero.education.benefits': 'Benefícios Colaborativos',

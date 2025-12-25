@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,11 +13,20 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Wallet, Zap, CreditCard, Coins, CheckCircle } from "lucide-react";
+import { Loader2, Wallet, Zap, CreditCard, Coins, CheckCircle, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { Address } from "viem";
-import { PUDGY_CHICKEN_ABI } from "@/lib/abi";
-import { getPudgyChickenCollectionAddress, PaymentType } from "@/lib/contracts-helpers";
+import { PUDGY_CHICKEN_ABI, ERC20_ABI } from "@/lib/abi";
+import { 
+  getPudgyChickenCollectionAddress, 
+  PaymentType,
+  getTokenPrice,
+  getERC20Balance,
+  getETHBalance,
+  getERC20Allowance,
+  getTokenAddress,
+  formatTokenAmount
+} from "@/lib/contracts-helpers";
 import { CHAIN_IDS } from "@/lib/contracts";
 import { getTokenAsset } from "@/lib/token-assets";
 import { ConnectWallet } from "./ConnectWallet";
@@ -31,6 +40,7 @@ interface MintModalProps {
 export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenId }) => {
   const { address, isConnected, chainId } = useAccount();
   const publicClient = usePublicClient();
+  const { switchChain } = useSwitchChain();
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -39,6 +49,11 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
   const [quantity, setQuantity] = useState<number>(1);
   const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.ETH);
   const [tokenAsset, setTokenAsset] = useState<ReturnType<typeof getTokenAsset> | null>(null);
+  const [price, setPrice] = useState<bigint | null>(null);
+  const [balance, setBalance] = useState<bigint | null>(null);
+  const [allowance, setAllowance] = useState<bigint | null>(null);
+  const [isLoadingPrice, setIsLoadingPrice] = useState(false);
+  const [isCheckingBalance, setIsCheckingBalance] = useState(false);
 
   // Carregar asset do token
   useEffect(() => {
@@ -53,8 +68,30 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
     if (!open) {
       setQuantity(1);
       setPaymentType(PaymentType.ETH);
+      setPrice(null);
+      setBalance(null);
+      setAllowance(null);
     }
   }, [open]);
+
+  // Consultar preço quando tokenId, quantity ou paymentType mudar
+  useEffect(() => {
+    if (open && isConnected && address && publicClient && chainId && tokenId) {
+      fetchPrice();
+    } else {
+      setPrice(null);
+    }
+  }, [open, isConnected, address, publicClient, chainId, tokenId, quantity, paymentType]);
+
+  // Verificar saldo quando preço ou paymentType mudar
+  useEffect(() => {
+    if (open && isConnected && address && publicClient && chainId && price) {
+      checkBalance();
+    } else {
+      setBalance(null);
+      setAllowance(null);
+    }
+  }, [open, isConnected, address, publicClient, chainId, price, paymentType]);
 
   // Mostrar toast quando transação for confirmada
   useEffect(() => {
@@ -74,9 +111,150 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
     }
   }, [error]);
 
+  const fetchPrice = async () => {
+    if (!address || !publicClient || !chainId || !tokenId) return;
+
+    setIsLoadingPrice(true);
+    try {
+      const collectionAddress = getPudgyChickenCollectionAddress(chainId);
+      if (!collectionAddress) {
+        setPrice(null);
+        return;
+      }
+
+      const tokenPrice = await getTokenPrice(
+        collectionAddress,
+        BigInt(tokenId),
+        paymentType,
+        publicClient
+      );
+
+      if (tokenPrice !== null) {
+        // Multiplicar pelo quantity
+        setPrice(tokenPrice * BigInt(quantity));
+      } else {
+        setPrice(null);
+      }
+    } catch (error) {
+      console.error("Erro ao consultar preço:", error);
+      setPrice(null);
+    } finally {
+      setIsLoadingPrice(false);
+    }
+  };
+
+  const checkBalance = async () => {
+    if (!address || !publicClient || !chainId || !price) return;
+
+    setIsCheckingBalance(true);
+    try {
+      if (paymentType === PaymentType.ETH) {
+        const ethBalance = await getETHBalance(address, publicClient);
+        setBalance(ethBalance);
+        setAllowance(null);
+      } else {
+        const tokenAddress = getTokenAddress(paymentType, chainId);
+        if (!tokenAddress) {
+          setBalance(null);
+          setAllowance(null);
+          return;
+        }
+
+        const tokenBalance = await getERC20Balance(tokenAddress, address, publicClient);
+        setBalance(tokenBalance);
+
+        const collectionAddress = getPudgyChickenCollectionAddress(chainId);
+        if (collectionAddress) {
+          const tokenAllowance = await getERC20Allowance(
+            tokenAddress,
+            address,
+            collectionAddress,
+            publicClient
+          );
+          setAllowance(tokenAllowance);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao verificar saldo:", error);
+      setBalance(null);
+      setAllowance(null);
+    } finally {
+      setIsCheckingBalance(false);
+    }
+  };
+
+  const ensureCorrectNetwork = async (): Promise<boolean> => {
+    if (!chainId) return false;
+
+    if (chainId !== CHAIN_IDS.baseSepolia) {
+      try {
+        await switchChain({ chainId: CHAIN_IDS.baseSepolia });
+        toast.info("Trocando para a rede Base Sepolia...");
+        // Aguardar um pouco para a rede trocar
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        return true;
+      } catch (error: any) {
+        console.error("Erro ao trocar de rede:", error);
+        toast.error("Por favor, conecte-se à rede Base Sepolia");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const ensureTokenApproval = async (): Promise<boolean> => {
+    if (paymentType === PaymentType.ETH || !price || !allowance) return true;
+
+    if (allowance < price) {
+      const tokenAddress = getTokenAddress(paymentType, chainId!);
+      if (!tokenAddress) {
+        toast.error("Endereço do token não encontrado");
+        return false;
+      }
+
+      const collectionAddress = getPudgyChickenCollectionAddress(chainId!);
+      if (!collectionAddress) {
+        toast.error("Contrato não encontrado");
+        return false;
+      }
+
+      try {
+        // Aprovar um valor maior para evitar múltiplas aprovações
+        const approvalAmount = price * 2n; // Aprovar 2x o valor necessário
+        
+        writeContract({
+          address: tokenAddress,
+          abi: ERC20_ABI,
+          functionName: "approve",
+          args: [collectionAddress, approvalAmount],
+        });
+
+        toast.info("Aguardando aprovação do token...");
+        return true;
+      } catch (error: any) {
+        console.error("Erro ao aprovar token:", error);
+        toast.error(`Erro ao aprovar token: ${error.message}`);
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleMint = async () => {
     if (!address || !chainId || !publicClient) {
       toast.error("Conecte sua carteira primeiro");
+      return;
+    }
+
+    // Verificar e trocar para a rede correta se necessário
+    const networkOk = await ensureCorrectNetwork();
+    if (!networkOk) {
+      return;
+    }
+
+    // Aguardar um pouco para garantir que a rede foi trocada
+    if (chainId !== CHAIN_IDS.baseSepolia) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       return;
     }
 
@@ -86,23 +264,48 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
       return;
     }
 
-    // Verificar se está na rede correta (Base Sepolia)
-    if (chainId !== CHAIN_IDS.baseSepolia) {
-      toast.error("Por favor, conecte-se à rede Base Sepolia");
-      return;
-    }
-
     if (quantity < 1 || quantity > 10) {
       toast.error("Quantidade deve ser entre 1 e 10");
       return;
     }
 
     try {
+      // Consultar preço antes de fazer o mint
+      if (!price) {
+        toast.error("Consultando preço... Aguarde um momento.");
+        await fetchPrice();
+        return;
+      }
+
+      // Verificar saldo
+      if (!balance || balance < price) {
+        const tokenName = getPaymentTypeLabel(paymentType);
+        toast.error(`Saldo insuficiente! Você precisa de ${formatTokenAmount(price)} ${tokenName}`);
+        return;
+      }
+
+      // Para tokens ERC20, verificar e fazer approve se necessário
+      if (paymentType !== PaymentType.ETH) {
+        if (!allowance || allowance < price) {
+          const approved = await ensureTokenApproval();
+          if (!approved) {
+            return;
+          }
+          // Aguardar a aprovação ser confirmada
+          toast.info("Aguardando confirmação da aprovação...");
+          return;
+        }
+      }
+
+      // Fazer o mint
+      const value = paymentType === PaymentType.ETH ? price : undefined;
+      
       writeContract({
         address: collectionAddress,
         abi: PUDGY_CHICKEN_ABI,
         functionName: "mint",
         args: [address, BigInt(tokenId), BigInt(quantity), BigInt(paymentType)],
+        value: value,
       });
     } catch (error: any) {
       console.error("Erro ao fazer mint:", error);
@@ -229,11 +432,69 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
               </Select>
             </div>
 
+            {/* Informações de Preço e Saldo */}
+            <div className="space-y-2 p-4 border rounded-lg bg-muted/50">
+              {isLoadingPrice ? (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Consultando preço...
+                </div>
+              ) : price !== null ? (
+                <>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium">Preço Total:</span>
+                    <span className="text-sm font-semibold">
+                      {formatTokenAmount(price)} {getPaymentTypeLabel(paymentType)}
+                    </span>
+                  </div>
+                  {isCheckingBalance ? (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      Verificando saldo...
+                    </div>
+                  ) : balance !== null ? (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Seu Saldo:</span>
+                        <span className="text-sm">
+                          {formatTokenAmount(balance)} {getPaymentTypeLabel(paymentType)}
+                        </span>
+                      </div>
+                      {balance < price ? (
+                        <Alert variant="destructive" className="mt-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertDescription className="text-xs">
+                            Saldo insuficiente! Você precisa de {formatTokenAmount(price)} {getPaymentTypeLabel(paymentType)}
+                          </AlertDescription>
+                        </Alert>
+                      ) : paymentType !== PaymentType.ETH && allowance !== null && allowance < price ? (
+                        <Alert className="mt-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertDescription className="text-xs">
+                            Aprovação necessária. Você precisará aprovar o token antes de fazer o mint.
+                          </AlertDescription>
+                        </Alert>
+                      ) : (
+                        <div className="text-xs text-green-600 mt-2">
+                          ✓ Saldo suficiente
+                        </div>
+                      )}
+                    </>
+                  ) : null}
+                </>
+              ) : (
+                <div className="text-sm text-muted-foreground">
+                  Selecionando tipo de pagamento para ver o preço
+                </div>
+              )}
+            </div>
+
             {/* Verificação de Rede */}
             {chainId && chainId !== CHAIN_IDS.baseSepolia && (
               <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Por favor, conecte-se à rede Base Sepolia para fazer o mint
+                  Por favor, conecte-se à rede Base Sepolia. Tentando trocar automaticamente...
                 </AlertDescription>
               </Alert>
             )}
@@ -241,14 +502,14 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
             {/* Botão de Mint */}
             <Button
               onClick={handleMint}
-              disabled={!canMint || chainId !== CHAIN_IDS.baseSepolia}
+              disabled={!canMint || (chainId !== CHAIN_IDS.baseSepolia) || isLoadingPrice || isCheckingBalance || (price !== null && balance !== null && balance < price)}
               className="w-full"
               size="lg"
             >
-              {isLoading ? (
+              {isLoading || isLoadingPrice || isCheckingBalance ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isPending ? "Aguardando confirmação..." : "Processando..."}
+                  {isLoadingPrice ? "Consultando preço..." : isCheckingBalance ? "Verificando saldo..." : isPending ? "Aguardando confirmação..." : "Processando..."}
                 </>
               ) : (
                 <>
