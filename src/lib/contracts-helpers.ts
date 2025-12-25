@@ -522,3 +522,120 @@ export function prepareJoinMatchParams(
   };
 }
 
+// ============================================================================
+// ERC20 TOKEN HELPERS
+// ============================================================================
+
+import { ERC20_ABI } from "./abi";
+
+/**
+ * Obtém o endereço do token ERC20 baseado no tipo de pagamento
+ */
+export function getTokenAddress(
+  paymentType: PaymentType,
+  chainId: number
+): Address | null {
+  const chainName = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as keyof typeof CONTRACTS.USDC;
+  
+  if (!chainName) return null;
+
+  switch (paymentType) {
+    case PaymentType.USDC:
+      return CONTRACTS.USDC[chainName] === "0x" ? null : CONTRACTS.USDC[chainName];
+    case PaymentType.USDT:
+      return CONTRACTS.USDT[chainName] === "0x" ? null : CONTRACTS.USDT[chainName];
+    case PaymentType.EGG_COIN:
+      return CONTRACTS.EGG_COIN[chainName] === "0x" ? null : CONTRACTS.EGG_COIN[chainName];
+    case PaymentType.ETH:
+      return null; // ETH não é um token ERC20
+    default:
+      return null;
+  }
+}
+
+/**
+ * Obtém o saldo de um token ERC20
+ */
+export async function getERC20Balance(
+  tokenAddress: Address,
+  account: Address,
+  publicClient: any
+): Promise<bigint> {
+  try {
+    const balance = await publicClient.readContract({
+      address: tokenAddress,
+      abi: ERC20_ABI,
+      functionName: "balanceOf",
+      args: [account],
+    });
+    return balance as bigint;
+  } catch (error) {
+    console.error("Error getting ERC20 balance:", error);
+    return 0n;
+  }
+}
+
+/**
+ * Obtém o allowance de um token ERC20
+ */
+export async function getERC20Allowance(
+  tokenAddress: Address,
+  owner: Address,
+  spender: Address,
+  publicClient: any
+): Promise<bigint> {
+  try {
+    const allowance = await publicClient.readContract({
+      address: tokenAddress,
+      abi: ERC20_ABI,
+      functionName: "allowance",
+      args: [owner, spender],
+    });
+    return allowance as bigint;
+  } catch (error) {
+    console.error("Error getting ERC20 allowance:", error);
+    return 0n;
+  }
+}
+
+/**
+ * Obtém o saldo de ETH
+ */
+export async function getETHBalance(
+  account: Address,
+  publicClient: any
+): Promise<bigint> {
+  try {
+    const balance = await publicClient.getBalance({ address: account });
+    return balance;
+  } catch (error) {
+    console.error("Error getting ETH balance:", error);
+    return 0n;
+  }
+}
+
+/**
+ * Formata o valor para exibição (considerando decimals)
+ */
+export function formatTokenAmount(
+  amount: bigint,
+  decimals: number = 18
+): string {
+  const divisor = BigInt(10 ** decimals);
+  const whole = amount / divisor;
+  const remainder = amount % divisor;
+  
+  if (remainder === 0n) {
+    return whole.toString();
+  }
+  
+  const remainderStr = remainder.toString().padStart(decimals, "0");
+  const trimmed = remainderStr.replace(/0+$/, "");
+  
+  if (trimmed === "") {
+    return whole.toString();
+  }
+  
+  return `${whole}.${trimmed}`;
+}
+

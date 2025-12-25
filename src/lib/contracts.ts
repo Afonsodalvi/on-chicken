@@ -15,7 +15,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x7D002d08acf9c2E0992F39A56340318Dd35a292D" as Address, // Base Sepolia Testnet
+    baseSepolia: "0xda95d5c228d9D12C2E9F80D3687AF651496B9E71" as Address, // Base Sepolia Testnet
   },
   
   // Pudgy Chicken Collection Contract (ERC-1155 NFT)
@@ -26,7 +26,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x5776cBdDB00e68E183E32D8534A27699196d05A7" as Address, // First Collection on Base Sepolia
+    baseSepolia: "0x05BE25F8292d61d10a0ad77cB0Ad4d4BB7D1209D" as Address, // First Collection on Base Sepolia
   },
   
   // Pudgy Chicken Implementation (for reference, not directly used)
@@ -36,7 +36,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x98D3083dB2D45283Fd776C9a8847cC6F5aD3C65b" as Address,
+    baseSepolia: "0x760EEC87EB1E34617E908980A1e7338Ec9527a9E" as Address,
   },
   
   // Pudgy Chicken Fight Contract (Battle Arena)
@@ -46,7 +46,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x1daa259C2eFe42D635aDD6a03Cf1B53EB5655c79" as Address, // Base Sepolia Testnet
+    baseSepolia: "0x5F3fde74442A75Dd63C66299b0b7b349B2a4DB1D" as Address, // Base Sepolia Testnet
   },
   
   // EggCoin Token (ERC-20)
@@ -56,7 +56,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x278d559F74d86aae1FB577FD4Bd748Ec624E534b" as Address, // Base Sepolia Testnet
+    baseSepolia: "0xf80d1037eBedbb582F818b2921b7253F4261E2e1" as Address, // Base Sepolia Testnet
   },
 
   // USDC Addresses (for payments)
@@ -66,7 +66,7 @@ export const CONTRACTS = {
     base: (import.meta.env.VITE_USDC_ADDRESS_BASE || "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913") as Address,
     sepolia: "0x" as Address, // TODO: Get testnet USDC
     polygonMumbai: "0x" as Address, // TODO: Get testnet USDC
-    baseSepolia: "0x" as Address, // TODO: Get testnet USDC for Base Sepolia
+    baseSepolia: "0x036CbD53842c5426634e7929541eC2318f3dCF7e" as Address, // Base Sepolia Testnet
   },
 
   // USDT Addresses (for payments)
@@ -76,7 +76,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Add base USDT
     sepolia: "0x" as Address, // TODO: Get testnet USDT
     polygonMumbai: "0x" as Address, // TODO: Get testnet USDT
-    baseSepolia: "0x" as Address, // TODO: Get testnet USDT for Base Sepolia
+    baseSepolia: "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2" as Address, // Base Sepolia Testnet
   },
   
   // Legacy exports for backward compatibility
@@ -86,7 +86,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x5776cBdDB00e68E183E32D8534A27699196d05A7" as Address,
+    baseSepolia: "0x05BE25F8292d61d10a0ad77cB0Ad4d4BB7D1209D" as Address,
   },
   
   BATTLE_ARENA: {
@@ -95,7 +95,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x1daa259C2eFe42D635aDD6a03Cf1B53EB5655c79" as Address,
+    baseSepolia: "0x5F3fde74442A75Dd63C66299b0b7b349B2a4DB1D" as Address,
   },
   
   FARM_TOKEN: {
@@ -104,7 +104,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x278d559F74d86aae1FB577FD4Bd748Ec624E534b" as Address,
+    baseSepolia: "0xf80d1037eBedbb582F818b2921b7253F4261E2e1" as Address,
   },
 } as const;
 

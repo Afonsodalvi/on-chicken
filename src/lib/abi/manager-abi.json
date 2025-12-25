@@ -154,6 +154,61 @@
     },
     {
         "type": "function",
+        "name": "getActiveMatches",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "tuple[]",
+                "internalType": "struct IPudgyChickenFight.ActiveMatchInfo[]",
+                "components": [
+                    {
+                        "name": "matchId",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "player1",
+                        "type": "address",
+                        "internalType": "address"
+                    },
+                    {
+                        "name": "collection1",
+                        "type": "address",
+                        "internalType": "address"
+                    },
+                    {
+                        "name": "collectionId",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "tokenId1",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "battleType",
+                        "type": "uint8",
+                        "internalType": "enum IPudgyChickenFight.BattleType"
+                    },
+                    {
+                        "name": "betAmount",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "uint8"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getBeacon",
         "inputs": [],
         "outputs": [
@@ -727,6 +782,11 @@
     {
         "type": "error",
         "name": "CollectionNotFound",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "FightNotSet",
         "inputs": []
     },
     {
