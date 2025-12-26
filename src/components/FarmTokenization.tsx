@@ -43,14 +43,14 @@ const contactMethods = [
   {
     icon: <Phone className="h-5 w-5" />,
     method: "WhatsApp",
-    value: "+55 (11) 99999-9999",
-    action: "https://wa.me/5511999999999"
+    value: "+55 (27) 99904-6066",
+    action: "https://wa.me/5527999046066"
   },
   {
     icon: <Mail className="h-5 w-5" />,
     method: "Email",
-    value: "farms@onchicken.com",
-    action: "mailto:farms@onchicken.com"
+    value: "afonsodalvia@gmail.com",
+    action: "mailto:afonsodalvia@gmail.com"
   },
   {
     icon: <MessageCircle className="h-5 w-5" />,
@@ -131,7 +131,7 @@ export const FarmTokenization = () => {
               <Button
                 size="lg"
                 className="bg-gradient-hero text-primary-foreground hover:opacity-90 px-8 py-4 text-lg"
-                onClick={() => handleContact("WhatsApp", "https://wa.me/5511999999999")}
+                onClick={() => handleContact("WhatsApp", "https://wa.me/5527999046066")}
               >
                 <MessageCircle className="mr-2 h-5 w-5" />
                 Entre em Contato Agora
@@ -233,7 +233,7 @@ export const FarmTokenization = () => {
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
-                São Paulo, SP - Brasil
+                Espírito Santo, Brasil
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
@@ -241,7 +241,7 @@ export const FarmTokenization = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                farms@onchicken.com
+                afonsodalvia@gmail.com
               </div>
             </div>
           </div>

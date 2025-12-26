@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import chickenA from "@/assets/1.png";
-import chickenB from "@/assets/10.png";
 
 export const Collection = () => {
   const { t } = useLanguage();
@@ -12,15 +11,8 @@ export const Collection = () => {
       name: "Pudgy Chickens",
       description: t('collection.original'),
       items: "10,000",
-      floorPrice: "$100",
+      floorPrice: "$20",
       image: chickenA,
-    },
-    {
-      name: "Lil Chicks",
-      description: t('collection.lil'),
-      items: "5,000",
-      floorPrice: "$50",
-      image: chickenB,
     },
   ];
 
@@ -38,7 +30,7 @@ export const Collection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-8 mb-12 max-w-2xl mx-auto">
           {collections.map((collection, index) => (
             <Card 
               key={index} 

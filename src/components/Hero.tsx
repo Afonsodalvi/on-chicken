@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Info, GraduationCap, Target, Gift } from "lucide-react";
+import { ArrowRight, Play, Info, GraduationCap, Target, Gift, Mail } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
@@ -165,7 +165,7 @@ export const Hero = () => {
               </div>
             </div>
 
-            {/* Botões Saiba Mais e Mint alinhados */}
+            {/* Botões Saiba Mais, Mint e Entre em Contato alinhados */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
               <Link to="/details">
                 <Button 
@@ -183,6 +183,19 @@ export const Hero = () => {
                   🐔 {t('hero.cta.mint')}
                 </Button>
               </Link>
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="w-full sm:w-auto border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary hover:text-primary-foreground transition-all shadow-lg hover:shadow-xl"
+                onClick={() => {
+                  const subject = encodeURIComponent('PudgyFarms');
+                  const body = encodeURIComponent('Olá,\n\nGostaria de saber mais sobre o projeto PudgyFarms e como posso participar.\n\nAtenciosamente,');
+                  window.location.href = `mailto:afonsodalvia@gmail.com?subject=${subject}&body=${body}`;
+                }}
+              >
+                <Mail className="mr-2 h-5 w-5" />
+                {t('hero.cta.contact')}
+              </Button>
             </div>
           </div>
 
