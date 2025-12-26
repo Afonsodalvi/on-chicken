@@ -111,21 +111,6 @@ export const Footer = () => {
                   Pudgy Chickens
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Lil Chicks
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Premium Roosters
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Raridades
-                </a>
-              </li>
             </ul>
           </div>
 
