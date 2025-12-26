@@ -335,8 +335,6 @@ const Battle = () => {
             <BattleLobby
               onJoinBattle={handleJoinBattle}
               onCreateBattle={handleCreateBattle}
-              userNFTs={userNFTs}
-              currentUser="currentUser"
             />
           </div>
         </section>
