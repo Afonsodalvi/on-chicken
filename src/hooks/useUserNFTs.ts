@@ -15,6 +15,7 @@ export interface UserNFT {
   collection: string;
   owner: string;
   isAlive: boolean;
+  balance: bigint; // Quantidade de tokens deste ID que o usuário possui
 }
 
 /**
@@ -125,6 +126,7 @@ export function useUserNFTs() {
                 collection: "Pudgy Chickens",
                 owner: address,
                 isAlive: alive,
+                balance, // Incluir o balance (quantidade) do token
               });
             }
           } catch (err) {

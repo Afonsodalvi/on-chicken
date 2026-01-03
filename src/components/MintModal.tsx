@@ -15,8 +15,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Wallet, Zap, CreditCard, Coins, CheckCircle, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { Address } from "viem";
+import { Address, decodeEventLog } from "viem";
 import { PUDGY_CHICKEN_ABI, ERC20_ABI } from "@/lib/abi";
+import { MintSuccessModal } from "./MintSuccessModal";
 import { 
   getPudgyChickenCollectionAddress, 
   PaymentType,
@@ -28,7 +29,7 @@ import {
   formatTokenAmount
 } from "@/lib/contracts-helpers";
 import { CHAIN_IDS } from "@/lib/contracts";
-import { getTokenAsset } from "@/lib/token-assets";
+import { getTokenAsset, TokenAsset } from "@/lib/token-assets";
 import { ConnectWallet } from "./ConnectWallet";
 
 interface MintModalProps {
@@ -42,7 +43,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
   const publicClient = usePublicClient();
   const { switchChain } = useSwitchChain();
   const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess: isConfirmed, isError: isTransactionError, error: transactionError } = useWaitForTransactionReceipt({
     hash,
   });
 
@@ -54,6 +55,9 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
   const [allowance, setAllowance] = useState<bigint | null>(null);
   const [isLoadingPrice, setIsLoadingPrice] = useState(false);
   const [isCheckingBalance, setIsCheckingBalance] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [instanceMintedData, setInstanceMintedData] = useState<any>(null);
+  const [mintedTokenAsset, setMintedTokenAsset] = useState<TokenAsset | null>(null);
 
   // Carregar asset do token
   useEffect(() => {
@@ -93,23 +97,150 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
     }
   }, [open, isConnected, address, publicClient, chainId, price, paymentType]);
 
-  // Mostrar toast quando transação for confirmada
+  // Monitorar confirmação da transação e buscar evento InstanceMinted
   useEffect(() => {
-    if (isConfirmed) {
-      toast.success("Mint realizado com sucesso! 🐔");
-      onOpenChange(false);
-      // Resetar formulário
-      setQuantity(1);
-      setPaymentType(PaymentType.ETH);
+    if (isConfirmed && hash && publicClient) {
+      const fetchMintEvent = async () => {
+        try {
+          const receipt = await publicClient.getTransactionReceipt({ hash });
+          
+          // Buscar evento InstanceMinted
+          const instanceMintedEvent = receipt.logs.find((log) => {
+            try {
+              const decoded = decodeEventLog({
+                abi: PUDGY_CHICKEN_ABI,
+                data: log.data,
+                topics: log.topics,
+              });
+              return decoded.eventName === "InstanceMinted";
+            } catch {
+              return false;
+            }
+          });
+
+          if (instanceMintedEvent) {
+            try {
+              const decoded = decodeEventLog({
+                abi: PUDGY_CHICKEN_ABI,
+                data: instanceMintedEvent.data,
+                topics: instanceMintedEvent.topics,
+              });
+              
+              if (decoded.eventName === "InstanceMinted") {
+                const mintedTokenId = Number(decoded.args.tokenId);
+                const tokenAsset = getTokenAsset(mintedTokenId);
+                
+                setInstanceMintedData({
+                  owner: decoded.args.owner,
+                  tokenId: decoded.args.tokenId,
+                  instanceId: decoded.args.instanceId,
+                  instanceIndex: decoded.args.instanceIndex,
+                  power: decoded.args.power,
+                  speed: decoded.args.speed,
+                  health: decoded.args.health,
+                  clucking: decoded.args.clucking,
+                  broodPower: decoded.args.broodPower,
+                });
+                setMintedTokenAsset(tokenAsset);
+                setShowSuccessModal(true);
+              }
+            } catch (err) {
+              console.error("Erro ao decodificar evento:", err);
+            }
+          }
+          
+          toast.success("Mint realizado com sucesso! 🐔");
+          // Resetar formulário
+          setQuantity(1);
+          setPaymentType(PaymentType.ETH);
+          // Não fechar o modal principal ainda, deixar o modal de sucesso aparecer primeiro
+        } catch (err) {
+          console.error("Erro ao buscar evento:", err);
+          toast.success("Mint realizado com sucesso! 🐔");
+          onOpenChange(false);
+        }
+      };
+
+      fetchMintEvent();
     }
-  }, [isConfirmed, onOpenChange]);
+  }, [isConfirmed, hash, publicClient, onOpenChange]);
+
+  // Função helper para formatar mensagens de erro de forma profissional
+  const formatErrorMessage = (error: any): string => {
+    if (!error) return "Erro desconhecido ao processar transação";
+    
+    const errorMessage = error.message || error.toString() || "Erro desconhecido";
+    const errorLower = errorMessage.toLowerCase();
+    
+    // Rejeição do usuário
+    if (errorLower.includes("user rejected") || 
+        errorLower.includes("user denied") || 
+        errorLower.includes("rejected") ||
+        errorLower.includes("denied transaction") ||
+        errorLower.includes("user cancelled")) {
+      return "Transação cancelada pelo usuário";
+    }
+    
+    // Saldo insuficiente
+    if (errorLower.includes("insufficient") || 
+        errorLower.includes("balance too low") ||
+        errorLower.includes("insufficient funds")) {
+      return "Saldo insuficiente para completar a transação";
+    }
+    
+    // Aprovação insuficiente
+    if (errorLower.includes("allowance") || 
+        errorLower.includes("approval") ||
+        errorLower.includes("insufficient allowance")) {
+      return "Aprovação insuficiente. Por favor, aprove o token primeiro";
+    }
+    
+    // Rede incorreta
+    if (errorLower.includes("network") || 
+        errorLower.includes("chain") ||
+        errorLower.includes("wrong network")) {
+      return "Rede incorreta. Por favor, conecte-se à Base Sepolia";
+    }
+    
+    // Gas/transação falhou
+    if (errorLower.includes("gas") || 
+        errorLower.includes("transaction failed") ||
+        errorLower.includes("execution reverted") ||
+        errorLower.includes("revert")) {
+      return "Transação falhou. Verifique se você tem saldo suficiente e tente novamente";
+    }
+    
+    // Timeout
+    if (errorLower.includes("timeout") || 
+        errorLower.includes("deadline")) {
+      return "Tempo de espera esgotado. Por favor, tente novamente";
+    }
+    
+    // Retornar mensagem original se não corresponder a nenhum padrão conhecido
+    return errorMessage.length > 100 
+      ? `${errorMessage.substring(0, 100)}...` 
+      : errorMessage;
+  };
 
   // Mostrar erro se houver
   useEffect(() => {
     if (error) {
-      toast.error(`Erro ao fazer mint: ${error.message}`);
+      const formattedError = formatErrorMessage(error);
+      toast.error(`Erro ao fazer mint: ${formattedError}`, {
+        duration: 5000,
+      });
     }
   }, [error]);
+
+  // Monitorar erros na confirmação da transação
+  useEffect(() => {
+    if (isTransactionError && transactionError && hash) {
+      const formattedError = formatErrorMessage(transactionError);
+      toast.error(`Falha na confirmação do mint: ${formattedError}`, {
+        duration: 6000,
+      });
+    }
+  }, [isTransactionError, transactionError, hash]);
 
   const fetchPrice = async () => {
     if (!address || !publicClient || !chainId || !tokenId) return;
@@ -547,6 +678,21 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
           </div>
         )}
       </DialogContent>
+
+      {/* Modal de Sucesso com Skills */}
+      <MintSuccessModal
+        open={showSuccessModal}
+        onOpenChange={(open) => {
+          setShowSuccessModal(open);
+          if (!open) {
+            // Fechar o modal principal quando o modal de sucesso fechar
+            onOpenChange(false);
+          }
+        }}
+        instanceData={instanceMintedData}
+        tokenImage={mintedTokenAsset?.image}
+        tokenName={mintedTokenAsset?.metadata.name}
+      />
     </Dialog>
   );
 };

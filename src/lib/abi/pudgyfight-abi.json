@@ -180,6 +180,11 @@
                 "internalType": "uint256"
             },
             {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
                 "name": "battleType",
                 "type": "uint8",
                 "internalType": "enum IPudgyChickenFight.BattleType"
@@ -220,6 +225,11 @@
             },
             {
                 "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
                 "type": "uint256",
                 "internalType": "uint256"
             },
@@ -485,6 +495,11 @@
                 "name": "tokenId",
                 "type": "uint256",
                 "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "outputs": [],
@@ -508,6 +523,11 @@
                 "name": "tokenId",
                 "type": "uint256",
                 "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "outputs": [],
@@ -529,6 +549,11 @@
             },
             {
                 "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
                 "type": "uint256",
                 "internalType": "uint256"
             },
@@ -564,6 +589,11 @@
                 "name": "tokenId",
                 "type": "uint256",
                 "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "outputs": [],
@@ -596,6 +626,11 @@
                 "internalType": "uint256"
             },
             {
+                "name": "instanceId1",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
                 "name": "player2",
                 "type": "address",
                 "internalType": "address"
@@ -607,6 +642,11 @@
             },
             {
                 "name": "tokenId2",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceId2",
                 "type": "uint256",
                 "internalType": "uint256"
             },
@@ -649,6 +689,19 @@
                 "name": "paymentType",
                 "type": "uint8",
                 "internalType": "uint8"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "maxPowerLevelDifferencePercent",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "stateMutability": "view"
@@ -858,6 +911,19 @@
     },
     {
         "type": "function",
+        "name": "setMaxPowerLevelDifferencePercent",
+        "inputs": [
+            {
+                "name": "_maxDifferencePercent",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
         "name": "setNFTTransferEnabled",
         "inputs": [
             {
@@ -962,8 +1028,8 @@
             },
             {
                 "name": "subId",
-                "type": "uint64",
-                "internalType": "uint64"
+                "type": "uint256",
+                "internalType": "uint256"
             },
             {
                 "name": "requestConfirmations",
@@ -1153,8 +1219,8 @@
         "outputs": [
             {
                 "name": "",
-                "type": "uint64",
-                "internalType": "uint64"
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "stateMutability": "view"
@@ -1339,6 +1405,19 @@
             },
             {
                 "name": "prizeAmount",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "MaxPowerLevelDifferenceUpdated",
+        "inputs": [
+            {
+                "name": "maxDifferencePercent",
                 "type": "uint256",
                 "indexed": false,
                 "internalType": "uint256"
@@ -1588,6 +1667,27 @@
                 "name": "slot",
                 "type": "bytes32",
                 "internalType": "bytes32"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "UnfairMatch",
+        "inputs": [
+            {
+                "name": "powerLevel1",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "powerLevel2",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "maxAllowedDifference",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ]
     }

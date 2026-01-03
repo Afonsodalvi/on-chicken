@@ -84,19 +84,6 @@
     },
     {
         "type": "function",
-        "name": "addToWhitelist",
-        "inputs": [
-            {
-                "name": "account",
-                "type": "address",
-                "internalType": "address"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
         "name": "adminMint",
         "inputs": [
             {
@@ -282,12 +269,74 @@
     },
     {
         "type": "function",
+        "name": "getFirstInstanceId",
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getFreeMintsUsed",
         "inputs": [
             {
                 "name": "account",
                 "type": "address",
                 "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getInstanceBattleWins",
+        "inputs": [
+            {
+                "name": "instanceId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getInstanceIdByIndex",
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "outputs": [
@@ -708,6 +757,126 @@
     },
     {
         "type": "function",
+        "name": "getUserTokenCompleteInfo",
+        "inputs": [
+            {
+                "name": "user",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "tuple",
+                "internalType": "struct IPudgyChicken.TokenUserInfo",
+                "components": [
+                    {
+                        "name": "tokenId",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "balance",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "instances",
+                        "type": "tuple[]",
+                        "internalType": "struct IPudgyChicken.InstanceInfo[]",
+                        "components": [
+                            {
+                                "name": "tokenId",
+                                "type": "uint256",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "name": "instanceId",
+                                "type": "uint256",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "name": "instanceIndex",
+                                "type": "uint256",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "name": "instanceSkills",
+                                "type": "tuple",
+                                "internalType": "struct IPudgyChicken.skills",
+                                "components": [
+                                    {
+                                        "name": "power",
+                                        "type": "uint256",
+                                        "internalType": "uint256"
+                                    },
+                                    {
+                                        "name": "speed",
+                                        "type": "uint256",
+                                        "internalType": "uint256"
+                                    },
+                                    {
+                                        "name": "health",
+                                        "type": "uint256",
+                                        "internalType": "uint256"
+                                    },
+                                    {
+                                        "name": "clucking",
+                                        "type": "uint256",
+                                        "internalType": "uint256"
+                                    },
+                                    {
+                                        "name": "broodPower",
+                                        "type": "uint256",
+                                        "internalType": "uint256"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "battleWins",
+                                "type": "uint256",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "name": "isIncubating",
+                                "type": "bool",
+                                "internalType": "bool"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "battleWins",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "isIncubating",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "isAlive",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "remainingLifespan",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "grantRole",
         "inputs": [
             {
@@ -1076,19 +1245,6 @@
                 "name": "tokenId",
                 "type": "uint256",
                 "internalType": "uint256"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
-        "name": "removeFromWhitelist",
-        "inputs": [
-            {
-                "name": "account",
-                "type": "address",
-                "internalType": "address"
             }
         ],
         "outputs": [],
@@ -1468,6 +1624,24 @@
     },
     {
         "type": "function",
+        "name": "updateInstanceBattleWins",
+        "inputs": [
+            {
+                "name": "instanceId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "newBattleWins",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
         "name": "updateSpecialTokenBattleWins",
         "inputs": [
             {
@@ -1731,6 +1905,86 @@
                 "type": "uint64",
                 "indexed": false,
                 "internalType": "uint64"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "InstanceBattleWinsUpdated",
+        "inputs": [
+            {
+                "name": "instanceId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "battleWins",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "InstanceMinted",
+        "inputs": [
+            {
+                "name": "owner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "tokenId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "instanceIndex",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "power",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "speed",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "health",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "clucking",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "broodPower",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
             }
         ],
         "anonymous": false

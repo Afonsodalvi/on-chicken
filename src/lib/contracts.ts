@@ -15,7 +15,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0xda95d5c228d9D12C2E9F80D3687AF651496B9E71" as Address, // Base Sepolia Testnet
+    baseSepolia: "0x9a449b5c6d6b1a66B8134Da6A0f5258f63F7D1b7" as Address, // Base Sepolia Testnet
   },
   
   // Pudgy Chicken Collection Contract (ERC-1155 NFT)
@@ -26,7 +26,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x05BE25F8292d61d10a0ad77cB0Ad4d4BB7D1209D" as Address, // First Collection on Base Sepolia
+    baseSepolia: "0x1fD6B9a94abe117D2f98201cbd4f1A0F9516B9bA" as Address, // First Collection on Base Sepolia
   },
   
   // Pudgy Chicken Implementation (for reference, not directly used)
@@ -36,7 +36,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x760EEC87EB1E34617E908980A1e7338Ec9527a9E" as Address,
+    baseSepolia: "0xf75A041d8268C54F82a155b418391695388e62E0" as Address,
   },
   
   // Pudgy Chicken Fight Contract (Battle Arena)
@@ -46,7 +46,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x5F3fde74442A75Dd63C66299b0b7b349B2a4DB1D" as Address, // Base Sepolia Testnet
+    baseSepolia: "0x93A5EA99044343b1247624dCe2eb91046C161BC7" as Address, // Base Sepolia Testnet
   },
   
   // EggCoin Token (ERC-20)
@@ -56,7 +56,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0xf80d1037eBedbb582F818b2921b7253F4261E2e1" as Address, // Base Sepolia Testnet
+    baseSepolia: "0x66A937Fa011f67862063272eFa8B28024675A05c" as Address, // Base Sepolia Testnet
   },
 
   // USDC Addresses (for payments)
@@ -86,7 +86,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x05BE25F8292d61d10a0ad77cB0Ad4d4BB7D1209D" as Address,
+    baseSepolia: "0x1fD6B9a94abe117D2f98201cbd4f1A0F9516B9bA" as Address,
   },
   
   BATTLE_ARENA: {
@@ -95,7 +95,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x5F3fde74442A75Dd63C66299b0b7b349B2a4DB1D" as Address,
+    baseSepolia: "0x93A5EA99044343b1247624dCe2eb91046C161BC7" as Address,
   },
   
   FARM_TOKEN: {
@@ -104,7 +104,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0xf80d1037eBedbb582F818b2921b7253F4261E2e1" as Address,
+    baseSepolia: "0x66A937Fa011f67862063272eFa8B28024675A05c" as Address,
   },
 } as const;
 
