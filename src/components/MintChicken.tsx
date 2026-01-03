@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, XCircle, Loader2, Wallet, Coins, CreditCard, Zap, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { Address } from "viem";
+import { Address, decodeEventLog } from "viem";
 import { PUDGY_CHICKEN_ABI, ERC20_ABI } from "@/lib/abi";
+import { MintSuccessModal } from "./MintSuccessModal";
 import { 
   getPudgyChickenCollectionAddress, 
   isWhitelisted, 
@@ -24,7 +25,7 @@ import {
   formatTokenAmount
 } from "@/lib/contracts-helpers";
 import { CHAIN_IDS } from "@/lib/contracts";
-import { getAllTokenAssets, TokenAsset } from "@/lib/token-assets";
+import { getAllTokenAssets, TokenAsset, getTokenAsset } from "@/lib/token-assets";
 import { ConnectWallet } from "./ConnectWallet";
 
 interface MintChickenProps {
@@ -37,7 +38,7 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
   const publicClient = usePublicClient();
   const { switchChain } = useSwitchChain();
   const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess: isConfirmed, isError: isTransactionError, error: transactionError } = useWaitForTransactionReceipt({
     hash,
   });
 
@@ -53,6 +54,9 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
   const [allowance, setAllowance] = useState<bigint | null>(null);
   const [isLoadingPrice, setIsLoadingPrice] = useState(false);
   const [isCheckingBalance, setIsCheckingBalance] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [instanceMintedData, setInstanceMintedData] = useState<any>(null);
+  const [mintedTokenAsset, setMintedTokenAsset] = useState<TokenAsset | null>(null);
 
   // Carregar assets dos tokens
   useEffect(() => {
@@ -113,23 +117,150 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
     }
   }, [isConnected, address, publicClient, chainId, price, paymentType, isWhitelistedUser]);
 
-  // Mostrar toast quando transação for confirmada
+  // Monitorar confirmação da transação e buscar evento InstanceMinted
   useEffect(() => {
-    if (isConfirmed) {
-      toast.success("Mint realizado com sucesso! 🐔");
-      onSuccess?.();
-      // Resetar formulário
-      setQuantity(1);
-      setSelectedTokenId(1);
+    if (isConfirmed && hash && publicClient) {
+      const fetchMintEvent = async () => {
+        try {
+          const receipt = await publicClient.getTransactionReceipt({ hash });
+          
+          // Buscar evento InstanceMinted
+          const instanceMintedEvent = receipt.logs.find((log) => {
+            try {
+              const decoded = decodeEventLog({
+                abi: PUDGY_CHICKEN_ABI,
+                data: log.data,
+                topics: log.topics,
+              });
+              return decoded.eventName === "InstanceMinted";
+            } catch {
+              return false;
+            }
+          });
+
+          if (instanceMintedEvent) {
+            try {
+              const decoded = decodeEventLog({
+                abi: PUDGY_CHICKEN_ABI,
+                data: instanceMintedEvent.data,
+                topics: instanceMintedEvent.topics,
+              });
+              
+              if (decoded.eventName === "InstanceMinted") {
+                const mintedTokenId = Number(decoded.args.tokenId);
+                const tokenAsset = getTokenAsset(mintedTokenId);
+                
+                setInstanceMintedData({
+                  owner: decoded.args.owner,
+                  tokenId: decoded.args.tokenId,
+                  instanceId: decoded.args.instanceId,
+                  instanceIndex: decoded.args.instanceIndex,
+                  power: decoded.args.power,
+                  speed: decoded.args.speed,
+                  health: decoded.args.health,
+                  clucking: decoded.args.clucking,
+                  broodPower: decoded.args.broodPower,
+                });
+                setMintedTokenAsset(tokenAsset);
+                setShowSuccessModal(true);
+              }
+            } catch (err) {
+              console.error("Erro ao decodificar evento:", err);
+            }
+          }
+          
+          toast.success("Mint realizado com sucesso! 🐔");
+          onSuccess?.();
+          // Resetar formulário
+          setQuantity(1);
+          setSelectedTokenId(1);
+        } catch (err) {
+          console.error("Erro ao buscar evento:", err);
+          toast.success("Mint realizado com sucesso! 🐔");
+          onSuccess?.();
+        }
+      };
+
+      fetchMintEvent();
     }
-  }, [isConfirmed, onSuccess]);
+  }, [isConfirmed, hash, publicClient, onSuccess]);
+
+  // Função helper para formatar mensagens de erro de forma profissional
+  const formatErrorMessage = (error: any): string => {
+    if (!error) return "Erro desconhecido ao processar transação";
+    
+    const errorMessage = error.message || error.toString() || "Erro desconhecido";
+    const errorLower = errorMessage.toLowerCase();
+    
+    // Rejeição do usuário
+    if (errorLower.includes("user rejected") || 
+        errorLower.includes("user denied") || 
+        errorLower.includes("rejected") ||
+        errorLower.includes("denied transaction") ||
+        errorLower.includes("user cancelled")) {
+      return "Transação cancelada pelo usuário";
+    }
+    
+    // Saldo insuficiente
+    if (errorLower.includes("insufficient") || 
+        errorLower.includes("balance too low") ||
+        errorLower.includes("insufficient funds")) {
+      return "Saldo insuficiente para completar a transação";
+    }
+    
+    // Aprovação insuficiente
+    if (errorLower.includes("allowance") || 
+        errorLower.includes("approval") ||
+        errorLower.includes("insufficient allowance")) {
+      return "Aprovação insuficiente. Por favor, aprove o token primeiro";
+    }
+    
+    // Rede incorreta
+    if (errorLower.includes("network") || 
+        errorLower.includes("chain") ||
+        errorLower.includes("wrong network")) {
+      return "Rede incorreta. Por favor, conecte-se à Base Sepolia";
+    }
+    
+    // Gas/transação falhou
+    if (errorLower.includes("gas") || 
+        errorLower.includes("transaction failed") ||
+        errorLower.includes("execution reverted") ||
+        errorLower.includes("revert")) {
+      return "Transação falhou. Verifique se você tem saldo suficiente e tente novamente";
+    }
+    
+    // Timeout
+    if (errorLower.includes("timeout") || 
+        errorLower.includes("deadline")) {
+      return "Tempo de espera esgotado. Por favor, tente novamente";
+    }
+    
+    // Retornar mensagem original se não corresponder a nenhum padrão conhecido
+    return errorMessage.length > 100 
+      ? `${errorMessage.substring(0, 100)}...` 
+      : errorMessage;
+  };
 
   // Mostrar erro se houver
   useEffect(() => {
     if (error) {
-      toast.error(`Erro ao fazer mint: ${error.message}`);
+      const formattedError = formatErrorMessage(error);
+      toast.error(`Erro ao fazer mint: ${formattedError}`, {
+        duration: 5000,
+      });
     }
   }, [error]);
+
+  // Monitorar erros na confirmação da transação
+  useEffect(() => {
+    if (isTransactionError && transactionError && hash) {
+      const formattedError = formatErrorMessage(transactionError);
+      toast.error(`Falha na confirmação do mint: ${formattedError}`, {
+        duration: 6000,
+      });
+    }
+  }, [isTransactionError, transactionError, hash]);
 
   const checkWhitelistStatus = async () => {
     if (!address || !publicClient || !chainId) return;
@@ -421,6 +552,7 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
   const canMint = !isLoading && selectedToken !== null;
 
   return (
+    <>
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-center text-2xl">Mint sua PudgyChicken</CardTitle>
@@ -706,6 +838,16 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
         )}
       </CardContent>
     </Card>
+
+    {/* Modal de Sucesso com Skills */}
+    <MintSuccessModal
+      open={showSuccessModal}
+      onOpenChange={setShowSuccessModal}
+      instanceData={instanceMintedData}
+      tokenImage={mintedTokenAsset?.image}
+      tokenName={mintedTokenAsset?.metadata.name}
+    />
+    </>
   );
 };
 

@@ -277,3 +277,29 @@ All colors MUST be HSL.
 .animate-wizard-sparkle {
   animation: wizard-sparkle 2s ease-in-out infinite;
 }
+
+/* Custom Scrollbar Styles - Futuristic Dark Theme */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: hsl(220 14% 20% / 0.5);
+  border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, hsl(265 92% 68% / 0.4), hsl(190 95% 65% / 0.4));
+  border-radius: 10px;
+  border: 1px solid hsl(220 12% 22% / 0.3);
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, hsl(265 92% 68% / 0.6), hsl(190 95% 65% / 0.6));
+}
+
+/* Firefox */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(265 92% 68% / 0.4) hsl(220 14% 20% / 0.5);
+}
