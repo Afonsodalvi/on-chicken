@@ -1,7 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Coins } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const EGGCOIN_OPEN_EVENT = "openEggCoinMint";
+
+/** Dispara o evento que a EggCoinSection escuta para abrir o modal de mint. */
+export function openEggCoinMintModal() {
+  window.dispatchEvent(new CustomEvent(EGGCOIN_OPEN_EVENT));
+}
 
 interface EggCoinButtonProps {
   size?: "sm" | "default" | "lg";
@@ -12,11 +18,17 @@ export const EggCoinButton: React.FC<EggCoinButtonProps> = ({
   size = "sm",
   className = ""
 }) => {
-  const { t } = useLanguage();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handlePudgyEggsClick = () => {
-    // TODO: Implement PudgyEggs acquisition logic
-    console.log("PudgyEggs acquisition clicked");
+    // Se não estiver na home, ir para a home e depois scroll + abrir modal
+    if (location.pathname !== "/") {
+      navigate("/", { state: { openEggCoinMint: true } });
+      return;
+    }
+    document.getElementById("eggcoin")?.scrollIntoView({ behavior: "smooth" });
+    openEggCoinMintModal();
   };
 
   return (

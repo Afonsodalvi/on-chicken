@@ -1,9 +1,43 @@
-// ABI exports for smart contracts
-import managerAbi from "./manager-abi.json";
-import pudgyChickenAbi from "./pudgychicken-abi.json";
-import pudgyFightAbi from "./pudgyfight-abi.json";
+// ABI exports – arquitetura Diamond (CONTRACTS_USAGE.md)
+// ABIs oficiais: ChickenManagerFarm.json, PudgyChicken.json, PudgyChickenView.json, PudgyChickenFight.json
 
-// ERC-20 ABI (for USDC, USDT, and EggCoin)
+import chickenManagerFarmRaw from "./ChickenManagerFarm.json";
+import pudgyChickenRaw from "./PudgyChicken.json";
+import pudgyChickenView from "./PudgyChickenView.json";
+import pudgyChickenFight from "./PudgyChickenFight.json";
+import eggCoinRaw from "./EggCoin.json";
+
+type AbiItem = { type?: string; name?: string; [key: string]: unknown };
+
+/** Remove constructor e receive para uso em proxy/Diamond (endereço já deployado). */
+function withoutConstructorOrReceive(abi: AbiItem[]): AbiItem[] {
+  return abi.filter(
+    (item) => item.type !== "constructor" && item.type !== "receive"
+  );
+}
+
+// ChickenManagerFarm – factory + createMatchById / joinMatchById
+const chickenManagerFarmAbi = withoutConstructorOrReceive(
+  chickenManagerFarmRaw as AbiItem[]
+);
+
+// Coleção Diamond = PudgyChicken (sem constructor) + PudgyChickenView (todas as views)
+const pudgyChickenAbiOnly = withoutConstructorOrReceive(
+  pudgyChickenRaw as AbiItem[]
+);
+const PUDGY_CHICKEN_COLLECTION_ABI = [
+  ...pudgyChickenAbiOnly,
+  ...(pudgyChickenView as AbiItem[]),
+];
+
+// PudgyChickenFight – Diamond da arena (matches, VRF, taxas)
+const pudgyChickenFightAbi = pudgyChickenFight as AbiItem[];
+
+// EggCoin – token PudgyEggs (getPrice, mintWithETH, mintWithUSDC)
+const eggCoinAbi = withoutConstructorOrReceive(eggCoinRaw as AbiItem[]);
+export const EGG_COIN_ABI = eggCoinAbi;
+
+// ERC-20 ABI (for USDC, USDT, EggCoin)
 export const ERC20_ABI = [
   {
     type: "function",
@@ -65,7 +99,7 @@ export const ERC20_ABI = [
   },
 ] as const;
 
-// ERC-1155 ABI (for PudgyChicken NFTs - it's an ERC1155 contract)
+// ERC-1155 ABI (compatibilidade; coleção Diamond já inclui balanceOf, setApprovalForAll, etc.)
 export const ERC1155_ABI = [
   {
     type: "function",
@@ -129,16 +163,15 @@ export const ERC1155_ABI = [
   },
 ] as const;
 
-// Real ABIs from deployed contracts
-export const CHICKEN_MANAGER_FARM_ABI = managerAbi;
-export const PUDGY_CHICKEN_ABI = pudgyChickenAbi;
-export const PUDGY_CHICKEN_FIGHT_ABI = pudgyFightAbi;
+// ABIs dos contratos deployados (Diamond)
+export const CHICKEN_MANAGER_FARM_ABI = chickenManagerFarmAbi;
+export const PUDGY_CHICKEN_ABI = PUDGY_CHICKEN_COLLECTION_ABI;
+export const PUDGY_CHICKEN_FIGHT_ABI = pudgyChickenFightAbi;
 
-// Type exports for better TypeScript support
+// Type exports
 export type ChickenManagerFarmABI = typeof CHICKEN_MANAGER_FARM_ABI;
 export type PudgyChickenABI = typeof PUDGY_CHICKEN_ABI;
 
-// Legacy exports for backward compatibility
+// Legacy (mesmos valores)
 export const PUDGY_CHICKENS_ABI = PUDGY_CHICKEN_ABI;
-export const BATTLE_ARENA_ABI = pudgyFightAbi; // Fight contract ABI
-export const EGG_COIN_ABI = ERC20_ABI; // EggCoin is an ERC-20 token
+export const BATTLE_ARENA_ABI = PUDGY_CHICKEN_FIGHT_ABI;

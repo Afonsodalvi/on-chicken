@@ -12,6 +12,7 @@ import { Farm } from "./pages/Farm";
 import Whitelist from "./pages/Whitelist";
 import Details from "./pages/Details";
 import NotFound from "./pages/NotFound";
+import { WalletEligibilityHandler } from "./components/WalletEligibilityHandler";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <WalletEligibilityHandler />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/battle" element={<Battle />} />

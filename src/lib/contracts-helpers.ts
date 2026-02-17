@@ -28,12 +28,11 @@ export enum PaymentType {
 }
 
 /**
- * Battle Types para createMatchById
+ * Battle Types para createMatchById (alinhado ao contrato ChickenManagerFarm)
  */
 export enum BattleType {
-  // TODO: Definir os tipos de batalha baseado no contrato
-  STANDARD = 0,
-  // Adicionar outros tipos conforme necessário
+  FREE = 0,
+  PAID = 1,
 }
 
 /**
@@ -182,13 +181,32 @@ export async function getDeploymentPriceUSDC(
 // ============================================================================
 
 /**
- * Obtém o endereço da coleção PudgyChicken para a chain atual
- * Por padrão, retorna a primeira coleção (baseSepolia)
+ * Obtém o endereço da coleção PudgyChicken (First Collection Diamond) para a chain atual
  */
 export function getPudgyChickenCollectionAddress(chainId: number): Address | null {
   const chainName = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as keyof typeof CONTRACTS.PUDGY_CHICKEN_COLLECTION;
   if (!chainName) return null;
   const address = CONTRACTS.PUDGY_CHICKEN_COLLECTION[chainName];
+  return address === "0x" ? null : address;
+}
+
+/**
+ * Obtém o endereço do PudgyChickenFight (Diamond da arena) para a chain atual
+ */
+export function getFightAddress(chainId: number): Address | null {
+  const chainName = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as keyof typeof CONTRACTS.PUDGY_CHICKEN_FIGHT;
+  if (!chainName) return null;
+  const address = CONTRACTS.PUDGY_CHICKEN_FIGHT[chainName];
+  return address === "0x" ? null : address;
+}
+
+/**
+ * Obtém o endereço do contrato EggCoin (PudgyEggs) para a chain atual
+ */
+export function getEggCoinAddress(chainId: number): Address | null {
+  const chainName = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as keyof typeof CONTRACTS.EGG_COIN;
+  if (!chainName) return null;
+  const address = CONTRACTS.EGG_COIN[chainName];
   return address === "0x" ? null : address;
 }
 
@@ -492,33 +510,37 @@ export function prepareMintFreeParams(
 }
 
 /**
- * Prepara os parâmetros para createMatchById (battle)
+ * Prepara os parâmetros para createMatchById (battle) – ChickenManagerFarm.
+ * Assinatura: createMatchById(id, player, tokenId, instanceIndex, battleType, betAmount, paymentType).
  */
 export function prepareCreateMatchParams(
   id: bigint,
   player: Address,
   tokenId: bigint,
+  instanceIndex: bigint,
   battleType: BattleType,
   betAmount: bigint,
   paymentType: PaymentType
 ) {
   return {
     functionName: "createMatchById" as const,
-    args: [id, player, tokenId, battleType, betAmount, paymentType],
+    args: [id, player, tokenId, instanceIndex, battleType, betAmount, paymentType],
   };
 }
 
 /**
- * Prepara os parâmetros para joinMatchById
+ * Prepara os parâmetros para joinMatchById – ChickenManagerFarm.
+ * Assinatura: joinMatchById(matchId, id, tokenId, instanceIndex).
  */
 export function prepareJoinMatchParams(
   matchId: bigint,
   id: bigint,
-  tokenId: bigint
+  tokenId: bigint,
+  instanceIndex: bigint
 ) {
   return {
     functionName: "joinMatchById" as const,
-    args: [matchId, id, tokenId],
+    args: [matchId, id, tokenId, instanceIndex],
   };
 }
 

@@ -1,16 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Coins, MapPin, Gift, Users } from "lucide-react";
+import { MapPin, Gift, Users } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import { EggCoinMintModal } from "./EggCoinMintModal";
 
 export const EggCoinSection = () => {
   const { t } = useLanguage();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [mintModalOpen, setMintModalOpen] = useState(false);
 
-  const handleGetPudgyEggs = () => {
-    // TODO: Implement PudgyEggs acquisition logic
-    console.log("Get PudgyEggs clicked");
-  };
+  // Abrir modal quando o header (ou outro) dispara o evento
+  useEffect(() => {
+    const handler = () => setMintModalOpen(true);
+    window.addEventListener("openEggCoinMint", handler);
+    return () => window.removeEventListener("openEggCoinMint", handler);
+  }, []);
+
+  // Se veio de outra página com state openEggCoinMint, scroll + abrir modal
+  useEffect(() => {
+    const state = location.state as { openEggCoinMint?: boolean } | null;
+    if (state?.openEggCoinMint) {
+      document.getElementById("eggcoin")?.scrollIntoView({ behavior: "smooth" });
+      setMintModalOpen(true);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, navigate]);
 
   return (
     <section id="eggcoin" className="py-20 bg-gradient-to-br from-background via-muted/30 to-background">
@@ -93,7 +110,7 @@ export const EggCoinSection = () => {
             
             <div className="mt-8 flex justify-center">
               <Button 
-                onClick={handleGetPudgyEggs}
+                onClick={() => setMintModalOpen(true)}
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3"
               >
@@ -104,6 +121,7 @@ export const EggCoinSection = () => {
           </div>
         </div>
       </div>
+      <EggCoinMintModal open={mintModalOpen} onOpenChange={setMintModalOpen} />
     </section>
   );
 };

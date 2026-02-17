@@ -2,10 +2,27 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAccount } from "wagmi";
+import { ExternalLink } from "lucide-react";
 import chickenA from "@/assets/1.png";
+import { getPudgyChickenCollectionAddress } from "@/lib/contracts-helpers";
+import { CHAIN_IDS } from "@/lib/contracts";
+
+function getCollectionExplorerUrl(chainId: number | undefined, collectionAddress: string | null): string {
+  const address = collectionAddress || "0x479500002B54D4F4C45A3944aB7EC0FF84eb20AB";
+  const base =
+    chainId === CHAIN_IDS.base
+      ? "https://basescan.org"
+      : "https://sepolia.basescan.org";
+  return `${base}/address/${address}`;
+}
 
 export const Collection = () => {
   const { t } = useLanguage();
+  const { chainId } = useAccount();
+  const collectionAddress = chainId ? getPudgyChickenCollectionAddress(chainId) : null;
+  const collectionExplorerUrl = getCollectionExplorerUrl(chainId, collectionAddress);
+
   const collections = [
     {
       name: "Pudgy Chickens",
@@ -61,8 +78,20 @@ export const Collection = () => {
                       <div className="text-sm text-muted-foreground">{t('collection.floor')}</div>
                       <div className="text-xl font-bold text-primary">{collection.floorPrice}</div>
                     </div>
-                    <Button variant="outline" className="border-border hover:bg-secondary">
-                      {t('collection.view')}
+                    <Button
+                      variant="outline"
+                      className="border-border hover:bg-secondary"
+                      asChild
+                    >
+                      <a
+                        href={collectionExplorerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2"
+                      >
+                        {t('collection.view')}
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
                     </Button>
                   </div>
                 </div>

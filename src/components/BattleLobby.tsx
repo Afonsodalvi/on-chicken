@@ -1612,11 +1612,11 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         try {
           const gasPrice = await publicClient.getGasPrice();
           
-          // Codificar os dados da função joinMatchById
+          // Codificar os dados da função joinMatchById (matchId, id, tokenId, instanceIndex)
           const functionData = encodeFunctionData({
             abi: CHICKEN_MANAGER_FARM_ABI,
             functionName: "joinMatchById",
-            args: [matchId, collectionId, tokenId],
+            args: [matchId, collectionId, tokenId, selectedInstanceIndexForJoin ?? 0n],
           });
           
           // Estimar gas
