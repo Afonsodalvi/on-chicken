@@ -1140,6 +1140,11 @@
     },
     {
         "type": "error",
+        "name": "ETHRefundFailed",
+        "inputs": []
+    },
+    {
+        "type": "error",
         "name": "FailedCall",
         "inputs": []
     },
@@ -1176,6 +1181,11 @@
     {
         "type": "error",
         "name": "InvalidRoundData",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "NonZeroMsgValueForERC20Payment",
         "inputs": []
     },
     {

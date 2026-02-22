@@ -28,9 +28,10 @@ import {
   getTokenAddress,
   formatTokenAmount
 } from "@/lib/contracts-helpers";
-import { CHAIN_IDS } from "@/lib/contracts";
+import { CHAIN_IDS, isSupportedBaseChain } from "@/lib/contracts";
 import { getTokenAsset, TokenAsset } from "@/lib/token-assets";
 import { ConnectWallet } from "./ConnectWallet";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MintModalProps {
   open: boolean;
@@ -39,6 +40,7 @@ interface MintModalProps {
 }
 
 export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenId }) => {
+  const { t } = useLanguage();
   const { address, isConnected, chainId } = useAccount();
   const publicClient = usePublicClient();
   const { switchChain } = useSwitchChain();
@@ -149,14 +151,14 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
             }
           }
           
-          toast.success("Mint realizado com sucesso! 🐔");
+          toast.success(t('mint.successToast'));
           // Resetar formulário
           setQuantity(1);
           setPaymentType(PaymentType.ETH);
           // Não fechar o modal principal ainda, deixar o modal de sucesso aparecer primeiro
         } catch (err) {
           console.error("Erro ao buscar evento:", err);
-          toast.success("Mint realizado com sucesso! 🐔");
+          toast.success(t('mint.successToast'));
           onOpenChange(false);
         }
       };
@@ -165,68 +167,24 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
     }
   }, [isConfirmed, hash, publicClient, onOpenChange]);
 
-  // Função helper para formatar mensagens de erro de forma profissional
   const formatErrorMessage = (error: any): string => {
-    if (!error) return "Erro desconhecido ao processar transação";
-    
-    const errorMessage = error.message || error.toString() || "Erro desconhecido";
+    if (!error) return t('mint.error.unknown');
+    const errorMessage = error.message || error.toString() || t('mint.error.unknown');
     const errorLower = errorMessage.toLowerCase();
-    
-    // Rejeição do usuário
-    if (errorLower.includes("user rejected") || 
-        errorLower.includes("user denied") || 
-        errorLower.includes("rejected") ||
-        errorLower.includes("denied transaction") ||
-        errorLower.includes("user cancelled")) {
-      return "Transação cancelada pelo usuário";
-    }
-    
-    // Saldo insuficiente
-    if (errorLower.includes("insufficient") || 
-        errorLower.includes("balance too low") ||
-        errorLower.includes("insufficient funds")) {
-      return "Saldo insuficiente para completar a transação";
-    }
-    
-    // Aprovação insuficiente
-    if (errorLower.includes("allowance") || 
-        errorLower.includes("approval") ||
-        errorLower.includes("insufficient allowance")) {
-      return "Aprovação insuficiente. Por favor, aprove o token primeiro";
-    }
-    
-    // Rede incorreta
-    if (errorLower.includes("network") || 
-        errorLower.includes("chain") ||
-        errorLower.includes("wrong network")) {
-      return "Rede incorreta. Por favor, conecte-se à Base Sepolia";
-    }
-    
-    // Gas/transação falhou
-    if (errorLower.includes("gas") || 
-        errorLower.includes("transaction failed") ||
-        errorLower.includes("execution reverted") ||
-        errorLower.includes("revert")) {
-      return "Transação falhou. Verifique se você tem saldo suficiente e tente novamente";
-    }
-    
-    // Timeout
-    if (errorLower.includes("timeout") || 
-        errorLower.includes("deadline")) {
-      return "Tempo de espera esgotado. Por favor, tente novamente";
-    }
-    
-    // Retornar mensagem original se não corresponder a nenhum padrão conhecido
-    return errorMessage.length > 100 
-      ? `${errorMessage.substring(0, 100)}...` 
-      : errorMessage;
+    if (errorLower.includes("user rejected") || errorLower.includes("user denied") || errorLower.includes("rejected") || errorLower.includes("denied transaction") || errorLower.includes("user cancelled")) return t('mint.error.userRejected');
+    if (errorLower.includes("insufficient") || errorLower.includes("balance too low") || errorLower.includes("insufficient funds")) return t('mint.error.insufficientBalance');
+    if (errorLower.includes("allowance") || errorLower.includes("approval") || errorLower.includes("insufficient allowance")) return t('mint.error.insufficientAllowance');
+    if (errorLower.includes("network") || errorLower.includes("chain") || errorLower.includes("wrong network")) return t('mint.error.wrongNetwork');
+    if (errorLower.includes("gas") || errorLower.includes("transaction failed") || errorLower.includes("execution reverted") || errorLower.includes("revert")) return t('mint.error.transactionFailed');
+    if (errorLower.includes("timeout") || errorLower.includes("deadline")) return t('mint.error.timeout');
+    return errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
   };
 
   // Mostrar erro se houver
   useEffect(() => {
     if (error) {
       const formattedError = formatErrorMessage(error);
-      toast.error(`Erro ao fazer mint: ${formattedError}`, {
+      toast.error(`${t('mint.error.mintFailed')} ${formattedError}`, {
         duration: 5000,
       });
     }
@@ -236,7 +194,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
   useEffect(() => {
     if (isTransactionError && transactionError && hash) {
       const formattedError = formatErrorMessage(transactionError);
-      toast.error(`Falha na confirmação do mint: ${formattedError}`, {
+      toast.error(`${t('mint.error.confirmFailed')} ${formattedError}`, {
         duration: 6000,
       });
     }
@@ -317,16 +275,16 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
   const ensureCorrectNetwork = async (): Promise<boolean> => {
     if (!chainId) return false;
 
-    if (chainId !== CHAIN_IDS.baseSepolia) {
+    if (!isSupportedBaseChain(chainId)) {
       try {
         await switchChain({ chainId: CHAIN_IDS.baseSepolia });
-        toast.info("Trocando para a rede Base Sepolia...");
+        toast.info(t('mint.error.switchingNetwork'));
         // Aguardar um pouco para a rede trocar
         await new Promise(resolve => setTimeout(resolve, 2000));
         return true;
       } catch (error: any) {
         console.error("Erro ao trocar de rede:", error);
-        toast.error("Por favor, conecte-se à rede Base Sepolia");
+        toast.error(t('mint.error.connectBaseSepolia'));
         return false;
       }
     }
@@ -339,13 +297,13 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
     if (allowance < price) {
       const tokenAddress = getTokenAddress(paymentType, chainId!);
       if (!tokenAddress) {
-        toast.error("Endereço do token não encontrado");
+        toast.error(t('mint.error.tokenAddressNotFound'));
         return false;
       }
 
       const collectionAddress = getPudgyChickenCollectionAddress(chainId!);
       if (!collectionAddress) {
-        toast.error("Contrato não encontrado");
+        toast.error(t('mint.error.contractNotFound'));
         return false;
       }
 
@@ -360,11 +318,11 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
           args: [collectionAddress, approvalAmount],
         });
 
-        toast.info("Aguardando aprovação do token...");
+        toast.info(t('mint.error.waitingApproval'));
         return true;
       } catch (error: any) {
         console.error("Erro ao aprovar token:", error);
-        toast.error(`Erro ao aprovar token: ${error.message}`);
+        toast.error(`${t('mint.error.approveError')} ${error.message}`);
         return false;
       }
     }
@@ -373,7 +331,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
 
   const handleMint = async () => {
     if (!address || !chainId || !publicClient) {
-      toast.error("Conecte sua carteira primeiro");
+      toast.error(t('mint.error.connectWallet'));
       return;
     }
 
@@ -384,26 +342,26 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
     }
 
     // Aguardar um pouco para garantir que a rede foi trocada
-    if (chainId !== CHAIN_IDS.baseSepolia) {
+    if (!isSupportedBaseChain(chainId)) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       return;
     }
 
     const collectionAddress = getPudgyChickenCollectionAddress(chainId);
     if (!collectionAddress) {
-      toast.error("Contrato não encontrado para esta rede");
+      toast.error(t('mint.error.contractNotFound'));
       return;
     }
 
     if (quantity < 1 || quantity > 10) {
-      toast.error("Quantidade deve ser entre 1 e 10");
+      toast.error(t('mint.quantityBetween'));
       return;
     }
 
     try {
       // Consultar preço antes de fazer o mint
       if (!price) {
-        toast.error("Consultando preço... Aguarde um momento.");
+        toast.error(t('mint.error.checkingPrice'));
         await fetchPrice();
         return;
       }
@@ -411,7 +369,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
       // Verificar saldo
       if (!balance || balance < price) {
         const tokenName = getPaymentTypeLabel(paymentType);
-        toast.error(`Saldo insuficiente! Você precisa de ${formatTokenAmount(price)} ${tokenName}`);
+        toast.error(`${t('mint.error.insufficientBalanceToast')} ${formatPaymentAmount(price)} ${tokenName}`);
         return;
       }
 
@@ -423,7 +381,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
             return;
           }
           // Aguardar a aprovação ser confirmada
-          toast.info("Aguardando confirmação da aprovação...");
+          toast.info(t('mint.error.waitingApprovalConfirm'));
           return;
         }
       }
@@ -440,7 +398,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
       });
     } catch (error: any) {
       console.error("Erro ao fazer mint:", error);
-      toast.error(`Erro: ${error.message || "Falha ao executar transação"}`);
+      toast.error(`${t('mint.error.prefix')} ${error.message || t('mint.error.generic')}`);
     }
   };
 
@@ -455,9 +413,15 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
       case PaymentType.EGG_COIN:
         return "PudgyEggs";
       default:
-        return "Desconhecido";
+        return t('mint.modal.unknownPayment');
     }
   };
+
+  /** Formata valor para exibição: ETH com decimais; USDC/outros sem casas decimais (como ETH em inteiros). */
+  const formatPaymentAmount = (amount: bigint) =>
+    paymentType === PaymentType.ETH
+      ? formatTokenAmount(amount, 18)
+      : formatTokenAmount(amount, 6, 0);
 
   const isLoading = isPending || isConfirming;
   const canMint = !isLoading && isConnected && tokenAsset !== null;
@@ -468,7 +432,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
         <DialogHeader>
           <DialogTitle>Mint {tokenAsset?.metadata.name || `Token #${tokenId}`}</DialogTitle>
           <DialogDescription>
-            Complete o mint do seu PudgyChicken NFT
+            {t('mint.modal.title')}
           </DialogDescription>
         </DialogHeader>
 
@@ -476,7 +440,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
           <div className="space-y-4 py-4">
             <Alert>
               <AlertDescription>
-                Conecte sua carteira para fazer o mint
+                {t('mint.modal.connectToMint')}
               </AlertDescription>
             </Alert>
             <div className="flex justify-center">
@@ -513,7 +477,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
 
             {/* Quantidade */}
             <div className="space-y-2">
-              <Label htmlFor="quantity">Quantidade</Label>
+              <Label htmlFor="quantity">{t('mint.quantity')}</Label>
               <Input
                 id="quantity"
                 type="number"
@@ -526,19 +490,19 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
                 }}
               />
               <p className="text-xs text-muted-foreground">
-                Você pode mintar entre 1 e 10 tokens
+                {t('mint.modal.quantityHint')}
               </p>
             </div>
 
             {/* Tipo de Pagamento */}
             <div className="space-y-2">
-              <Label htmlFor="payment-type">Tipo de Pagamento</Label>
+              <Label htmlFor="payment-type">{t('mint.paymentType')}</Label>
               <Select
                 value={paymentType.toString()}
                 onValueChange={(value) => setPaymentType(parseInt(value) as PaymentType)}
               >
                 <SelectTrigger id="payment-type">
-                  <SelectValue placeholder="Selecione o tipo de pagamento" />
+                  <SelectValue placeholder={t('mint.selectPaymentPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={PaymentType.ETH.toString()}>
@@ -568,46 +532,46 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
               {isLoadingPrice ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Consultando preço...
+                  {t('mint.checkingPrice')}
                 </div>
               ) : price !== null ? (
                 <>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">Preço Total:</span>
+                    <span className="text-sm font-medium">{t('mint.totalPrice')}</span>
                     <span className="text-sm font-semibold">
-                      {formatTokenAmount(price)} {getPaymentTypeLabel(paymentType)}
+                      {formatPaymentAmount(price)} {getPaymentTypeLabel(paymentType)}
                     </span>
                   </div>
                   {isCheckingBalance ? (
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Loader2 className="h-3 w-3 animate-spin" />
-                      Verificando saldo...
+                      {t('mint.buttonCheckingBalance')}
                     </div>
                   ) : balance !== null ? (
                     <>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm">Seu Saldo:</span>
+                        <span className="text-sm">{t('mint.yourBalance')}</span>
                         <span className="text-sm">
-                          {formatTokenAmount(balance)} {getPaymentTypeLabel(paymentType)}
+                          {formatPaymentAmount(balance)} {getPaymentTypeLabel(paymentType)}
                         </span>
                       </div>
                       {balance < price ? (
                         <Alert variant="destructive" className="mt-2">
                           <AlertTriangle className="h-4 w-4" />
                           <AlertDescription className="text-xs">
-                            Saldo insuficiente! Você precisa de {formatTokenAmount(price)} {getPaymentTypeLabel(paymentType)}
+                            {t('mint.insufficientBalance')} {formatPaymentAmount(price)} {getPaymentTypeLabel(paymentType)}
                           </AlertDescription>
                         </Alert>
                       ) : paymentType !== PaymentType.ETH && allowance !== null && allowance < price ? (
                         <Alert className="mt-2">
                           <AlertTriangle className="h-4 w-4" />
                           <AlertDescription className="text-xs">
-                            Aprovação necessária. Você precisará aprovar o token antes de fazer o mint.
+                            {t('mint.approvalRequired')}
                           </AlertDescription>
                         </Alert>
                       ) : (
                         <div className="text-xs text-green-600 mt-2">
-                          ✓ Saldo suficiente
+                          {t('mint.balanceOk')}
                         </div>
                       )}
                     </>
@@ -615,17 +579,17 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
                 </>
               ) : (
                 <div className="text-sm text-muted-foreground">
-                  Selecionando tipo de pagamento para ver o preço
+                  {t('mint.modal.selectPaymentForPrice')}
                 </div>
               )}
             </div>
 
             {/* Verificação de Rede */}
-            {chainId && chainId !== CHAIN_IDS.baseSepolia && (
+            {chainId && !isSupportedBaseChain(chainId) && (
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Por favor, conecte-se à rede Base Sepolia. Tentando trocar automaticamente...
+                  {t('mint.wrongNetwork')}
                 </AlertDescription>
               </Alert>
             )}
@@ -633,19 +597,19 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
             {/* Botão de Mint */}
             <Button
               onClick={handleMint}
-              disabled={!canMint || (chainId !== CHAIN_IDS.baseSepolia) || isLoadingPrice || isCheckingBalance || (price !== null && balance !== null && balance < price)}
+              disabled={!canMint || !isSupportedBaseChain(chainId) || isLoadingPrice || isCheckingBalance || (price !== null && balance !== null && balance < price)}
               className="w-full"
               size="lg"
             >
               {isLoading || isLoadingPrice || isCheckingBalance ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isLoadingPrice ? "Consultando preço..." : isCheckingBalance ? "Verificando saldo..." : isPending ? "Aguardando confirmação..." : "Processando..."}
+                  {isLoadingPrice ? t('mint.buttonCheckingPrice') : isCheckingBalance ? t('mint.buttonCheckingBalance') : isPending ? t('mint.buttonWaitingConfirmation') : t('mint.buttonProcessing')}
                 </>
               ) : (
                 <>
                   <Wallet className="mr-2 h-4 w-4" />
-                  Mint com {getPaymentTypeLabel(paymentType)}
+                  {t('mint.buttonMintWith')} {getPaymentTypeLabel(paymentType)}
                 </>
               )}
             </Button>
@@ -654,7 +618,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
             {hash && (
               <Alert>
                 <AlertDescription>
-                  Hash da transação:{" "}
+                  {t('mint.txHash')}{" "}
                   <a
                     href={`https://sepolia.basescan.org/tx/${hash}`}
                     target="_blank"
@@ -671,7 +635,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
               <Alert className="border-green-500 bg-green-500/10">
                 <CheckCircle className="h-4 w-4 text-green-500" />
                 <AlertDescription className="text-green-500">
-                  Mint realizado com sucesso! Verifique sua carteira.
+                  {t('mint.successMessage')}
                 </AlertDescription>
               </Alert>
             )}

@@ -14,7 +14,7 @@ import { Trophy, XCircle, Zap, Heart, Wind, Volume2, Shield, Loader2, User, User
 import { useAccount, usePublicClient } from "wagmi";
 import { Address } from "viem";
 import { PUDGY_CHICKEN_FIGHT_ABI } from "@/lib/abi";
-import { CONTRACTS } from "@/lib/contracts";
+import { getFightAddress } from "@/lib/contracts-helpers";
 import { getTokenAsset } from "@/lib/token-assets";
 import { toast } from "sonner";
 
@@ -50,6 +50,7 @@ export const BattleResultModal: React.FC<BattleResultModalProps> = ({
   matchId,
   userAddress,
 }) => {
+  const { chainId } = useAccount();
   const publicClient = usePublicClient();
   const [matchInfo, setMatchInfo] = useState<MatchInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,15 +61,15 @@ export const BattleResultModal: React.FC<BattleResultModalProps> = ({
     if (open && matchId && publicClient) {
       fetchMatchInfo();
     }
-  }, [open, matchId, publicClient]);
+  }, [open, matchId, publicClient, chainId]);
 
   const fetchMatchInfo = async () => {
     if (!publicClient) return;
 
     setIsLoading(true);
     try {
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
-      if (!fightAddress || fightAddress === "0x") {
+      const fightAddress = chainId ? getFightAddress(chainId) : null;
+      if (!fightAddress) {
         throw new Error("Contrato não encontrado");
       }
 

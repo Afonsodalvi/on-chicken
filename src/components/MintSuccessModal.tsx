@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trophy, Zap, Heart, Wind, Volume2, Shield, CheckCircle, Sparkles, X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface InstanceMintedData {
   owner: string;
@@ -38,6 +39,7 @@ export const MintSuccessModal: React.FC<MintSuccessModalProps> = ({
   tokenImage,
   tokenName,
 }) => {
+  const { t } = useLanguage();
   if (!instanceData) return null;
 
   const skills = [
@@ -75,10 +77,10 @@ export const MintSuccessModal: React.FC<MintSuccessModalProps> = ({
             </div>
             <div>
               <DialogTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                NFT Mintado com Sucesso! 🎉
+                {t('mint.success.title')}
               </DialogTitle>
               <DialogDescription className="text-base mt-1">
-                Seu colecionável foi criado e está pronto para batalhas
+                {t('mint.success.description')}
               </DialogDescription>
             </div>
           </div>
@@ -105,7 +107,7 @@ export const MintSuccessModal: React.FC<MintSuccessModalProps> = ({
                       {tokenName || `Token #${instanceData.tokenId.toString()}`}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      Colecionável único com skills especiais
+                      {t('mint.success.uniqueCollectible')}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-3 justify-center md:justify-start items-center">
@@ -129,10 +131,10 @@ export const MintSuccessModal: React.FC<MintSuccessModalProps> = ({
                 <div className="p-2 bg-primary/10 rounded-lg">
                   <Trophy className="h-5 w-5 text-primary" />
                 </div>
-                Skills do Colecionável
+                {t('mint.success.skillsTitle')}
               </h3>
               <Badge className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-4 py-1.5 text-sm font-semibold shadow-md">
-                Total: {totalStats} pts
+                {t('mint.success.totalPts')} {totalStats} pts
               </Badge>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -182,7 +184,7 @@ export const MintSuccessModal: React.FC<MintSuccessModalProps> = ({
               <div className="flex items-center gap-2 mb-4">
                 <div className="h-1 w-8 bg-primary rounded-full"></div>
                 <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
-                  Detalhes da Instância
+                  {t('mint.success.instanceDetails')}
                 </h4>
               </div>
               <div className="space-y-4">
@@ -218,7 +220,7 @@ export const MintSuccessModal: React.FC<MintSuccessModalProps> = ({
               size="lg"
               variant="default"
             >
-              Continuar
+              {t('mint.success.continue')}
             </Button>
           </div>
         </div>

@@ -13,9 +13,9 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Wallet, Coins, AlertTriangle, Info } from "lucide-react";
 import { toast } from "sonner";
-import { Address, formatUnits } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 import { EGG_COIN_ABI, ERC20_ABI } from "@/lib/abi";
-import { CHAIN_IDS } from "@/lib/contracts";
+import { CHAIN_IDS, isSupportedBaseChain, isBaseSepolia } from "@/lib/contracts";
 import { getEggCoinAddress, getERC20Balance, getERC20Allowance, getTokenAddress } from "@/lib/contracts-helpers";
 import { PaymentType } from "@/lib/contracts-helpers";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -49,15 +49,24 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
 
   const eggCoinAddress = chainId ? getEggCoinAddress(chainId) : null;
   const usdcAddress = chainId ? getTokenAddress(PaymentType.USDC, chainId) : null;
-  const isCorrectNetwork = chainId === CHAIN_IDS.baseSepolia;
-  const amountBigInt = (() => {
-    const n = Math.floor(Number(amount) || 0);
-    return n > 0 ? BigInt(n) : 0n;
+  const isCorrectNetwork = isSupportedBaseChain(chainId);
+  const isTestnet = isBaseSepolia(chainId);
+  /** Quantidade em unidades do token (18 decimais): 1 PudgyEggs = 1e18.
+   * Contrato esperado: 1 EGG = R$ 3 → 3 × (BRL/USD) = USD → getUSDCPrice(1e18) ≈ 0.54 USDC (540_000),
+   * getETHPrice(1e18) ≈ 0.00027 ETH (2.7e14 wei) com BRL/USD ≈ 0.18 e ETH/USD ≈ 2000. */
+  const amountRaw = (() => {
+    const raw = amount?.trim();
+    if (!raw || Number(raw) <= 0) return 0n;
+    try {
+      return parseUnits(raw, 18);
+    } catch {
+      return 0n;
+    }
   })();
 
-  // Buscar preços getPrice(amount, 0) e getPrice(amount, 1)
+  // Preço via contrato: getETHPrice(amountRaw) e getUSDCPrice(amountRaw); amount em 18 decimais (1 EGG = 1e18)
   useEffect(() => {
-    if (!open || !publicClient || !eggCoinAddress || amountBigInt === 0n) {
+    if (!open || !publicClient || !eggCoinAddress || amountRaw === 0n) {
       setPriceEth(null);
       setPriceUsdc(null);
       return;
@@ -70,14 +79,14 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
           publicClient.readContract({
             address: eggCoinAddress,
             abi: EGG_COIN_ABI,
-            functionName: "getPrice",
-            args: [amountBigInt, 0n],
+            functionName: "getETHPrice",
+            args: [amountRaw],
           }) as Promise<bigint>,
           publicClient.readContract({
             address: eggCoinAddress,
             abi: EGG_COIN_ABI,
-            functionName: "getPrice",
-            args: [amountBigInt, 1n],
+            functionName: "getUSDCPrice",
+            args: [amountRaw],
           }) as Promise<bigint>,
         ]);
         if (!cancelled) {
@@ -95,7 +104,7 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
       }
     })();
     return () => { cancelled = true; };
-  }, [open, publicClient, eggCoinAddress, amountBigInt]);
+  }, [open, publicClient, eggCoinAddress, amountRaw]);
 
   // Saldos e allowance USDC
   useEffect(() => {
@@ -131,18 +140,29 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
   }, [open, isConnected, address, publicClient, chainId, eggCoinAddress, usdcAddress, allowanceRefresh]);
 
   const ensureCorrectNetwork = async (): Promise<boolean> => {
-    if (chainId === CHAIN_IDS.baseSepolia) return true;
+    if (isSupportedBaseChain(chainId)) return true;
+    toast.error(t("eggcoin.modal.wrongNetwork"));
+    return false;
+  };
+
+  const switchToBaseSepolia = async () => {
     try {
       await switchChain?.({ chainId: CHAIN_IDS.baseSepolia });
-      return true;
     } catch (e) {
       toast.error(t("eggcoin.modal.wrongNetwork"));
-      return false;
+    }
+  };
+
+  const switchToBase = async () => {
+    try {
+      await switchChain?.({ chainId: CHAIN_IDS.base });
+    } catch (e) {
+      toast.error(t("eggcoin.modal.wrongNetwork"));
     }
   };
 
   const handleMint = async () => {
-    if (!address || !publicClient || !eggCoinAddress || amountBigInt === 0n) return;
+    if (!address || !publicClient || !eggCoinAddress || amountRaw === 0n) return;
     const ok = await ensureCorrectNetwork();
     if (!ok) return;
 
@@ -160,7 +180,7 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
         address: eggCoinAddress,
         abi: EGG_COIN_ABI,
         functionName: "mintWithETH",
-        args: [address, amountBigInt],
+        args: [address, amountRaw],
         value: priceEth,
       });
       return;
@@ -194,7 +214,7 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
         address: eggCoinAddress,
         abi: EGG_COIN_ABI,
         functionName: "mintWithUSDC",
-        args: [address, amountBigInt],
+        args: [address, amountRaw],
       });
     }
   };
@@ -214,7 +234,7 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
 
   const isLoading = isPending || isConfirming;
   const needsApproval = paymentType === "USDC" && priceUsdc !== null && (allowanceUsdc === null || allowanceUsdc < priceUsdc);
-  const canMint = !isLoading && isConnected && isCorrectNetwork && amountBigInt > 0n && eggCoinAddress;
+  const canMint = !isLoading && isConnected && isCorrectNetwork && amountRaw > 0n && eggCoinAddress;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -244,13 +264,27 @@ export const EggCoinMintModal: React.FC<EggCoinMintModalProps> = ({ open, onOpen
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>{t("eggcoin.modal.wrongNetwork")}</AlertDescription>
             </Alert>
-            <Button onClick={ensureCorrectNetwork} className="w-full">
-              {t("eggcoin.modal.switchNetwork")}
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button onClick={switchToBaseSepolia} variant="default" className="flex-1">
+                {t("eggcoin.modal.switchToBaseSepolia")}
+              </Button>
+              <Button onClick={switchToBase} variant="outline" className="flex-1">
+                {t("eggcoin.modal.switchToBase")}
+              </Button>
+            </div>
           </div>
         ) : (
           <div className="space-y-6 py-4">
-            {/* Aviso / benefício */}
+            {/* Aviso testnet: em Base Sepolia usamos ETH feed e valor é para testes */}
+            {isTestnet && (
+              <Alert className="bg-amber-500/10 border-amber-500/30">
+                <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <AlertDescription className="text-sm whitespace-pre-line text-amber-800 dark:text-amber-200">
+                  {t("eggcoin.modal.testnetDisclaimer")}
+                </AlertDescription>
+              </Alert>
+            )}
+            {/* Benefício / disclaimer geral */}
             <Alert className="bg-muted/50 border-border/50">
               <Info className="h-4 w-4" />
               <AlertDescription className="text-sm whitespace-pre-line">

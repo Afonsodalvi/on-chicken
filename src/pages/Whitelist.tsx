@@ -42,10 +42,10 @@ const Whitelist: React.FC = () => {
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Mint sua PudgyChicken
+              {t('mint.title')}
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-              Conecte sua carteira e faça o mint da sua primeira PudgyChicken NFT
+              {t('mint.whitelist.connectAndMint')}
             </p>
             
             {/* Contador de Vagas Limitadas */}

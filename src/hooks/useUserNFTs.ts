@@ -3,7 +3,7 @@ import { useAccount, usePublicClient } from "wagmi";
 import { Address } from "viem";
 import { getTokenBalance, getPudgyChickenCollectionAddress, isTokenAlive, getRarityTier } from "@/lib/contracts-helpers";
 import { getTokenAsset } from "@/lib/token-assets";
-import { CHAIN_IDS } from "@/lib/contracts";
+import { isSupportedBaseChain } from "@/lib/contracts";
 import { RarityTier } from "@/lib/contracts-helpers";
 
 export interface UserNFT {
@@ -38,7 +38,7 @@ export function useUserNFTs() {
       }
 
       // Verificar se está na rede correta (Base Sepolia)
-      if (chainId !== CHAIN_IDS.baseSepolia) {
+      if (!isSupportedBaseChain(chainId)) {
         setError("Por favor, conecte-se à rede Base Sepolia");
         setNfts([]);
         setIsLoading(false);

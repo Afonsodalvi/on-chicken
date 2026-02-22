@@ -15,7 +15,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x0ec1464c01E80f41B6eE4dd0c13e629063353980" as Address, // Base Sepolia
+    baseSepolia: "0xB285F63c9915a7aCE922D687CAd02E86d1eEf0da" as Address, // Base Sepolia
   },
 
   // First Collection – Diamond da primeira coleção ERC-1155 (PudgyChicken + PudgyChickenView)
@@ -25,7 +25,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x479500002B54D4F4C45A3944aB7EC0FF84eb20AB" as Address, // Base Sepolia – First Collection Diamond
+    baseSepolia: "0x51152cb9B26FD8285a13a5C98b0C14F4757EA7b8" as Address, // Base Sepolia – First Collection (PudgyChicken Diamond)
   },
 
   // Implementação de referência (Beacon); não chamar no front
@@ -35,7 +35,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x5656cA1679ee45BF9353825F61f46e5c919d1572" as Address, // Base Sepolia
+    baseSepolia: "0xED365C79321d7290b0F35fC506C0dCbEf0417757" as Address, // Base Sepolia
   },
 
   // Pudgy Chicken Fight – Diamond da arena (matches, VRF, taxas)
@@ -45,7 +45,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x3Bd7B94fB03B0e8E544529b0E661E5a379B42a27" as Address, // Base Sepolia
+    baseSepolia: "0x570d73cF9893926B92Da4293C4feA3414b1fC246" as Address, // Base Sepolia
   },
 
   // Beacon para upgrades das coleções (referência; não chamar no front)
@@ -55,7 +55,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0xfe872CD14258B6848E29467Bdc3efF7F144E5c7a" as Address, // Base Sepolia
+    baseSepolia: "0x30D6Ca94022092452f7E14e940dA5d4A7656f30D" as Address, // Base Sepolia
   },
 
   // EggCoin Token (ERC-20)
@@ -65,7 +65,7 @@ export const CONTRACTS = {
     base: "0x" as Address, // TODO: Deploy to base
     sepolia: "0x" as Address, // TODO: Deploy to sepolia
     polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0xc849cfAB96cc7a073854009aDB8C5E370C5d0063" as Address, // Base Sepolia
+    baseSepolia: "0x26986F8054Af73b788f82564f593c62862145a38" as Address, // Base Sepolia
   },
 
   // USDC Addresses (for payments)
@@ -95,7 +95,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x479500002B54D4F4C45A3944aB7EC0FF84eb20AB" as Address,
+    baseSepolia: "0x51152cb9B26FD8285a13a5C98b0C14F4757EA7b88" as Address,
   },
   BATTLE_ARENA: {
     mainnet: "0x" as Address,
@@ -103,7 +103,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x3Bd7B94fB03B0e8E544529b0E661E5a379B42a27" as Address,
+    baseSepolia: "0x570d73cF9893926B92Da4293C4feA3414b1fC246" as Address,
   },
   FARM_TOKEN: {
     mainnet: "0x" as Address,
@@ -111,7 +111,7 @@ export const CONTRACTS = {
     base: "0x" as Address,
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0xc849cfAB96cc7a073854009aDB8C5E370C5d0063" as Address,
+    baseSepolia: "0x26986F8054Af73b788f82564f593c62862145a38" as Address,
   },
 } as const;
 
@@ -124,6 +124,17 @@ export const CHAIN_IDS = {
   polygonMumbai: 80001,
   baseSepolia: 84532,
 } as const;
+
+/** Redes Base suportadas pela app: testnet (Sepolia) e mainnet. Contratos na mainnet: preencher endereços quando fizer deploy. */
+export const SUPPORTED_BASE_CHAINS: readonly number[] = [CHAIN_IDS.baseSepolia, CHAIN_IDS.base];
+
+export function isSupportedBaseChain(chainId: number | undefined): boolean {
+  return chainId !== undefined && SUPPORTED_BASE_CHAINS.includes(chainId);
+}
+
+export function isBaseSepolia(chainId: number | undefined): boolean {
+  return chainId === CHAIN_IDS.baseSepolia;
+}
 
 // Função helper para obter endereço do contrato
 export function getContractAddress(

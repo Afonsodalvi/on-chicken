@@ -559,7 +559,7 @@
                 "internalType": "uint256[]"
             },
             {
-                "name": "values",
+                "name": "amounts",
                 "type": "uint256[]",
                 "internalType": "uint256[]"
             },
@@ -1009,6 +1009,29 @@
             }
         ],
         "stateMutability": "pure"
+    },
+    {
+        "type": "function",
+        "name": "withdrawERC20",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "to",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
     },
     {
         "type": "function",
@@ -1782,6 +1805,11 @@
     },
     {
         "type": "error",
+        "name": "ETHRefundFailed",
+        "inputs": []
+    },
+    {
+        "type": "error",
         "name": "ExceedsMaxFreeMints",
         "inputs": []
     },
@@ -1843,6 +1871,11 @@
     {
         "type": "error",
         "name": "InvalidTokenId",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "NonZeroMsgValueForERC20Payment",
         "inputs": []
     },
     {

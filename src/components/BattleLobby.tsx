@@ -24,9 +24,9 @@ import { TokenInfoModal } from "./TokenInfoModal";
 import { BattleResultModal } from "./BattleResultModal";
 import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import { Address, parseUnits, formatUnits, encodeFunctionData } from "viem";
-import { CHAIN_IDS, CONTRACTS } from "@/lib/contracts";
+import { CHAIN_IDS, isSupportedBaseChain } from "@/lib/contracts";
 import { CHICKEN_MANAGER_FARM_ABI, PUDGY_CHICKEN_FIGHT_ABI, PUDGY_CHICKEN_ABI, ERC20_ABI } from "@/lib/abi";
-import { getManagerFarmAddress, getPudgyChickenCollectionAddress, getTokenBalance, isTokenAlive, getERC20Balance, getERC20Allowance, PaymentType } from "@/lib/contracts-helpers";
+import { getManagerFarmAddress, getPudgyChickenCollectionAddress, getFightAddress, getTokenAddress, getTokenBalance, isTokenAlive, getERC20Balance, getERC20Allowance, PaymentType } from "@/lib/contracts-helpers";
 import { toast } from "sonner";
 
 // Battle Types
@@ -44,6 +44,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
   const { t } = useLanguage();
   const { address, isConnected, chainId } = useAccount();
   const publicClient = usePublicClient();
+  // Client fixo para Base Sepolia: permite listar batalhas mesmo sem carteira conectada
+  const publicClientBaseSepolia = usePublicClient({ chainId: CHAIN_IDS.baseSepolia });
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed, isError: isTransactionError, error: transactionError } = useWaitForTransactionReceipt({ hash });
   const { switchChain } = useSwitchChain();
@@ -55,7 +57,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
   const [isLoadingInstances, setIsLoadingInstances] = useState(false);
 
   // Verificar se está na rede correta (definir antes de usar nos useEffect)
-  const isCorrectNetwork = chainId === CHAIN_IDS.baseSepolia;
+  const isCorrectNetwork = isSupportedBaseChain(chainId);
 
   // Selecionar automaticamente o primeiro NFT válido quando os NFTs carregarem
   useEffect(() => {
@@ -209,7 +211,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
       setIsLoadingInstancesForJoin(true);
       try {
         const collectionAddress = getPudgyChickenCollectionAddress(chainId);
-        const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+        const fightAddress = getFightAddress(chainId!);
         
         if (!collectionAddress || !fightAddress || fightAddress === "0x") {
           setTokenInstancesForJoin([]);
@@ -573,7 +575,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
       setIsLoadingSkillsComparison(true);
       try {
-        const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+        const fightAddress = getFightAddress(chainId!);
         if (!fightAddress || fightAddress === "0x") {
           return;
         }
@@ -651,7 +653,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
       setIsLoadingFees(true);
       try {
-        const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+        const fightAddress = getFightAddress(chainId!);
         if (!fightAddress || fightAddress === "0x") {
           return;
         }
@@ -677,13 +679,13 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         const [ethBal, usdcBal, usdcAllow] = await Promise.all([
           publicClient.getBalance({ address: address as Address }),
           (async () => {
-            const usdcAddress = CONTRACTS.USDC.baseSepolia;
+            const usdcAddress = getTokenAddress(PaymentType.USDC, chainId!);
             if (!usdcAddress || usdcAddress === "0x") return 0n;
             return getERC20Balance(usdcAddress, address as Address, publicClient);
           })(),
           (async () => {
-            const usdcAddress = CONTRACTS.USDC.baseSepolia;
-            const fightAddr = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+            const usdcAddress = getTokenAddress(PaymentType.USDC, chainId!);
+            const fightAddr = getFightAddress(chainId!);
             if (!usdcAddress || usdcAddress === "0x" || !fightAddr || fightAddr === "0x") return 0n;
             return getERC20Allowance(usdcAddress, address as Address, fightAddr, publicClient);
           })(),
@@ -712,7 +714,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
       try {
         const collectionAddress = getPudgyChickenCollectionAddress(chainId);
-        const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+        const fightAddress = getFightAddress(chainId!);
         
         if (!collectionAddress || !fightAddress || fightAddress === "0x") {
           setNftApproved(null);
@@ -746,7 +748,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
       try {
         const collectionAddress = getPudgyChickenCollectionAddress(chainId);
-        const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+        const fightAddress = getFightAddress(chainId!);
         
         if (!collectionAddress || !fightAddress || fightAddress === "0x") {
           setNftApprovedForJoin(null);
@@ -798,7 +800,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         errorLower.includes("not authorized") ||
         errorLower.includes("invalid subscription") ||
         errorLower.includes("caller is not")) {
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+      const fightAddress = getFightAddress(chainId!);
       const subscriptionId = "21389456745401240734773929798092537115406826755591078326000898398765197969080";
       return `Erro VRF: O consumer não está autorizado ou há problema na configuração. Verifique: 1) Acesse https://vrf.chain.link/base-sepolia 2) Encontre a subscription ${subscriptionId} 3) Verifique se o consumer ${fightAddress} está na lista 4) Se não estiver, adicione-o 5) Verifique se a subscription tem saldo suficiente (LINK e ETH). O erro "function does not exist" geralmente significa que o consumer não está autorizado.`;
     }
@@ -821,7 +823,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     if (errorLower.includes("network") || 
         errorLower.includes("chain") ||
         errorLower.includes("wrong network")) {
-      return "Rede incorreta. Por favor, conecte-se à Base Sepolia";
+      return t('battle.error.wrongNetwork');
     }
     
     // Gas/transação falhou
@@ -845,12 +847,21 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
   };
 
   // Trocar para a rede correta se necessário
-  const handleSwitchNetwork = async () => {
+  const handleSwitchToBaseSepolia = async () => {
     try {
       await switchChain({ chainId: CHAIN_IDS.baseSepolia });
     } catch (err) {
       console.error("Erro ao trocar rede:", err);
-      toast.error("Erro ao trocar para Base Sepolia");
+      toast.error(t('battle.switchNetworkError'));
+    }
+  };
+
+  const handleSwitchToBase = async () => {
+    try {
+      await switchChain({ chainId: CHAIN_IDS.base });
+    } catch (err) {
+      console.error("Erro ao trocar rede:", err);
+      toast.error(t('battle.switchNetworkError'));
     }
   };
 
@@ -859,7 +870,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     if (!address || !chainId || !publicClient || !selectedNFT) return;
 
     const collectionAddress = getPudgyChickenCollectionAddress(chainId);
-    const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+    const fightAddress = getFightAddress(chainId!);
     
     if (!collectionAddress || !fightAddress || fightAddress === "0x") {
       toast.error("Endereços de contrato não configurados");
@@ -890,15 +901,14 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
   const handleApproveUSDC = async () => {
     if (!address || !chainId || !publicClient) return;
 
-    const usdcAddress = CONTRACTS.USDC.baseSepolia;
-    const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+    const usdcAddress = getTokenAddress(PaymentType.USDC, chainId!);
+    const fightAddress = getFightAddress(chainId!);
     if (!usdcAddress || usdcAddress === "0x" || !fightAddress || fightAddress === "0x") {
       toast.error("Endereços de contrato não configurados");
       return;
     }
 
-    const betAmountBigInt = parseUnits(betAmount || "0", 6);
-    const totalNeeded = (platformFeeUSDC || 0n) + (battleType === BattleType.PAID ? betAmountBigInt : 0n);
+    const totalNeeded = platformFeeUSDC || 0n;
 
     setIsApprovingUSDC(true);
     setCurrentOperation("approveUSDC");
@@ -950,7 +960,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
     // Buscar informações completas do match para obter instanceId1 e buscar instanceIndex1
     try {
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+      const fightAddress = getFightAddress(chainId!);
       const collectionAddress = getPudgyChickenCollectionAddress(chainId);
       
       if (fightAddress && fightAddress !== "0x" && collectionAddress) {
@@ -1021,7 +1031,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     if (!address || !chainId || !publicClient || !selectedNFTForJoin) return;
 
     const collectionAddress = getPudgyChickenCollectionAddress(chainId);
-    const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+    const fightAddress = getFightAddress(chainId!);
     
     if (!collectionAddress || !fightAddress || fightAddress === "0x") {
       toast.error("Endereços de contrato não configurados");
@@ -1102,7 +1112,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
   }> => {
     try {
       const collectionAddress = getPudgyChickenCollectionAddress(chainId!);
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+      const fightAddress = getFightAddress(chainId!);
       
       if (!collectionAddress || !fightAddress || fightAddress === "0x") {
         throw new Error("Endereços de contrato não encontrados");
@@ -1315,7 +1325,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
       // Tentar buscar threshold do contrato mesmo em caso de erro
       let threshold = 0;
       try {
-        const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+        const fightAddress = getFightAddress(chainId!);
         if (fightAddress && fightAddress !== "0x" && publicClient) {
           const maxDifferencePercent = await publicClient.readContract({
             address: fightAddress,
@@ -1378,7 +1388,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
       const tokenId = BigInt(selectedNFTForJoin.tokenId);
 
       // Buscar informações completas do match para comparar skills
-      const fightAddressForComparison = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+      const fightAddressForComparison = getFightAddress(chainId!);
       if (!fightAddressForComparison || fightAddressForComparison === "0x") {
         toast.error("Endereço do contrato Fight não configurado");
         return;
@@ -1518,7 +1528,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
       }
 
       // Calcular valor necessário - sempre buscar do contrato para garantir valor atualizado
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+      const fightAddress = getFightAddress(chainId!);
       if (!fightAddress || fightAddress === "0x") {
         toast.error("Endereço do contrato Fight não configurado");
         return;
@@ -1676,7 +1686,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         const totalNeeded = (platformFeeUSDC as bigint) + betAmount;
         
         // Verificar saldo USDC
-        const usdcAddress = CONTRACTS.USDC.baseSepolia;
+        const usdcAddress = getTokenAddress(PaymentType.USDC, chainId!);
         if (usdcAddress && usdcAddress !== "0x") {
           const usdcBalance = await getERC20Balance(usdcAddress, address as Address, publicClient);
           if (usdcBalance < totalNeeded) {
@@ -1769,11 +1779,6 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
       return;
     }
 
-    if (battleType === BattleType.PAID && (!betAmount || betAmount === "0")) {
-      toast.error("Batalha paga requer valor de aposta maior que 0");
-      return;
-    }
-
     if (nftApproved === false) {
       toast.error("Por favor, aprove o NFT primeiro");
       return;
@@ -1798,11 +1803,6 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
     if (selectedInstanceIndex === null) {
       toast.error("Por favor, selecione uma instância do colecionável");
-      return;
-    }
-
-    if (battleType === BattleType.PAID && (!betAmount || betAmount === "0")) {
-      toast.error("Batalha paga requer valor de aposta maior que 0");
       return;
     }
 
@@ -1831,7 +1831,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
       // Obter collectionId (assumindo que é 1 para a primeira coleção)
       const collectionId = 1n;
       const tokenId = BigInt(selectedNFT.tokenId);
-      const betAmountBigInt = battleType === BattleType.PAID ? parseUnits(betAmount, 6) : 0n;
+      // Apenas batalhas gratuitas (sem aposta) — paga/aposta desativadas na UI
+      const betAmountBigInt = 0n;
 
       // Verificar saldo e approval se necessário
       if (paymentType === PaymentType.USDC) {
@@ -1846,7 +1847,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         }
       } else {
         // ETH payment
-        const totalNeeded = (platformFeeETH || 0n) + (battleType === BattleType.PAID ? betAmountBigInt : 0n);
+        const totalNeeded = (platformFeeETH || 0n);
         if ((ethBalance || 0n) < totalNeeded) {
           toast.error(`Saldo ETH insuficiente. Necessário: ${formatUnits(totalNeeded, 18)} ETH`);
           return;
@@ -1866,8 +1867,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         player: address,
         tokenId: tokenId.toString(),
         instanceIndex: selectedInstanceIndex.toString(),
-        battleType,
-        betAmount: betAmountBigInt.toString(),
+        battleType: BattleType.FREE,
+        betAmount: "0",
         paymentType,
         value: value.toString(),
       });
@@ -1883,8 +1884,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
           address,
           tokenId,
           selectedInstanceIndex,
-          battleType,
-          betAmountBigInt,
+          BattleType.FREE,
+          0n,
           paymentType,
         ],
         value,
@@ -1900,16 +1901,17 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     }
   };
 
-  // Buscar batalhas ativas do contrato e verificar matches finalizados
+  // Buscar batalhas ativas do contrato (view – qualquer pessoa pode ver, mesmo sem carteira)
   const fetchActiveMatches = async () => {
-    if (!publicClient || !chainId || !isCorrectNetwork) return;
+    const client = publicClientBaseSepolia ?? publicClient;
+    if (!client) return;
+
+    const fightAddress = getFightAddress(chainId!);
+    if (!fightAddress || fightAddress === "0x") return;
 
     setIsLoadingMatches(true);
     try {
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
-      if (!fightAddress || fightAddress === "0x") return;
-
-      const matches = await publicClient.readContract({
+      const matches = await client.readContract({
         address: fightAddress,
         abi: PUDGY_CHICKEN_FIGHT_ABI,
         functionName: "getActiveMatches",
@@ -1917,12 +1919,12 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
       setActiveMatches(matches as any[]);
       
-      // Verificar se algum match monitorado foi finalizado
+      // Verificar se algum match monitorado foi finalizado (só quando conectado)
       if (monitoredMatches.size > 0 && address) {
         for (const matchIdStr of monitoredMatches) {
           try {
             const matchId = BigInt(matchIdStr);
-            const match = await publicClient.readContract({
+            const match = await client.readContract({
               address: fightAddress,
               abi: PUDGY_CHICKEN_FIGHT_ABI,
               functionName: "matches",
@@ -1977,7 +1979,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     setIsLoadingFinishedMatches(true);
     console.log("📊 Iniciando busca de batalhas encerradas...");
     try {
-      const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+      const fightAddress = getFightAddress(chainId!);
       console.log("📍 Fight Address:", fightAddress);
       if (!fightAddress || fightAddress === "0x") {
         console.warn("⚠️ Fight address não encontrado");
@@ -2127,22 +2129,21 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     }
   };
 
-  // Carregar batalhas ao montar componente e periodicamente verificar matches finalizados
+  // Lista de batalhas: carregar assim que houver client (Base Sepolia), com ou sem carteira conectada
   useEffect(() => {
-    if (isConnected && isCorrectNetwork && publicClient && chainId) {
-      fetchActiveMatches();
-      
-      // Verificar matches finalizados a cada 10 segundos
-      const interval = setInterval(() => {
-        if (monitoredMatches.size > 0) {
-          fetchActiveMatches();
-        }
-      }, 10000);
-      
-      return () => clearInterval(interval);
-    }
+    const client = publicClientBaseSepolia ?? publicClient;
+    if (!client) return;
+
+    fetchActiveMatches();
+
+    // Com carteira conectada, revalidar a cada 10s para atualizar resultados dos matches em que o usuário está
+    if (!isConnected || !isCorrectNetwork) return;
+    const interval = setInterval(() => {
+      if (monitoredMatches.size > 0) fetchActiveMatches();
+    }, 10000);
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected, isCorrectNetwork, monitoredMatches.size]);
+  }, [publicClientBaseSepolia, publicClient, isConnected, isCorrectNetwork, monitoredMatches.size]);
 
   // Buscar batalhas encerradas quando o usuário conectar ou quando mostrar a aba
   useEffect(() => {
@@ -2177,7 +2178,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         setTimeout(() => {
           if (address && publicClient && chainId && isCorrectNetwork) {
             const collectionAddress = getPudgyChickenCollectionAddress(chainId);
-            const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+            const fightAddress = getFightAddress(chainId!);
             if (collectionAddress && fightAddress && fightAddress !== "0x") {
               publicClient.readContract({
                 address: collectionAddress,
@@ -2200,8 +2201,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         setCurrentOperation("none");
         // Recarregar allowance de USDC
         if (address && publicClient && chainId && isCorrectNetwork) {
-          const usdcAddress = CONTRACTS.USDC.baseSepolia;
-          const fightAddress = CONTRACTS.PUDGY_CHICKEN_FIGHT.baseSepolia;
+          const usdcAddress = getTokenAddress(PaymentType.USDC, chainId!);
+          const fightAddress = getFightAddress(chainId!);
           if (usdcAddress && usdcAddress !== "0x" && fightAddress && fightAddress !== "0x") {
             getERC20Allowance(usdcAddress, address as Address, fightAddress, publicClient)
               .then((allowance) => {
@@ -2425,12 +2426,17 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
             <CardContent className="p-8 text-center space-y-4">
               <Alert>
                 <AlertDescription>
-                  Por favor, troque para a rede Base Sepolia para participar de batalhas
+                  {t('battle.wrongNetwork')}
                 </AlertDescription>
               </Alert>
-              <Button onClick={handleSwitchNetwork} size="lg">
-                Trocar para Base Sepolia
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                <Button onClick={handleSwitchToBaseSepolia} size="lg" variant="default">
+                  {t('battle.switchToBaseSepolia')}
+                </Button>
+                <Button onClick={handleSwitchToBase} size="lg" variant="outline">
+                  {t('battle.switchToBase')}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -2508,7 +2514,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   {!selectedNFT && (
                     <Alert>
                       <AlertDescription>
-                        Por favor, selecione um NFT acima para criar uma batalha
+                        {t('battle.modal.selectNftAbove')}
                       </AlertDescription>
                     </Alert>
                   )}
@@ -2517,18 +2523,18 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   {selectedNFT && (
                     <div className="space-y-2">
                       <Label htmlFor="instance-select" className="text-base font-semibold">
-                        Selecionar Instância do Colecionável
+                        {t('battle.modal.selectInstance')}
                       </Label>
                       {isLoadingInstances ? (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Carregando instâncias...
+                          {t('battle.modal.loadingInstances')}
                         </div>
                       ) : tokenInstances.length === 0 ? (
                         <Alert variant="destructive">
                           <AlertTriangle className="h-4 w-4" />
                           <AlertDescription>
-                            Nenhuma instância disponível para este token. Todas as instâncias podem estar incubando ou você não possui instâncias deste token.
+                            {t('battle.modal.noInstancesForToken')}
                           </AlertDescription>
                         </Alert>
                       ) : (
@@ -2541,8 +2547,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                             }}
                           >
                             <SelectTrigger id="instance-select" className="w-full">
-                              <SelectValue placeholder="Selecione uma instância">
-                                {selectedInstanceIndex !== null ? `Instance Index #${selectedInstanceIndex.toString()}` : "Selecione uma instância"}
+                              <SelectValue placeholder={t('battle.modal.selectInstancePlaceholder')}>
+                                {selectedInstanceIndex !== null ? `Instance Index #${selectedInstanceIndex.toString()}` : t('battle.modal.selectInstancePlaceholder')}
                               </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
@@ -2574,7 +2580,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                             <Alert className="bg-yellow-500/10 border-yellow-500/20">
                               <AlertTriangle className="h-4 w-4 text-yellow-600" />
                               <AlertDescription className="text-yellow-800 dark:text-yellow-200">
-                                Por favor, selecione uma instância acima
+                                {t('battle.modal.selectInstanceAbove')}
                               </AlertDescription>
                             </Alert>
                           )}
@@ -2582,7 +2588,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                       )}
                       {tokenInstances.length > 0 && selectedInstanceIndex !== null && (
                         <div className="p-3 bg-muted rounded-lg">
-                          <p className="text-xs font-semibold mb-1">Skills da Instância Selecionada:</p>
+                          <p className="text-xs font-semibold mb-1">{t('battle.modal.selectedInstanceSkillsLabel')}</p>
                           <p className="text-xs text-muted-foreground">
                             {(() => {
                               const selectedInstance = tokenInstances.find(
@@ -2600,47 +2606,36 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                     </div>
                   )}
 
-                  {/* Tipo de Batalha */}
+                  {/* Tipo de Batalha — apenas gratuita; paga/aposta no contrato só para aprendizado */}
                   <div className="space-y-3">
                     <Label className="text-base font-semibold">Tipo de Batalha</Label>
                     <RadioGroup
-                      value={battleType.toString()}
-                      onValueChange={(value) => setBattleType(Number(value) as BattleType)}
+                      value={BattleType.FREE.toString()}
+                      onValueChange={(value) => {
+                        if (Number(value) === BattleType.FREE) setBattleType(BattleType.FREE);
+                      }}
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value={BattleType.FREE.toString()} id="free" />
                         <Label htmlFor="free" className="cursor-pointer">
-                          Gratuita (Apenas taxa de $2 USD)
+                          {t('battle.freeWithFee')}
                         </Label>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={BattleType.PAID.toString()} id="paid" />
-                        <Label htmlFor="paid" className="cursor-pointer">
-                          Paga (Taxa + Aposta)
+                      <div className="flex items-center space-x-2 opacity-70">
+                        <RadioGroupItem value={BattleType.PAID.toString()} id="paid" disabled />
+                        <Label htmlFor="paid" className="cursor-not-allowed text-muted-foreground">
+                          {t('battle.paidDisabled.option')}
                         </Label>
                       </div>
                     </RadioGroup>
+                    <Alert className="bg-muted/80 border-muted-foreground/20">
+                      <Info className="h-4 w-4 text-muted-foreground" />
+                      <AlertDescription>
+                        <span className="font-medium text-foreground">{t('battle.paidDisabled.title')}</span>
+                        <p className="mt-1 text-sm text-muted-foreground">{t('battle.paidDisabled.description')}</p>
+                      </AlertDescription>
+                    </Alert>
                   </div>
-
-                  {/* Valor da Aposta (se PAID) */}
-                  {battleType === BattleType.PAID && (
-                    <div className="space-y-2">
-                      <Label htmlFor="betAmount">Valor da Aposta (USDC)</Label>
-                      <Input
-                        id="betAmount"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={betAmount}
-                        onChange={(e) => setBetAmount(e.target.value)}
-                        placeholder="0.00"
-                        className="bg-background text-foreground"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        O vencedor receberá o dobro da aposta (2x)
-                      </p>
-                    </div>
-                  )}
 
                   {/* Tipo de Pagamento */}
                   <div className="space-y-3">
@@ -2650,13 +2645,12 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                       onValueChange={(value) => setPaymentType(Number(value) as PaymentType)}
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem 
-                          value={PaymentType.ETH.toString()} 
+                        <RadioGroupItem
+                          value={PaymentType.ETH.toString()}
                           id="eth"
-                          disabled={battleType === BattleType.PAID}
                         />
-                        <Label htmlFor="eth" className={`cursor-pointer ${battleType === BattleType.PAID ? 'opacity-50' : ''}`}>
-                          ETH {battleType === BattleType.PAID && '(Apenas para batalhas gratuitas)'}
+                        <Label htmlFor="eth" className="cursor-pointer">
+                          ETH
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -2666,11 +2660,6 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         </Label>
                       </div>
                     </RadioGroup>
-                    {battleType === BattleType.PAID && paymentType === PaymentType.ETH && (
-                      <p className="text-xs text-yellow-600 dark:text-yellow-400">
-                        Batalhas pagas devem ser feitas em USDC. Alterando para USDC...
-                      </p>
-                    )}
                   </div>
 
                   {/* Informações de Pagamento */}
@@ -2693,14 +2682,6 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                             : "-"}
                         </span>
                       </div>
-                      {battleType === BattleType.PAID && (
-                        <div className="flex justify-between">
-                          <span>Aposta:</span>
-                          <span className="font-semibold">
-                            {betAmount ? `${betAmount} USDC` : "0 USDC"}
-                          </span>
-                        </div>
-                      )}
                       <div className="flex justify-between font-bold pt-2 border-t">
                         <span>Total:</span>
                         <span>
@@ -2709,18 +2690,27 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                               ? `${formatUnits(platformFeeETH, 18)} ETH (~$2 USD)`
                               : "-"
                             : platformFeeUSDC
-                            ? `${formatUnits((platformFeeUSDC || 0n) + (battleType === BattleType.PAID ? parseUnits(betAmount || "0", 6) : 0n), 6)} USDC`
-                            : "-"}
+                              ? `${formatUnits(platformFeeUSDC || 0n, 6)} USDC`
+                              : "-"}
                         </span>
                       </div>
                     </div>
                   )}
 
+                  {/* Explicação da taxa da plataforma */}
+                  <Alert className="bg-muted/80 border-muted-foreground/20">
+                    <Info className="h-4 w-4 text-muted-foreground" />
+                    <AlertDescription>
+                      <span className="font-medium text-foreground">{t('battle.platformFee.title')}</span>
+                      <p className="mt-1 text-sm text-muted-foreground">{t('battle.platformFee.description')}</p>
+                    </AlertDescription>
+                  </Alert>
+
                   {/* Aprovar NFT se necessário */}
                   {nftApproved === false && (
                     <Alert>
                       <AlertDescription className="flex items-center justify-between">
-                        <span>É necessário aprovar o NFT para participar de batalhas</span>
+                        <span>{t('battle.modal.approveNftRequired')}</span>
                         <Button
                           onClick={handleApproveNFT}
                           variant="outline"
@@ -2731,10 +2721,10 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                           {isPending || isApprovingNFT ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Aprovando...
+                              {t('battle.modal.approving')}
                             </>
                           ) : (
-                            "Aprovar NFT"
+                            t('battle.modal.approveNft')
                           )}
                         </Button>
                       </AlertDescription>
@@ -2745,7 +2735,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   {nftApproved === true && (
                     <Alert className="bg-green-500/10 border-green-500/20">
                       <AlertDescription className="text-green-600 dark:text-green-400">
-                        ✓ NFT aprovado e pronto para batalhas
+                        {t('battle.modal.nftApprovedReady')}
                       </AlertDescription>
                     </Alert>
                   )}
@@ -2753,7 +2743,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   {/* Aprovar USDC se necessário */}
                   {paymentType === PaymentType.USDC && usdcAllowance !== null && (
                     (() => {
-                      const totalNeeded = (platformFeeUSDC || 0n) + (battleType === BattleType.PAID ? parseUnits(betAmount || "0", 6) : 0n);
+                      const totalNeeded = platformFeeUSDC || 0n;
                       if (usdcAllowance < totalNeeded) {
                         return (
                           <Button
@@ -2793,9 +2783,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                       isLoadingInstances ||
                       !selectedNFT?.isAlive || 
                       nftApproved === false || 
-                      (battleType === BattleType.PAID && (!betAmount || betAmount === "0")) ||
                       (paymentType === PaymentType.USDC && usdcAllowance !== null && (() => {
-                        const totalNeeded = (platformFeeUSDC || 0n) + (battleType === BattleType.PAID ? parseUnits(betAmount || "0", 6) : 0n);
+                        const totalNeeded = platformFeeUSDC || 0n;
                         return usdcAllowance < totalNeeded;
                       })())
                     }
@@ -2808,7 +2797,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                     ) : isPending || isConfirming || isCreatingBattle ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        {isPending ? "Aguardando confirmação..." : "Criando batalha..."}
+                        {isPending ? t('battle.modal.waitingConfirmation') : t('battle.modal.creatingBattle')}
                       </>
                     ) : (
                       <>
@@ -2832,7 +2821,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
           className="gap-2"
         >
           <Info className="h-4 w-4" />
-          Ver Informações dos Colecionáveis
+          {t('battle.verTokenInfo')}
         </Button>
       </div>
 
@@ -2842,7 +2831,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
           <div className="flex items-center gap-4">
             <h2 className="text-2xl font-bold">
               <span className="bg-gradient-hero bg-clip-text text-transparent">
-                {showFinishedMatches ? "Batalhas Encerradas" : "Batalhas Ativas"}
+                {showFinishedMatches ? t('battle.finishedMatches') : t('battle.activeMatches')}
               </span>
             </h2>
             <div className="flex gap-2">
@@ -2853,7 +2842,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   setShowFinishedMatches(false);
                 }}
               >
-                Ativas
+                {t('battle.tabActive')}
               </Button>
               <Button
                 variant={showFinishedMatches ? "default" : "outline"}
@@ -2869,7 +2858,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   }
                 }}
               >
-                Encerradas
+                {t('battle.tabFinished')}
               </Button>
             </div>
           </div>
@@ -2883,12 +2872,12 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
               {isLoadingMatches ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Carregando...
+                  {t('common.loading')}
                 </>
               ) : (
                 <>
                   <Clock className="mr-2 h-4 w-4" />
-                  Atualizar
+                  {t('battle.refresh')}
                 </>
               )}
             </Button>
@@ -2902,12 +2891,12 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
               {isLoadingFinishedMatches ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Carregando...
+                  {t('common.loading')}
                 </>
               ) : (
                 <>
                   <Clock className="mr-2 h-4 w-4" />
-                  Atualizar
+                  {t('battle.refresh')}
                 </>
               )}
             </Button>
@@ -2915,21 +2904,20 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
         </div>
 
         {showFinishedMatches ? (
-          // Batalhas Encerradas
           isLoadingFinishedMatches ? (
             <Card>
               <CardContent className="p-8 text-center">
                 <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-                <p className="text-muted-foreground">Carregando batalhas encerradas...</p>
+                <p className="text-muted-foreground">{t('battle.loadingFinishedMatches')}</p>
               </CardContent>
             </Card>
           ) : finishedMatches.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center">
                 <Trophy className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-bold mb-2">Nenhuma batalha encerrada</h3>
+                <h3 className="text-lg font-bold mb-2">{t('battle.noFinishedMatches')}</h3>
                 <p className="text-muted-foreground">
-                  Você ainda não participou de batalhas finalizadas.
+                  {t('battle.noFinishedMatchesSubtitle')}
                 </p>
               </CardContent>
             </Card>
@@ -2954,18 +2942,18 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="font-bold text-lg">Batalha #{matchId}</h3>
+                          <h3 className="font-bold text-lg">{t('battle.battleId')}{matchId}</h3>
                           <div className="flex items-center gap-2 mt-2">
                             {isUserWinner && (
                               <Badge className="bg-yellow-500 text-white">
                                 <Trophy className="h-3 w-3 mr-1" />
-                                Você Venceu!
+                                {t('battle.youWon')}
                               </Badge>
                             )}
                             {isUserLoser && (
                               <Badge variant="destructive">
                                 <XCircle className="h-3 w-3 mr-1" />
-                                Você Perdeu
+                                {t('battle.youLost')}
                               </Badge>
                             )}
                           </div>
@@ -2974,23 +2962,23 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
                       <div className="space-y-2 text-sm mb-4">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Vencedor:</span>
+                          <span className="text-muted-foreground">{t('battle.winnerLabel')}</span>
                           <span className="font-mono text-xs">
                             {match.winner.slice(0, 6)}...{match.winner.slice(-4)}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Perdedor:</span>
+                          <span className="text-muted-foreground">{t('battle.loserLabel')}</span>
                           <span className="font-mono text-xs">
                             {match.loser.slice(0, 6)}...{match.loser.slice(-4)}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Seu Token ID:</span>
+                          <span className="text-muted-foreground">{t('battle.yourTokenId')}</span>
                           <span className="font-semibold">#{userTokenId.toString()}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Oponente Token ID:</span>
+                          <span className="text-muted-foreground">{t('battle.opponentTokenId')}</span>
                           <span className="font-semibold">#{opponentTokenId.toString()}</span>
                         </div>
                       </div>
@@ -3004,7 +2992,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         variant="outline"
                       >
                         <Trophy className="mr-2 h-4 w-4" />
-                        Ver Detalhes
+                        {t('battle.viewDetails')}
                       </Button>
                     </CardContent>
                   </Card>
@@ -3016,9 +3004,9 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
           <Card>
             <CardContent className="p-8 text-center">
               <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-bold mb-2">Nenhuma batalha ativa</h3>
+              <h3 className="text-lg font-bold mb-2">{t('battle.noActiveMatches')}</h3>
               <p className="text-muted-foreground">
-                Seja o primeiro a criar uma batalha!
+                {t('battle.noActiveMatchesSubtitle')}
               </p>
             </CardContent>
           </Card>
@@ -3027,7 +3015,8 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
             {activeMatches.map((match: any) => {
               const matchId = match.matchId.toString();
               const isMyBattle = match.player1.toLowerCase() === address?.toLowerCase();
-              const battleTypeText = match.battleType === 0 ? "Gratuita" : "Paga";
+              const isPaidMatch = match.battleType === 1 || (match.betAmount && match.betAmount > 0n);
+              const battleTypeText = match.battleType === 0 ? t('battle.free') : t('battle.paid');
               const paymentTypeText = match.paymentType === 0 ? "ETH" : "USDC";
               const betAmountFormatted = match.betAmount ? formatUnits(match.betAmount, 6) : "0";
 
@@ -3036,7 +3025,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="font-bold text-lg">Batalha #{matchId}</h3>
+                        <h3 className="font-bold text-lg">{t('battle.battleId')}{matchId}</h3>
                         <div className="flex items-center gap-2 mt-2">
                           <Badge className={match.battleType === 0 ? "bg-green-500" : "bg-yellow-500"}>
                             {battleTypeText}
@@ -3046,7 +3035,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                           </Badge>
                           {isMyBattle && (
                             <Badge className="bg-primary text-primary-foreground">
-                              Minha Batalha
+                              {t('battle.myBattle')}
                             </Badge>
                           )}
                         </div>
@@ -3055,36 +3044,45 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
 
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Jogador 1:</span>
+                        <span className="text-muted-foreground">{t('battle.player1')}</span>
                         <span className="font-mono text-xs">
                           {match.player1.slice(0, 6)}...{match.player1.slice(-4)}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Token ID:</span>
+                        <span className="text-muted-foreground">{t('battle.tokenId')}</span>
                         <span className="font-semibold">#{match.tokenId1.toString()}</span>
                       </div>
                       {matchInstanceIndexes.has(matchId) && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Instance Index:</span>
+                          <span className="text-muted-foreground">{t('battle.modal.instanceIndex')}</span>
                           <span className="font-semibold">#{matchInstanceIndexes.get(matchId)}</span>
                         </div>
                       )}
                       {match.battleType === 1 && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Aposta:</span>
+                          <span className="text-muted-foreground">{t('battle.betLabel')}</span>
                           <span className="font-semibold">{betAmountFormatted} USDC</span>
                         </div>
                       )}
                     </div>
 
+                    {isPaidMatch && !isMyBattle && (
+                      <Alert className="mt-3 bg-muted/80 border-muted-foreground/20">
+                        <Info className="h-4 w-4 text-muted-foreground" />
+                        <AlertDescription className="text-sm text-muted-foreground">
+                          {t('battle.paidDisabled.join')}
+                        </AlertDescription>
+                      </Alert>
+                    )}
+
                     <Button
-                      onClick={() => handleJoinBattleClick(match)}
+                      onClick={() => !isPaidMatch && handleJoinBattleClick(match)}
                       className="w-full mt-4 bg-gradient-hero text-primary-foreground hover:opacity-90"
-                      disabled={isMyBattle || !isConnected}
+                      disabled={isMyBattle || !isConnected || isPaidMatch}
                     >
                       <Sword className="mr-2 h-4 w-4" />
-                      {isMyBattle ? "Sua Batalha" : "Entrar na Batalha"}
+                      {isMyBattle ? t('battle.your.battle') : isPaidMatch ? t('battle.paidDisabled.joinButton') : t('battle.join')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -3100,65 +3098,60 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
           <DialogHeader className="flex-shrink-0">
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <Shield className="h-6 w-6 text-primary" />
-              Confirmar Entrada na Batalha
+              {t('battle.modal.confirmJoinTitle')}
             </DialogTitle>
             <DialogDescription className="pt-4">
               {selectedMatchToJoin && selectedNFTForJoin && (
                 <div className="space-y-4 overflow-y-auto max-h-[calc(90vh-200px)] pr-2 scrollbar-custom">
-                  {/* NFT Transfer Warning */}
                   {nftTransferEnabled === true && (
                     <Alert className="bg-amber-500/10 border-amber-500/20">
                       <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                       <AlertDescription className="text-amber-800 dark:text-amber-200">
-                        <strong>⚠️ NFT em Jogo</strong>
+                        <strong>{t('battle.modal.nftAtStakeTitle')}</strong>
                         <p className="mt-1">
-                          Esta batalha envolve transferência de NFT. Se você perder, seu colecionável será transferido para o vencedor.
-                          <br />
-                          <strong>Considere cuidadosamente antes de entrar nesta batalha.</strong>
+                          {t('battle.modal.nftAtStakeDescription')}
                         </p>
                       </AlertDescription>
                     </Alert>
                   )}
 
-                  {/* Informações da Batalha */}
                   <div className="p-4 bg-muted rounded-lg space-y-2">
-                    <h3 className="font-semibold">Informações da Batalha</h3>
+                    <h3 className="font-semibold">{t('battle.modal.battleInfo')}</h3>
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Batalha ID:</span>
+                        <span className="text-muted-foreground">{t('battle.modal.battleIdLabel')}</span>
                         <span className="ml-2 font-semibold">#{selectedMatchToJoin.matchId.toString()}</span>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Tipo:</span>
+                        <span className="text-muted-foreground">{t('battle.modal.type')}</span>
                         <span className="ml-2 font-semibold">
-                          {selectedMatchToJoin.battleType === 0 ? "Gratuita" : "Paga"}
+                          {selectedMatchToJoin.battleType === 0 ? t('battle.free') : t('battle.paid')}
                         </span>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Oponente Token ID:</span>
+                        <span className="text-muted-foreground">{t('battle.opponentTokenId')}</span>
                         <span className="ml-2 font-semibold">#{selectedMatchToJoin.tokenId1.toString()}</span>
                       </div>
                       {selectedMatchToJoin.instanceIndex1 !== undefined && (
                         <div>
-                          <span className="text-muted-foreground">Oponente Instance Index:</span>
+                          <span className="text-muted-foreground">{t('battle.modal.opponentInstanceIndex')}</span>
                           <span className="ml-2 font-semibold">#{selectedMatchToJoin.instanceIndex1.toString()}</span>
                         </div>
                       )}
                       {nftTransferEnabled !== null && (
                         <div className="col-span-2">
-                          <span className="text-muted-foreground">NFT Transfer:</span>
+                          <span className="text-muted-foreground">{t('battle.modal.nftTransfer')}</span>
                           <Badge variant={nftTransferEnabled ? "destructive" : "outline"} className="ml-2">
-                            {nftTransferEnabled ? "Ativado" : "Desativado"}
+                            {nftTransferEnabled ? t('battle.modal.enabled') : t('battle.modal.disabled')}
                           </Badge>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  {/* Seleção de NFT (Token ID) */}
                   <div className="space-y-2">
                     <Label htmlFor="nft-select-join" className="text-base font-semibold">
-                      Selecionar Colecionável (Token ID)
+                      {t('battle.modal.selectCollectible')}
                     </Label>
                     <Select
                       value={selectedNFTForJoin?.tokenId.toString() || ""}
@@ -3172,7 +3165,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                       }}
                     >
                       <SelectTrigger id="nft-select-join" className="w-full">
-                        <SelectValue placeholder="Selecione um colecionável" />
+                        <SelectValue placeholder={t('battle.modal.selectCollectiblePlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>
                         {nfts
@@ -3195,7 +3188,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                                     <span>Token ID #{nft.tokenId}</span>
                                   </div>
                                   <Badge variant="outline" className="ml-2">
-                                    {nft.balance.toString()} {Number(nft.balance) > 1 ? 'unidades' : 'unidade'}
+                                    {nft.balance.toString()} {Number(nft.balance) > 1 ? t('battle.modal.units') : t('battle.modal.unit')}
                                   </Badge>
                                 </div>
                               </SelectItem>
@@ -3205,21 +3198,20 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                     </Select>
                   </div>
 
-                  {/* Seleção de Instância para Join Battle */}
                   {selectedNFTForJoin && (
                     <div className="space-y-2">
                       <Label htmlFor="instance-select-join" className="text-base font-semibold">
-                        Selecionar Instância do Colecionável
+                        {t('battle.modal.selectInstance')}
                       </Label>
                       {isLoadingInstancesForJoin ? (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Carregando instâncias...
+                          {t('battle.modal.loadingInstances')}
                         </div>
                       ) : tokenInstancesForJoin.length === 0 ? (
                         <Alert variant="destructive">
                           <AlertDescription>
-                            Nenhuma instância justa disponível para este token. Todas as suas instâncias excedem o threshold de diferença de Power Level permitido pelo contrato, ou estão incubando.
+                            {t('battle.modal.noFairInstance')}
                           </AlertDescription>
                         </Alert>
                       ) : (
@@ -3228,7 +3220,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                           onValueChange={(value) => setSelectedInstanceIndexForJoin(BigInt(value))}
                         >
                           <SelectTrigger id="instance-select-join" className="w-full">
-                            <SelectValue placeholder="Selecione uma instância" />
+                            <SelectValue placeholder={t('battle.modal.selectInstancePlaceholder')} />
                           </SelectTrigger>
                           <SelectContent>
                             {tokenInstancesForJoin.map((instance, index) => {
@@ -3247,7 +3239,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                                       <span>Instance Index #{instance.instanceIndex.toString()}</span>
                                       {!isFair && (
                                         <Badge variant="destructive" className="text-xs">
-                                          ⚠️ Bloqueado ({differencePercent.toFixed(1)}%)
+                                          ⚠️ {t('battle.modal.blocked')} ({differencePercent.toFixed(1)}%)
                                         </Badge>
                                       )}
                                       {isFair && differencePercent > 0 && (
@@ -3296,46 +3288,41 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                     </div>
                   )}
 
-                  {/* Aviso de Risco */}
                   <Alert className="bg-yellow-500/10 border-yellow-500/20">
                     <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
                     <AlertDescription className="text-yellow-800 dark:text-yellow-200">
-                      <strong>⚠️ ATENÇÃO: Seu colecionável está em jogo!</strong>
+                      <strong>{t('battle.modal.collectibleAtRiskTitle')}</strong>
                       <p className="mt-2">
-                        Ao entrar nesta batalha, seu NFT será transferido para o contrato. Se você perder, 
-                        seu colecionável será transferido para o vencedor. Certifique-se de que está disposto 
-                        a arriscar seu NFT antes de continuar.
+                        {t('battle.modal.collectibleAtRiskDescription')}
                       </p>
                     </AlertDescription>
                   </Alert>
 
-                  {/* Comparação de Skills e Aviso de Risco */}
                   {isLoadingSkillsComparison ? (
                     <Alert className="bg-blue-500/10 border-blue-500/20">
                       <Loader2 className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />
                       <AlertDescription className="text-blue-800 dark:text-blue-200">
-                        Analisando skills e calculando risco da batalha...
+                        {t('battle.modal.analyzingSkills')}
                       </AlertDescription>
                     </Alert>
                   ) : skillsComparison ? (
                     <>
-                      {/* Comparação de Power Levels */}
                       <div className="p-4 bg-muted rounded-lg space-y-3">
-                        <h3 className="font-semibold text-base">Comparação de Power Levels</h3>
+                        <h3 className="font-semibold text-base">{t('battle.modal.powerLevelComparison')}</h3>
                         {skillsComparison.threshold && (
                           <p className="text-xs text-muted-foreground">
-                            Threshold máximo permitido: {skillsComparison.threshold}%
+                            {t('battle.modal.maxThreshold')} {skillsComparison.threshold}%
                           </p>
                         )}
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-1">
-                            <p className="text-xs text-muted-foreground">Oponente (Player 1)</p>
+                            <p className="text-xs text-muted-foreground">{t('battle.modal.opponentPlayer1')}</p>
                             <p className="text-lg font-bold text-red-600 dark:text-red-400">
                               {skillsComparison.player1PowerLevel} Power Level
                             </p>
                           </div>
                           <div className="space-y-1">
-                            <p className="text-xs text-muted-foreground">Você (Player 2)</p>
+                            <p className="text-xs text-muted-foreground">{t('battle.modal.youPlayer2')}</p>
                             <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
                               {skillsComparison.player2PowerLevel} Power Level
                             </p>
@@ -3343,7 +3330,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         </div>
                         <div className="pt-2 border-t">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">Diferença:</span>
+                            <span className="text-sm text-muted-foreground">{t('battle.modal.difference')}</span>
                             <span className={`text-sm font-semibold ${
                               skillsComparison.differencePercent > 30 
                                 ? "text-red-600 dark:text-red-400" 
@@ -3362,11 +3349,9 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         <Alert className="bg-amber-500/10 border-amber-500/20">
                           <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                           <AlertDescription className="text-amber-800 dark:text-amber-200">
-                            <strong>⏳ Threshold Não Configurado</strong>
+                            <strong>{t('battle.modal.thresholdNotSetTitle')}</strong>
                             <p className="mt-2">
-                              O threshold de diferença de Power Level ainda não foi configurado pelo owner do contrato.
-                              <br />
-                              <strong>Por favor, aguarde a configuração do threshold pelo owner do contrato antes de participar de batalhas.</strong>
+                              {t('battle.modal.thresholdNotSetDesc')}
                             </p>
                           </AlertDescription>
                         </Alert>
@@ -3375,9 +3360,9 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         <Alert className="bg-purple-500/10 border-purple-500/20">
                           <AlertTriangle className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                           <AlertDescription className="text-purple-800 dark:text-purple-200">
-                            <strong>⚖️ EMPATE GARANTIDO - Batalha Bloqueada!</strong>
+                            <strong>{t('battle.modal.tieBlockedTitle')}</strong>
                             <p className="mt-2">
-                              <strong>ATENÇÃO:</strong> Todas as skills dos dois colecionáveis são <strong>idênticas</strong>:
+                              <strong>{t('battle.modal.tieBlockedDesc')}</strong>
                             </p>
                             <div className="mt-3 space-y-1 text-sm bg-background/50 p-3 rounded border">
                               <div className="grid grid-cols-2 gap-2">
@@ -3403,11 +3388,6 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                                 </div>
                               </div>
                             </div>
-                            <p className="mt-3 font-semibold">
-                              Como todas as skills são idênticas, o resultado da batalha será sempre um <strong>EMPATE</strong>.
-                              <br />
-                              <strong>Esta batalha não pode ser iniciada.</strong> Por favor, selecione uma instância com skills diferentes ou aguarde uma batalha com outro oponente.
-                            </p>
                           </AlertDescription>
                         </Alert>
                       )}
@@ -3415,13 +3395,9 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         <Alert className="bg-red-500/10 border-red-500/20">
                           <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
                           <AlertDescription className="text-red-800 dark:text-red-200">
-                            <strong>🚫 Batalha Bloqueada!</strong>
+                            <strong>{t('battle.modal.battleBlockedTitle')}</strong>
                             <p className="mt-2">
-                              Diferença de {skillsComparison.differencePercent.toFixed(1)}% entre os Power Levels ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
-                              <br />
-                              <strong>A diferença excede o limite permitido de {skillsComparison.threshold}%.</strong> Para manter o jogo justo, batalhas com diferença superior a {skillsComparison.threshold}% não são permitidas.
-                              <br />
-                              Considere usar um colecionável com skills mais próximas ou fazer um novo mint.
+                              {skillsComparison.differencePercent.toFixed(1)}% {t('battle.modal.difference')} ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}). {t('battle.modal.battleBlockedDesc')}
                             </p>
                           </AlertDescription>
                         </Alert>
@@ -3430,22 +3406,15 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         <Alert className="bg-orange-500/10 border-orange-500/20">
                           <AlertTriangle className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                           <AlertDescription className="text-orange-800 dark:text-orange-200">
-                            <strong>⚠️ Risco Alto - Próximo do Limite</strong>
+                            <strong>{t('battle.modal.highRiskTitle')}</strong>
                             <p className="mt-2">
-                              Diferença de {skillsComparison.differencePercent.toFixed(1)}% entre os Power Levels ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
+                              {t('battle.modal.highRiskDiffPrefix')} {skillsComparison.differencePercent.toFixed(1)}% {t('battle.modal.highRiskDiffSuffix')} ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
                               <br />
-                              A diferença está próxima do limite permitido de {skillsComparison.threshold}% (entre {Math.round(skillsComparison.threshold * 0.8)}% e {skillsComparison.threshold}%).
+                              {t('battle.modal.highRiskNearLimitPrefix')} {skillsComparison.threshold}% {t('battle.modal.highRiskNearLimitSuffix')} {Math.round(skillsComparison.threshold * 0.8)}% {t('battle.modal.highRiskNearLimitAnd')} {skillsComparison.threshold}%).
                               {skillsComparison.player2PowerLevel < skillsComparison.player1PowerLevel ? (
-                                <>
-                                  {" "}Seu colecionável tem menos Power Level que o oponente. Suas chances de vitória são reduzidas. 
-                                  Considere cuidadosamente antes de prosseguir.
-                                </>
+                                <> {" "}{t('battle.modal.highRiskYourLower')}</>
                               ) : (
-                                <>
-                                  {" "}Seu colecionável tem mais Power Level que o oponente ({skillsComparison.player2PowerLevel} vs {skillsComparison.player1PowerLevel}). 
-                                  Você pode ter mais chances de ganhar, mas <strong>se perder, estará arriscando um colecionável com mais power e tem chances de perdê-lo para um colecionável de power menor</strong>. 
-                                  Considere cuidadosamente antes de prosseguir.
-                                </>
+                                <> {" "}({skillsComparison.player2PowerLevel} vs {skillsComparison.player1PowerLevel}). {t('battle.modal.highRiskYourHigher')}</>
                               )}
                             </p>
                           </AlertDescription>
@@ -3455,17 +3424,13 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         <Alert className="bg-yellow-500/10 border-yellow-500/20">
                           <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
                           <AlertDescription className="text-yellow-800 dark:text-yellow-200">
-                            <strong>⚡ Risco Moderado</strong>
+                            <strong>{t('battle.modal.mediumRiskTitle')}</strong>
                             <p className="mt-2">
-                              Diferença de {skillsComparison.differencePercent.toFixed(1)}% entre os Power Levels ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
+                              {t('battle.modal.highRiskDiffPrefix')} {skillsComparison.differencePercent.toFixed(1)}% {t('battle.modal.highRiskDiffSuffix')} ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
                               {skillsComparison.player2PowerLevel > skillsComparison.player1PowerLevel ? (
-                                <>
-                                  {" "}Seu colecionável tem mais Power Level que o oponente. Você pode ter mais chances de ganhar, mas <strong>se perder, estará arriscando um colecionável com mais power e tem chances de perdê-lo para um colecionável de power menor</strong>.
-                                </>
+                                <> {" "}{t('battle.modal.mediumRiskYourHigher')}</>
                               ) : (
-                                <>
-                                  {" "}A batalha está relativamente balanceada, mas ainda há uma diferença significativa.
-                                </>
+                                <> {" "}{t('battle.modal.mediumRiskBalanced')}</>
                               )}
                             </p>
                           </AlertDescription>
@@ -3475,18 +3440,13 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         <Alert className="bg-green-500/10 border-green-500/20">
                           <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
                           <AlertDescription className="text-green-800 dark:text-green-200">
-                            <strong>✅ Batalha Balanceada</strong>
+                            <strong>{t('battle.modal.balancedTitle')}</strong>
                             <p className="mt-2">
-                              Diferença de apenas {skillsComparison.differencePercent.toFixed(1)}% entre os Power Levels ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
+                              {t('battle.modal.balancedDiffPrefix')} {skillsComparison.differencePercent.toFixed(1)}% {t('battle.modal.highRiskDiffSuffix')} ({skillsComparison.player1PowerLevel} vs {skillsComparison.player2PowerLevel}).
                               {skillsComparison.player2PowerLevel > skillsComparison.player1PowerLevel ? (
-                                <>
-                                  {" "}Seu colecionável tem mais Power Level que o oponente. Você pode ter mais chances de ganhar, mas <strong>se perder, estará arriscando um colecionável com mais power e tem chances de perdê-lo para um colecionável de power menor</strong>. 
-                                  Esta é uma batalha relativamente balanceada! (Threshold: {skillsComparison.threshold}%)
-                                </>
+                                <> {" "}{t('battle.modal.balancedYourHigher')} ({t('battle.modal.thresholdLabel')} {skillsComparison.threshold}%)</>
                               ) : (
-                                <>
-                                  {" "}Esta é uma batalha justa e balanceada! (Threshold: {skillsComparison.threshold}%)
-                                </>
+                                <> {" "}{t('battle.modal.balancedFair')} ({t('battle.modal.thresholdLabel')} {skillsComparison.threshold}%)</>
                               )}
                             </p>
                           </AlertDescription>
@@ -3500,7 +3460,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                     <Alert>
                       <AlertDescription>
                         <div className="flex items-center justify-between">
-                          <span>É necessário aprovar o NFT antes de entrar na batalha</span>
+                          <span>{t('battle.modal.approveNftRequired')}</span>
                           <Button
                             onClick={handleApproveNFTForJoin}
                             variant="outline"
@@ -3511,10 +3471,10 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                             {isPending || isApprovingNFTForJoin ? (
                               <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Aprovando...
+                                {t('battle.modal.approving')}
                               </>
                             ) : (
-                              "Aprovar NFT"
+                              t('battle.modal.approveNft')
                             )}
                           </Button>
                         </div>
@@ -3525,7 +3485,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                   {nftApprovedForJoin === true && (
                     <Alert className="bg-green-500/10 border-green-500/20">
                       <AlertDescription className="text-green-600 dark:text-green-400">
-                        ✓ NFT aprovado e pronto para batalhar
+                        {t('battle.modal.nftApprovedReady')}
                       </AlertDescription>
                     </Alert>
                   )}
@@ -3545,7 +3505,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
               }}
               disabled={isPending || isJoiningBattle}
             >
-              Cancelar
+              {t('battle.modal.cancel')}
             </Button>
             <Button
               onClick={handleJoinBattle}
@@ -3564,12 +3524,12 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
               {isPending || isJoiningBattle ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isPending ? "Aguardando confirmação..." : "Entrando na batalha..."}
+                  {isPending ? t('battle.modal.waitingConfirmation') : t('battle.modal.joiningBattle')}
                 </>
               ) : (
                 <>
                   <Sword className="mr-2 h-4 w-4" />
-                  Confirmar e Entrar na Batalha
+                  {t('battle.modal.confirmAndJoin')}
                 </>
               )}
             </Button>
@@ -3583,55 +3543,43 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <Shield className="h-6 w-6 text-primary" />
-              Confirmar Criação de Batalha
+              {t('battle.modal.confirmCreateTitle')}
             </DialogTitle>
             <DialogDescription className="pt-4">
               {selectedNFT && (
                 <div className="space-y-4">
-                  {/* Informações da Batalha */}
                   <div className="p-4 bg-muted rounded-lg space-y-2">
-                    <h3 className="font-semibold">Informações da Batalha</h3>
+                    <h3 className="font-semibold">{t('battle.modal.battleInfo')}</h3>
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Tipo:</span>
-                        <span className="ml-2 font-semibold">
-                          {battleType === BattleType.FREE ? "Gratuita" : "Paga"}
-                        </span>
+                        <span className="text-muted-foreground">{t('battle.modal.type')}</span>
+                        <span className="ml-2 font-semibold">{t('battle.free')}</span>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Pagamento:</span>
+                        <span className="text-muted-foreground">{t('battle.modal.payment')}</span>
                         <span className="ml-2 font-semibold">
                           {paymentType === PaymentType.ETH ? "ETH" : "USDC"}
                         </span>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Seu Token ID:</span>
+                        <span className="text-muted-foreground">{t('battle.modal.yourTokenId')}</span>
                         <span className="ml-2 font-semibold">#{selectedNFT.tokenId}</span>
                       </div>
                       {selectedInstanceIndex !== null && (
                         <div>
-                          <span className="text-muted-foreground">Instance Index:</span>
+                          <span className="text-muted-foreground">{t('battle.modal.instanceIndex')}</span>
                           <span className="ml-2 font-semibold">#{selectedInstanceIndex.toString()}</span>
-                        </div>
-                      )}
-                      {battleType === BattleType.PAID && (
-                        <div>
-                          <span className="text-muted-foreground">Aposta:</span>
-                          <span className="ml-2 font-semibold">{betAmount} USDC</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  {/* Aviso de Risco */}
                   <Alert className="bg-yellow-500/10 border-yellow-500/20">
                     <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
                     <AlertDescription className="text-yellow-800 dark:text-yellow-200">
-                      <strong>⚠️ ATENÇÃO: Seu colecionável está em jogo!</strong>
+                      <strong>{t('battle.modal.collectibleAtRiskTitle')}</strong>
                       <p className="mt-2">
-                        Ao criar esta batalha, seu NFT será transferido para o contrato. Se você perder, 
-                        seu colecionável será transferido para o vencedor. Certifique-se de que está disposto 
-                        a arriscar seu NFT antes de continuar.
+                        {t('battle.modal.collectibleAtRiskCreate')}
                       </p>
                     </AlertDescription>
                   </Alert>
@@ -3645,7 +3593,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
               onClick={() => setIsCreateBattleModalOpen(false)}
               disabled={isPending || isCreatingBattle}
             >
-              Cancelar
+              {t('battle.modal.cancel')}
             </Button>
             <Button
               onClick={handleCreateBattle}
@@ -3661,12 +3609,12 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
               {isPending || isCreatingBattle ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isPending ? "Aguardando confirmação..." : "Criando batalha..."}
+                  {isPending ? t('battle.modal.waitingConfirmation') : t('battle.modal.creatingBattle')}
                 </>
               ) : (
                 <>
                   <Sword className="mr-2 h-4 w-4" />
-                  Confirmar e Criar Batalha
+                  {t('battle.modal.confirmAndCreate')}
                 </>
               )}
             </Button>

@@ -5,7 +5,7 @@
  * a interação com os contratos inteligentes.
  */
 
-import { Address } from "viem";
+import { Address, getAddress } from "viem";
 import { CHICKEN_MANAGER_FARM_ABI, PUDGY_CHICKEN_ABI } from "./abi";
 import { CONTRACTS, CHAIN_IDS } from "./contracts";
 
@@ -187,7 +187,12 @@ export function getPudgyChickenCollectionAddress(chainId: number): Address | nul
   const chainName = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as keyof typeof CONTRACTS.PUDGY_CHICKEN_COLLECTION;
   if (!chainName) return null;
   const address = CONTRACTS.PUDGY_CHICKEN_COLLECTION[chainName];
-  return address === "0x" ? null : address;
+  if (address === "0x") return null;
+  try {
+    return getAddress(address);
+  } catch {
+    return address;
+  }
 }
 
 /**
@@ -637,27 +642,40 @@ export async function getETHBalance(
 }
 
 /**
- * Formata o valor para exibição (considerando decimals)
+ * Formata o valor para exibição (considerando decimals).
+ * @param amount Valor na menor unidade (ex: wei, 6 decimals para USDC)
+ * @param decimals Número de decimais do token (18 ETH, 6 USDC)
+ * @param maxDecimalPlaces Se 0, exibe só a parte inteira (sem casas decimais)
  */
 export function formatTokenAmount(
   amount: bigint,
-  decimals: number = 18
+  decimals: number = 18,
+  maxDecimalPlaces?: number
 ): string {
   const divisor = BigInt(10 ** decimals);
   const whole = amount / divisor;
   const remainder = amount % divisor;
-  
+
+  if (maxDecimalPlaces === 0) {
+    return whole.toString();
+  }
+
   if (remainder === 0n) {
     return whole.toString();
   }
-  
+
   const remainderStr = remainder.toString().padStart(decimals, "0");
-  const trimmed = remainderStr.replace(/0+$/, "");
-  
+  let trimmed = remainderStr.replace(/0+$/, "");
+
   if (trimmed === "") {
     return whole.toString();
   }
-  
+
+  if (maxDecimalPlaces !== undefined && maxDecimalPlaces > 0 && trimmed.length > maxDecimalPlaces) {
+    trimmed = trimmed.slice(0, maxDecimalPlaces).replace(/0+$/, "") || "";
+    if (trimmed === "") return whole.toString();
+  }
+
   return `${whole}.${trimmed}`;
 }
 

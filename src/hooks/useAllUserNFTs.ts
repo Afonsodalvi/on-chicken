@@ -8,7 +8,7 @@ import {
   getRarityTier,
 } from "@/lib/contracts-helpers";
 import { getTokenAsset } from "@/lib/token-assets";
-import { CHAIN_IDS } from "@/lib/contracts";
+import { isSupportedBaseChain } from "@/lib/contracts";
 import { RarityTier } from "@/lib/contracts-helpers";
 import {
   UNIQUE_COLLECTIBLES_TOKEN_IDS,
@@ -53,7 +53,7 @@ export function useAllUserNFTs() {
         return;
       }
 
-      if (chainId !== CHAIN_IDS.baseSepolia) {
+      if (!isSupportedBaseChain(chainId)) {
         setError("Por favor, conecte-se à rede Base Sepolia");
         setNfts([]);
         setIsLoading(false);

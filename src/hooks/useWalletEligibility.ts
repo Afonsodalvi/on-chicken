@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAccount, usePublicClient } from "wagmi";
 import { Address } from "viem";
 import { getPudgyChickenCollectionAddress, getTokenBalance, isWhitelisted } from "@/lib/contracts-helpers";
-import { CHAIN_IDS } from "@/lib/contracts";
+import { isSupportedBaseChain } from "@/lib/contracts";
 import {
   UNIQUE_COLLECTIBLES_TOKEN_IDS,
   fetchUniqueCollectibleMetadata,
@@ -42,7 +42,7 @@ export function useWalletEligibility(): WalletEligibilityResult {
         return;
       }
 
-      if (chainId !== CHAIN_IDS.baseSepolia) {
+      if (!isSupportedBaseChain(chainId)) {
         setError("Connect to Base Sepolia");
         setIsWhitelistedUser(null);
         setUniqueCollectible(null);
