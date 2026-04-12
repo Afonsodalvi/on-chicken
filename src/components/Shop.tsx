@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, QrCode } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 import { MintModal } from "@/components/MintModal";
 
 // Importando as imagens das galinhas (1-10)
@@ -20,6 +21,7 @@ import chicken10 from "@/assets/10.png";
 
 export const Shop = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [selectedTokenId, setSelectedTokenId] = useState<number | null>(null);
   const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const products = [
@@ -228,15 +230,27 @@ export const Shop = () => {
                         {product.originalPrice}
                       </div>
                     </div>
-                    <Button 
-                      className="bg-gradient-hero text-primary-foreground hover:opacity-90"
-                      onClick={() => {
-                        setSelectedTokenId(product.id);
-                        setIsMintModalOpen(true);
-                      }}
-                    >
-                      Mint
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-[#32BCAD] text-[#32BCAD] hover:bg-[#32BCAD] hover:text-white"
+                        onClick={() => navigate("/buy")}
+                      >
+                        <QrCode className="h-4 w-4 mr-1" />
+                        PIX
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-gradient-hero text-primary-foreground hover:opacity-90"
+                        onClick={() => {
+                          setSelectedTokenId(product.id);
+                          setIsMintModalOpen(true);
+                        }}
+                      >
+                        Mint
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
