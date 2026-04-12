@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,7 +15,19 @@ import Details from "./pages/Details";
 import NotFound from "./pages/NotFound";
 import { WalletEligibilityHandler } from "./components/WalletEligibilityHandler";
 
-const queryClient = new QueryClient();
+const Admin = lazy(() => import("./pages/Admin"));
+const Buy = lazy(() => import("./pages/Buy"));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      gcTime: 1000 * 60 * 10,
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -26,15 +39,18 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <WalletEligibilityHandler />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/battle" element={<Battle />} />
-                <Route path="/farm" element={<Farm />} />
-                <Route path="/whitelist" element={<Whitelist />} />
-                <Route path="/details" element={<Details />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/battle" element={<Battle />} />
+                  <Route path="/farm" element={<Farm />} />
+                  <Route path="/whitelist" element={<Whitelist />} />
+                  <Route path="/details" element={<Details />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/buy" element={<Buy />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </BrowserRouter>
           </BattleProvider>
         </TooltipProvider>

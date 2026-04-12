@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import { EggCoinButton } from "@/components/EggCoinButton";
+import { NetworkBadge } from "@/components/NetworkBadge";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,6 +73,7 @@ export const Header = () => {
           </a>
           <div className="flex items-center gap-3">
             <EggCoinButton size="sm" />
+            <NetworkBadge />
             <LanguageSelector />
             <ConnectWallet size="sm" />
           </div>
@@ -118,8 +120,9 @@ export const Header = () => {
             <a href="#community" className="block text-foreground/90 hover:text-foreground transition-colors">
               {t('nav.community')}
             </a>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <EggCoinButton size="sm" className="flex-1" />
+              <NetworkBadge />
               <LanguageSelector />
               <ConnectWallet size="sm" className="flex-1" />
             </div>
