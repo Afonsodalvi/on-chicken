@@ -241,6 +241,7 @@ const translations = {
     // Battle
     'battle.title': 'Arena de Batalha',
     'battle.subtitle': 'Escolha seus NFTs favoritos e participe de batalhas épicas na arena. Crie uma batalha ou participe de uma existente!',
+    'battle.mainnetComingSoon': 'Batalhas na mainnet serão liberadas em',
     'battle.select': 'Selecione seu NFT',
     'battle.create': 'Criar Nova Batalha',
     'battle.your': 'Suas Batalhas',
@@ -469,7 +470,8 @@ const translations = {
     'mint.success.continue': 'Continuar',
     'mint.whitelist.connectAndMint': 'Conecte sua carteira e faça o mint da sua primeira PudgyChicken NFT',
     'mint.quantityBetween': 'Quantidade deve ser entre 1 e 10',
-    
+    'mint.mainnetComingSoon': 'Mainnet será liberada em',
+
     // Farm
     'farm.title': 'Fazenda Digital',
     'farm.subtitle': 'Gerencie sua fazenda digital e tokenize seus animais',
@@ -952,6 +954,7 @@ const translations = {
     // Battle
     'battle.title': 'Battle Arena',
     'battle.subtitle': 'Choose your favorite NFTs and participate in epic battles in the arena. Create a battle or join an existing one!',
+    'battle.mainnetComingSoon': 'Mainnet battles will be available on',
     'battle.select': 'Select your NFT',
     'battle.create': 'Create New Battle',
     'battle.your': 'Your Battles',
@@ -1180,6 +1183,7 @@ const translations = {
     'mint.success.continue': 'Continue',
     'mint.whitelist.connectAndMint': 'Connect your wallet and mint your first PudgyChicken NFT',
     'mint.quantityBetween': 'Quantity must be between 1 and 10',
+    'mint.mainnetComingSoon': 'Mainnet launches on',
 
     // Farm
     'farm.title': 'Digital Farm',

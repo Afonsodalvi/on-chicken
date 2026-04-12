@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +28,7 @@ import {
   getTokenAddress,
   formatTokenAmount
 } from "@/lib/contracts-helpers";
-import { CHAIN_IDS, isSupportedBaseChain } from "@/lib/contracts";
+import { CHAIN_IDS, isSupportedBaseChain, isBaseMainnet, isMainnetLive, getMainnetLaunchDate } from "@/lib/contracts";
 import { getTokenAsset, TokenAsset } from "@/lib/token-assets";
 import { ConnectWallet } from "./ConnectWallet";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -60,6 +60,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [instanceMintedData, setInstanceMintedData] = useState<any>(null);
   const [mintedTokenAsset, setMintedTokenAsset] = useState<TokenAsset | null>(null);
+  const lastActionRef = useRef<"approve" | "mint" | null>(null);
 
   // Carregar asset do token
   useEffect(() => {
@@ -101,11 +102,21 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
 
   // Monitorar confirmação da transação e buscar evento InstanceMinted
   useEffect(() => {
+    let cancelled = false;
+
     if (isConfirmed && hash && publicClient) {
+      // If this was an approve tx, just refresh balance and return
+      if (lastActionRef.current === "approve") {
+        lastActionRef.current = null;
+        toast.success(t('mint.approvalSuccess') || "Approval confirmed!");
+        checkBalance();
+        return () => { cancelled = true; };
+      }
+
       const fetchMintEvent = async () => {
         try {
           const receipt = await publicClient.getTransactionReceipt({ hash });
-          
+
           // Buscar evento InstanceMinted
           const instanceMintedEvent = receipt.logs.find((log) => {
             try {
@@ -127,11 +138,11 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
                 data: instanceMintedEvent.data,
                 topics: instanceMintedEvent.topics,
               });
-              
-              if (decoded.eventName === "InstanceMinted") {
+
+              if (decoded.eventName === "InstanceMinted" && !cancelled) {
                 const mintedTokenId = Number(decoded.args.tokenId);
                 const tokenAsset = getTokenAsset(mintedTokenId);
-                
+
                 setInstanceMintedData({
                   owner: decoded.args.owner,
                   tokenId: decoded.args.tokenId,
@@ -150,21 +161,27 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
               console.error("Erro ao decodificar evento:", err);
             }
           }
-          
-          toast.success(t('mint.successToast'));
-          // Resetar formulário
-          setQuantity(1);
-          setPaymentType(PaymentType.ETH);
+
+          if (!cancelled) {
+            toast.success(t('mint.successToast'));
+            // Resetar formulário
+            setQuantity(1);
+            setPaymentType(PaymentType.ETH);
+          }
           // Não fechar o modal principal ainda, deixar o modal de sucesso aparecer primeiro
         } catch (err) {
           console.error("Erro ao buscar evento:", err);
-          toast.success(t('mint.successToast'));
-          onOpenChange(false);
+          if (!cancelled) {
+            toast.success(t('mint.successToast'));
+            onOpenChange(false);
+          }
         }
       };
 
       fetchMintEvent();
     }
+
+    return () => { cancelled = true; };
   }, [isConfirmed, hash, publicClient, onOpenChange]);
 
   const formatErrorMessage = (error: any): string => {
@@ -310,7 +327,8 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
       try {
         // Aprovar um valor maior para evitar múltiplas aprovações
         const approvalAmount = price * 2n; // Aprovar 2x o valor necessário
-        
+
+        lastActionRef.current = "approve";
         writeContract({
           address: tokenAddress,
           abi: ERC20_ABI,
@@ -321,6 +339,7 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
         toast.info(t('mint.error.waitingApproval'));
         return true;
       } catch (error: any) {
+        lastActionRef.current = null;
         console.error("Erro ao aprovar token:", error);
         toast.error(`${t('mint.error.approveError')} ${error.message}`);
         return false;
@@ -388,7 +407,8 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
 
       // Fazer o mint
       const value = paymentType === PaymentType.ETH ? price : undefined;
-      
+
+      lastActionRef.current = "mint";
       writeContract({
         address: collectionAddress,
         abi: PUDGY_CHICKEN_ABI,
@@ -594,10 +614,20 @@ export const MintModal: React.FC<MintModalProps> = ({ open, onOpenChange, tokenI
               </Alert>
             )}
 
+            {/* Mainnet gate */}
+            {chainId && isBaseMainnet(chainId) && !isMainnetLive() && (
+              <Alert className="border-blue-500 bg-blue-500/10">
+                <AlertTriangle className="h-4 w-4 text-blue-500" />
+                <AlertDescription className="text-blue-500">
+                  {t('mint.mainnetComingSoon')} {getMainnetLaunchDate()}
+                </AlertDescription>
+              </Alert>
+            )}
+
             {/* Botão de Mint */}
             <Button
               onClick={handleMint}
-              disabled={!canMint || !isSupportedBaseChain(chainId) || isLoadingPrice || isCheckingBalance || (price !== null && balance !== null && balance < price)}
+              disabled={!canMint || !isSupportedBaseChain(chainId) || (isBaseMainnet(chainId) && !isMainnetLive()) || isLoadingPrice || isCheckingBalance || (price !== null && balance !== null && balance < price)}
               className="w-full"
               size="lg"
             >

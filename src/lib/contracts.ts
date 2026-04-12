@@ -149,6 +149,37 @@ export function getContractAddress(
   return address === "0x" ? null : address;
 }
 
+export function isBaseMainnet(chainId: number | undefined): boolean {
+  return chainId === CHAIN_IDS.base;
+}
+
+/** Date when mainnet goes live (ISO string). Adjust when ready to launch. */
+const MAINNET_LAUNCH_DATE = "2026-06-01T00:00:00Z";
+
+export function getMainnetLaunchDate(): string {
+  return MAINNET_LAUNCH_DATE;
+}
+
+export function isMainnetLive(): boolean {
+  return new Date() >= new Date(MAINNET_LAUNCH_DATE);
+}
+
+/** Well-known admin wallets for environment badges. */
+export function isKnownAdminWallet(address: string | undefined): "dev" | "prod" | null {
+  if (!address) return null;
+  const lower = address.toLowerCase();
+  // Add known admin addresses here
+  const DEV_WALLETS = [
+    "0x" // placeholder
+  ];
+  const PROD_WALLETS = [
+    "0x" // placeholder
+  ];
+  if (DEV_WALLETS.some(w => w.toLowerCase() === lower)) return "dev";
+  if (PROD_WALLETS.some(w => w.toLowerCase() === lower)) return "prod";
+  return null;
+}
+
 // Função para verificar se um contrato está deployado
 export function isContractDeployed(
   contractType: keyof typeof CONTRACTS,
