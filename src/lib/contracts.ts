@@ -10,62 +10,62 @@ export interface ContractConfig {
 export const CONTRACTS = {
   // Chicken Manager Farm – factory + createMatchById / joinMatchById
   CHICKEN_MANAGER_FARM: {
-    mainnet: "0x" as Address, // TODO: Deploy to mainnet
-    polygon: "0x" as Address, // TODO: Deploy to polygon
-    base: "0x" as Address, // TODO: Deploy to base
-    sepolia: "0x" as Address, // TODO: Deploy to sepolia
-    polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0xB285F63c9915a7aCE922D687CAd02E86d1eEf0da" as Address, // Base Sepolia
+    mainnet: "0x" as Address,
+    polygon: "0x" as Address,
+    base: "0x71B48ec5C79b4fAba876cCcCFB6c1BAb805f0F32" as Address, // Base Mainnet
+    sepolia: "0x" as Address,
+    polygonMumbai: "0x" as Address,
+    baseSepolia: "0x8dAdA3e910b713b3Cb33579B93F9233B4810Ec31" as Address, // Base Sepolia
   },
 
   // First Collection – Diamond da primeira coleção ERC-1155 (PudgyChicken + PudgyChickenView)
   PUDGY_CHICKEN_COLLECTION: {
-    mainnet: "0x" as Address, // TODO: Deploy to mainnet
-    polygon: "0x" as Address, // TODO: Deploy to polygon
-    base: "0x" as Address, // TODO: Deploy to base
-    sepolia: "0x" as Address, // TODO: Deploy to sepolia
-    polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x51152cb9B26FD8285a13a5C98b0C14F4757EA7b8" as Address, // Base Sepolia – First Collection (PudgyChicken Diamond)
+    mainnet: "0x" as Address,
+    polygon: "0x" as Address,
+    base: "0xd9114E1D7fEec3C9332673B6D048Cc40741D79dC" as Address, // Base Mainnet
+    sepolia: "0x" as Address,
+    polygonMumbai: "0x" as Address,
+    baseSepolia: "0x27Bb62C5B5Ea7EE6A365084d73D05565AbA49503" as Address, // Base Sepolia
   },
 
   // Implementação de referência (Beacon); não chamar no front
   PUDGY_CHICKEN_IMPLEMENTATION: {
     mainnet: "0x" as Address,
     polygon: "0x" as Address,
-    base: "0x" as Address,
+    base: "0x852626fCeb3eEf7aAeFcDDD58FD37eCEa968f833" as Address, // Base Mainnet
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0xED365C79321d7290b0F35fC506C0dCbEf0417757" as Address, // Base Sepolia
+    baseSepolia: "0xbD7cB806a97b25d714D48Da679706578A1fE7FF0" as Address, // Base Sepolia
   },
 
   // Pudgy Chicken Fight – Diamond da arena (matches, VRF, taxas)
   PUDGY_CHICKEN_FIGHT: {
-    mainnet: "0x" as Address, // TODO: Deploy to mainnet
-    polygon: "0x" as Address, // TODO: Deploy to polygon
-    base: "0x" as Address, // TODO: Deploy to base
-    sepolia: "0x" as Address, // TODO: Deploy to sepolia
-    polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x570d73cF9893926B92Da4293C4feA3414b1fC246" as Address, // Base Sepolia
+    mainnet: "0x" as Address,
+    polygon: "0x" as Address,
+    base: "0xCFF5bC8FaD268e5C4cfb42dab145c808E5cF6d4a" as Address, // Base Mainnet
+    sepolia: "0x" as Address,
+    polygonMumbai: "0x" as Address,
+    baseSepolia: "0x4279510110aFD50F86CB7d7669b76002B5D735e2" as Address, // Base Sepolia
   },
 
   // Beacon para upgrades das coleções (referência; não chamar no front)
   BEACON: {
     mainnet: "0x" as Address,
     polygon: "0x" as Address,
-    base: "0x" as Address,
+    base: "0x78eE496138211cA731eDbaD9A837DB7d7AAa16B2" as Address, // Base Mainnet
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x30D6Ca94022092452f7E14e940dA5d4A7656f30D" as Address, // Base Sepolia
+    baseSepolia: "0x7B32634F6D83763998d9bEE938622A2cCC3A14EF" as Address, // Base Sepolia
   },
 
   // EggCoin Token (ERC-20)
   EGG_COIN: {
-    mainnet: "0x" as Address, // TODO: Deploy to mainnet
-    polygon: "0x" as Address, // TODO: Deploy to polygon
-    base: "0x" as Address, // TODO: Deploy to base
-    sepolia: "0x" as Address, // TODO: Deploy to sepolia
-    polygonMumbai: "0x" as Address, // TODO: Deploy to mumbai
-    baseSepolia: "0x26986F8054Af73b788f82564f593c62862145a38" as Address, // Base Sepolia
+    mainnet: "0x" as Address,
+    polygon: "0x" as Address,
+    base: "0x0534d18ee14a83841f21aa448bE2bc59b1993B2E" as Address, // Base Mainnet
+    sepolia: "0x" as Address,
+    polygonMumbai: "0x" as Address,
+    baseSepolia: "0xF6C19D7f8217EDfD2E8F0E306Dd1Ca21A2ae4253" as Address, // Base Sepolia
   },
 
   // USDC Addresses (for payments)
@@ -92,26 +92,26 @@ export const CONTRACTS = {
   PUDGY_CHICKENS: {
     mainnet: "0x" as Address,
     polygon: "0x" as Address,
-    base: "0x" as Address,
+    base: "0xd9114E1D7fEec3C9332673B6D048Cc40741D79dC" as Address, // Base Mainnet
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x51152cb9B26FD8285a13a5C98b0C14F4757EA7b88" as Address,
+    baseSepolia: "0x27Bb62C5B5Ea7EE6A365084d73D05565AbA49503" as Address,
   },
   BATTLE_ARENA: {
     mainnet: "0x" as Address,
     polygon: "0x" as Address,
-    base: "0x" as Address,
+    base: "0xCFF5bC8FaD268e5C4cfb42dab145c808E5cF6d4a" as Address, // Base Mainnet
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x570d73cF9893926B92Da4293C4feA3414b1fC246" as Address,
+    baseSepolia: "0x4279510110aFD50F86CB7d7669b76002B5D735e2" as Address,
   },
   FARM_TOKEN: {
     mainnet: "0x" as Address,
     polygon: "0x" as Address,
-    base: "0x" as Address,
+    base: "0x0534d18ee14a83841f21aa448bE2bc59b1993B2E" as Address, // Base Mainnet
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
-    baseSepolia: "0x26986F8054Af73b788f82564f593c62862145a38" as Address,
+    baseSepolia: "0xF6C19D7f8217EDfD2E8F0E306Dd1Ca21A2ae4253" as Address,
   },
 } as const;
 
@@ -154,7 +154,7 @@ export function isBaseMainnet(chainId: number | undefined): boolean {
 }
 
 /** Date when mainnet goes live (ISO string). Adjust when ready to launch. */
-const MAINNET_LAUNCH_DATE = "2026-06-01T00:00:00Z";
+const MAINNET_LAUNCH_DATE = "2026-04-18T00:00:00Z";
 
 export function getMainnetLaunchDate(): string {
   return MAINNET_LAUNCH_DATE;

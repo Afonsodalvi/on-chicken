@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BattleProvider } from "@/contexts/BattleContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Web3Provider } from "@/providers/Web3Provider";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import Index from "./pages/Index";
 import Battle from "./pages/Battle";
 import { Farm } from "./pages/Farm";
@@ -37,21 +38,23 @@ const App = () => (
           <BattleProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
-              <WalletEligibilityHandler />
-              <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/battle" element={<Battle />} />
-                  <Route path="/farm" element={<Farm />} />
-                  <Route path="/whitelist" element={<Whitelist />} />
-                  <Route path="/details" element={<Details />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/buy" element={<Buy />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
+            <ErrorBoundary>
+              <BrowserRouter>
+                <WalletEligibilityHandler />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/battle" element={<Battle />} />
+                    <Route path="/farm" element={<Farm />} />
+                    <Route path="/whitelist" element={<Whitelist />} />
+                    <Route path="/details" element={<Details />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/buy" element={<Buy />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </ErrorBoundary>
           </BattleProvider>
         </TooltipProvider>
       </Web3Provider>

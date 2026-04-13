@@ -10,12 +10,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Trophy, XCircle, Zap, Heart, Wind, Volume2, Shield, Loader2, User, Users, Copy, CheckCircle, AlertTriangle } from "lucide-react";
+import { Trophy, XCircle, Zap, Heart, Wind, Volume2, Shield, Loader2, User, Users, Copy, CheckCircle, AlertTriangle, Gift, Clock, Coins, ExternalLink } from "lucide-react";
 import { useAccount, usePublicClient } from "wagmi";
 import { Address } from "viem";
 import { PUDGY_CHICKEN_FIGHT_ABI } from "@/lib/abi";
 import { getFightAddress } from "@/lib/contracts-helpers";
 import { getTokenAsset } from "@/lib/token-assets";
+import { useBattleClaim, MATCH_STATUS_RESOLVED } from "@/hooks/useBattleClaim";
+import { CHAIN_IDS } from "@/lib/contracts";
 import { toast } from "sonner";
 
 interface MatchInfo {
@@ -56,6 +58,24 @@ export const BattleResultModal: React.FC<BattleResultModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [nftTransferEnabled, setNftTransferEnabled] = useState<boolean | null>(null);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
+
+  // Claim hooks for NFTs and prize
+  const {
+    claimNfts,
+    claimPrize,
+    isClaimingNfts,
+    isClaimingPrize,
+    nftsClaimed,
+    prizeClaimed,
+    claimDeadline,
+    isExpired,
+    isLoadingDeadline,
+    error: claimError,
+    nftClaimTxHash,
+    prizeClaimTxHash,
+  } = useBattleClaim(open ? matchId : null);
+
+  const basescanBase = chainId === CHAIN_IDS.base ? "https://basescan.org" : "https://sepolia.basescan.org";
 
   useEffect(() => {
     if (open && matchId && publicClient) {
@@ -246,6 +266,126 @@ export const BattleResultModal: React.FC<BattleResultModalProps> = ({
         </DialogHeader>
 
         <div className="space-y-4 overflow-y-auto max-h-[calc(90vh-200px)] pr-2 scrollbar-custom">
+
+          {/* ============================================================ */}
+          {/* CLAIM / RESGATE — TOPO do modal para máxima visibilidade     */}
+          {/* ============================================================ */}
+          {matchInfo.status === MATCH_STATUS_RESOLVED && (isUserWinner || isExpired) && (
+            <Card className="border-2 border-yellow-500/50 bg-gradient-to-br from-yellow-500/10 via-amber-500/5 to-orange-500/10 shadow-lg shadow-yellow-500/10 animate-in fade-in duration-500">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
+                    <Gift className="h-6 w-6 text-yellow-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">
+                      {isUserWinner
+                        ? "🎉 Resgate suas Recompensas!"
+                        : "Recuperar seu NFT"}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {isUserWinner
+                        ? "Você venceu a batalha! Clique abaixo para resgatar os NFTs e o prêmio."
+                        : "O prazo de 30 dias expirou. Você pode recuperar seu próprio NFT."}
+                    </p>
+                  </div>
+                </div>
+
+                {claimDeadline && !isExpired && !isLoadingDeadline && (
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                    <Clock className="h-5 w-5 text-blue-500 shrink-0" />
+                    <div className="text-sm">
+                      <span className="font-medium text-blue-700 dark:text-blue-300">Prazo para resgate: </span>
+                      <span className="text-blue-600 dark:text-blue-400">
+                        {new Date(Number(claimDeadline) * 1000).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {isExpired && (
+                  <Alert className="bg-amber-500/10 border-amber-500/30">
+                    <AlertTriangle className="h-5 w-5 text-amber-600" />
+                    <AlertDescription className="text-sm text-amber-800 dark:text-amber-200 font-medium">
+                      O prazo de 30 dias expirou. Cada jogador pode recuperar seu próprio NFT.
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {claimError && (
+                  <Alert className="bg-red-500/10 border-red-500/30">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    <AlertDescription className="text-sm text-red-800 dark:text-red-200">
+                      {claimError.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Button
+                      onClick={() => { claimNfts(); toast.info("Resgatando NFTs..."); }}
+                      disabled={isClaimingNfts || nftsClaimed}
+                      size="lg"
+                      className={`w-full ${nftsClaimed ? "bg-green-600 hover:bg-green-600 text-white" : "bg-gradient-hero text-primary-foreground hover:opacity-90"}`}
+                    >
+                      {isClaimingNfts ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : nftsClaimed ? <CheckCircle className="h-5 w-5 mr-2" /> : <Gift className="h-5 w-5 mr-2" />}
+                      {nftsClaimed ? "NFTs Resgatados!" : "Resgatar NFTs"}
+                    </Button>
+                    {nftsClaimed && nftClaimTxHash && (
+                      <a
+                        href={`${basescanBase}/tx/${nftClaimTxHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        Ver transação on-chain
+                      </a>
+                    )}
+                  </div>
+
+                  {matchInfo.betAmount > 0n && isUserWinner && (
+                    <div className="space-y-2">
+                      <Button
+                        onClick={() => { claimPrize(); toast.info("Resgatando prêmio..."); }}
+                        disabled={isClaimingPrize || prizeClaimed}
+                        size="lg"
+                        className={`w-full ${prizeClaimed ? "bg-green-600 hover:bg-green-600 text-white" : "border-2 border-yellow-500 text-yellow-600 dark:text-yellow-400 bg-yellow-500/10 hover:bg-yellow-500/20"}`}
+                        variant={prizeClaimed ? "default" : "outline"}
+                      >
+                        {isClaimingPrize ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : prizeClaimed ? <CheckCircle className="h-5 w-5 mr-2" /> : <Coins className="h-5 w-5 mr-2" />}
+                        {prizeClaimed ? "Prêmio Resgatado!" : `Resgatar Prêmio (${matchInfo.paymentType === 0 ? "ETH" : "USDC"})`}
+                      </Button>
+                      {prizeClaimed && prizeClaimTxHash && (
+                        <a
+                          href={`${basescanBase}/tx/${prizeClaimTxHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          Ver transação on-chain
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {!nftsClaimed && isUserWinner && (
+                  <p className="text-xs text-center text-muted-foreground">
+                    Ao resgatar, os NFTs serão transferidos para sua carteira. Aprove a transação na sua wallet.
+                  </p>
+                )}
+
+                {nftsClaimed && !nftClaimTxHash && (
+                  <p className="text-xs text-center text-green-600 dark:text-green-400 font-medium">
+                    ✓ NFTs já foram resgatados anteriormente.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* NFT Transfer Warning */}
           {nftTransferEnabled && (

@@ -48,6 +48,10 @@ export interface UseBattleClaimResult extends BattleClaimState {
   prizeClaimed: boolean;
   /** Most recent error from either claim attempt, if any. */
   error: Error | null;
+  /** Tx hash from NFT claim (available after tx is sent). */
+  nftClaimTxHash: `0x${string}` | undefined;
+  /** Tx hash from prize claim (available after tx is sent). */
+  prizeClaimTxHash: `0x${string}` | undefined;
 }
 
 /**
@@ -139,6 +143,24 @@ export function useBattleClaim(matchId: bigint | null): UseBattleClaimResult {
     if (prizeReceipt.isSuccess) setPrizeClaimed(true);
   }, [prizeReceipt.isSuccess]);
 
+  // Detect "already claimed" revert errors and auto-mark as claimed
+  useEffect(() => {
+    if (nftWrite.error) {
+      const msg = nftWrite.error.message?.toLowerCase() ?? "";
+      if (msg.includes("already claimed") || msg.includes("nfts already claimed")) {
+        setNftsClaimed(true);
+      }
+    }
+  }, [nftWrite.error]);
+  useEffect(() => {
+    if (prizeWrite.error) {
+      const msg = prizeWrite.error.message?.toLowerCase() ?? "";
+      if (msg.includes("already claimed") || msg.includes("prize already claimed")) {
+        setPrizeClaimed(true);
+      }
+    }
+  }, [prizeWrite.error]);
+
   const claimNfts = useCallback(() => {
     if (!chainId || matchId === null) return;
     const fightAddress = getFightAddress(chainId);
@@ -168,6 +190,16 @@ export function useBattleClaim(matchId: bigint | null): UseBattleClaimResult {
   const nowSec = BigInt(Math.floor(Date.now() / 1000));
   const isExpired = claimDeadline !== null && nowSec > claimDeadline;
 
+  // Build a user-friendly error, filtering out "already claimed" (handled via auto-mark)
+  const rawError = (nftWrite.error ?? prizeWrite.error ?? nftReceipt.error ?? prizeReceipt.error) as Error | null;
+  const friendlyError = (() => {
+    if (!rawError) return null;
+    const msg = rawError.message?.toLowerCase() ?? "";
+    if (msg.includes("already claimed")) return null; // silenced — auto-marked
+    if (msg.includes("user rejected") || msg.includes("user denied")) return new Error("Transação cancelada pelo usuário.");
+    return rawError;
+  })();
+
   return {
     resolvedAt,
     claimDeadline,
@@ -179,6 +211,8 @@ export function useBattleClaim(matchId: bigint | null): UseBattleClaimResult {
     isClaimingPrize: prizeWrite.isPending || prizeReceipt.isLoading,
     nftsClaimed,
     prizeClaimed,
-    error: (nftWrite.error ?? prizeWrite.error ?? nftReceipt.error ?? prizeReceipt.error) as Error | null,
+    error: friendlyError,
+    nftClaimTxHash: nftWrite.data,
+    prizeClaimTxHash: prizeWrite.data,
   };
 }

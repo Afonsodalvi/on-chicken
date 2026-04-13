@@ -13,9 +13,11 @@ import { isBaseSepolia, isBaseMainnet, isSupportedBaseChain, isMainnetLive, getM
 
 interface NetworkBadgeProps {
   className?: string;
+  /** Bypass the mainnet launch gate (e.g. for admin pages). */
+  allowMainnet?: boolean;
 }
 
-export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className = "" }) => {
+export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className = "", allowMainnet = false }) => {
   const { chainId, isConnected } = useAccount();
   const { switchChain } = useSwitchChain();
 
@@ -23,9 +25,9 @@ export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className = "" }) =>
 
   const isTestnet = isBaseSepolia(chainId);
   const isMainnet = isBaseMainnet(chainId);
-  const mainnetLive = isMainnetLive();
+  const mainnetLive = isMainnetLive() || allowMainnet;
 
-  const launchDate = getMainnetLaunchDate();
+  const launchDate = new Date(getMainnetLaunchDate());
   const launchLabel = launchDate.toLocaleDateString("pt-BR", {
     day: "2-digit", month: "2-digit",
   });

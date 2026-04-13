@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Sword, Users, Clock, Trophy, Zap, Coins, Wallet, Loader2, AlertTriangle, Shield, Info, CheckCircle, XCircle } from "lucide-react";
+import { Sword, Users, Clock, Trophy, Zap, Coins, Wallet, Loader2, AlertTriangle, Shield, Info, CheckCircle, XCircle, Gift } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import { useUserNFTs, UserNFT } from "@/hooks/useUserNFTs";
@@ -2983,17 +2983,32 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
                         </div>
                       </div>
 
-                      <Button
-                        onClick={() => {
-                          setBattleResultMatchId(match.matchId);
-                          setShowBattleResultModal(true);
-                        }}
-                        className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90"
-                        variant="outline"
-                      >
-                        <Trophy className="mr-2 h-4 w-4" />
-                        {t('battle.viewDetails')}
-                      </Button>
+                      <div className="flex gap-2">
+                        {isUserWinner && (
+                          <Button
+                            onClick={() => {
+                              setBattleResultMatchId(match.matchId);
+                              setShowBattleResultModal(true);
+                            }}
+                            className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white"
+                          >
+                            <Gift className="mr-2 h-4 w-4" />
+                            {t('battle.claimRewards')}
+                          </Button>
+                        )}
+                        <Button
+                          onClick={() => {
+                            setBattleResultMatchId(match.matchId);
+                            setShowBattleResultModal(true);
+                          }}
+                          className={isUserWinner ? "" : "w-full bg-gradient-hero text-primary-foreground hover:opacity-90"}
+                          variant={isUserWinner ? "outline" : "outline"}
+                          size={isUserWinner ? "default" : "default"}
+                        >
+                          <Trophy className="mr-2 h-4 w-4" />
+                          {t('battle.viewDetails')}
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 );

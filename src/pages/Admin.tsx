@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
 import {
   Shield, Lock, Loader2, CheckCircle, AlertTriangle, Coins,
-  Send, Package, Swords, Egg, ArrowDownToLine, Settings,
+  Send, Package, Swords, Egg, ArrowDownToLine, Settings, Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -166,6 +167,19 @@ function CollectionSection({ contractAddress }: { contractAddress: Address | nul
   const [mintTo, setMintTo] = useState("");
   const [mintTokenId, setMintTokenId] = useState("");
   const [mintQty, setMintQty] = useState("1");
+
+  // Mint Special Token state
+  const [specialTo, setSpecialTo] = useState("");
+  const [specialTokenId, setSpecialTokenId] = useState("");
+  const [specialQty, setSpecialQty] = useState("1");
+  const [specialURI, setSpecialURI] = useState("");
+  const [specialPower, setSpecialPower] = useState("");
+  const [specialSpeed, setSpecialSpeed] = useState("");
+  const [specialHealth, setSpecialHealth] = useState("");
+  const [specialClucking, setSpecialClucking] = useState("");
+  const [specialBroodPower, setSpecialBroodPower] = useState("");
+  const [specialMaxSupply, setSpecialMaxSupply] = useState("");
+
   const [withdrawTo, setWithdrawTo] = useState("");
   const [erc20Token, setErc20Token] = useState("");
   const [erc20To, setErc20To] = useState("");
@@ -206,6 +220,84 @@ function CollectionSection({ contractAddress }: { contractAddress: Address | nul
             args={[mintTo as Address, BigInt(mintTokenId || "0"), BigInt(mintQty || "1")]}
             disabled={!mintTo || !isAddress(mintTo) || !mintTokenId}
           />
+        </CardContent>
+      </Card>
+
+      {/* Mint Special Token */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-purple-500" />
+            Mint Special Token
+          </CardTitle>
+          <p className="text-xs text-muted-foreground">
+            Cria um token especial com URI customizada, skills personalizadas e supply definido.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Input placeholder="Endereço do destinatário (0x...)" value={specialTo} onChange={e => setSpecialTo(e.target.value)} />
+          <div className="grid grid-cols-2 gap-3">
+            <Input placeholder="Token ID" type="number" value={specialTokenId} onChange={e => setSpecialTokenId(e.target.value)} />
+            <Input placeholder="Quantidade" type="number" value={specialQty} onChange={e => setSpecialQty(e.target.value)} />
+          </div>
+          <div>
+            <Label className="text-sm font-medium mb-1.5 block">Custom URI (metadata)</Label>
+            <Input placeholder="ipfs://... ou https://..." value={specialURI} onChange={e => setSpecialURI(e.target.value)} />
+          </div>
+          <div>
+            <Label className="text-sm font-medium mb-1.5 block">Custom Skills</Label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Power</Label>
+                <Input type="number" placeholder="0" value={specialPower} onChange={e => setSpecialPower(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Speed</Label>
+                <Input type="number" placeholder="0" value={specialSpeed} onChange={e => setSpecialSpeed(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Health</Label>
+                <Input type="number" placeholder="0" value={specialHealth} onChange={e => setSpecialHealth(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Clucking</Label>
+                <Input type="number" placeholder="0" value={specialClucking} onChange={e => setSpecialClucking(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Brood Power</Label>
+                <Input type="number" placeholder="0" value={specialBroodPower} onChange={e => setSpecialBroodPower(e.target.value)} />
+              </div>
+            </div>
+          </div>
+          <div>
+            <Label className="text-sm font-medium mb-1.5 block">Max Supply</Label>
+            <Input type="number" placeholder="Max supply para este tokenId" value={specialMaxSupply} onChange={e => setSpecialMaxSupply(e.target.value)} />
+          </div>
+          <TxButton
+            label="Mint Special Token"
+            icon={Sparkles}
+            contractAddress={contractAddress}
+            abi={PUDGY_CHICKEN_ABI}
+            functionName="mintSpecialToken"
+            args={[
+              specialTo as Address,
+              BigInt(specialTokenId || "0"),
+              BigInt(specialQty || "1"),
+              specialURI,
+              {
+                power: BigInt(specialPower || "0"),
+                speed: BigInt(specialSpeed || "0"),
+                health: BigInt(specialHealth || "0"),
+                clucking: BigInt(specialClucking || "0"),
+                broodPower: BigInt(specialBroodPower || "0"),
+              },
+              BigInt(specialMaxSupply || "0"),
+            ]}
+            disabled={!specialTo || !isAddress(specialTo) || !specialTokenId || !specialURI || !specialMaxSupply}
+          />
+          <p className="text-xs text-muted-foreground">
+            Todos os campos são obrigatórios. Skills com valor 0 serão mantidas como zero on-chain.
+          </p>
         </CardContent>
       </Card>
 
@@ -551,7 +643,7 @@ const Admin = () => {
               Painel de administração dos contratos Pudgy Farms
             </p>
             <div className="flex justify-center">
-              <NetworkBadge />
+              <NetworkBadge allowMainnet />
             </div>
           </div>
 

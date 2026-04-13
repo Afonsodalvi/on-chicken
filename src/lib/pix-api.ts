@@ -47,8 +47,8 @@ export async function createPixOrder(data: CreateOrderRequest): Promise<CreateOr
     throw new PixServiceUnavailableError();
   }
 
-  if (res.status >= 500) {
-    // Server misconfiguration (missing env vars, Stripe not configured, etc.)
+  if (res.status === 404 || res.status >= 500) {
+    // 404 = endpoint not deployed yet; 500+ = server misconfiguration
     throw new PixServiceUnavailableError();
   }
 

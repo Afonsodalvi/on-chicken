@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Gift, Users } from "lucide-react";
@@ -11,6 +11,7 @@ export const EggCoinSection = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mintModalOpen, setMintModalOpen] = useState(false);
+  const handledStateRef = useRef(false);
 
   // Abrir modal quando o header (ou outro) dispara o evento
   useEffect(() => {
@@ -21,8 +22,10 @@ export const EggCoinSection = () => {
 
   // Se veio de outra página com state openEggCoinMint, scroll + abrir modal
   useEffect(() => {
+    if (handledStateRef.current) return;
     const state = location.state as { openEggCoinMint?: boolean } | null;
     if (state?.openEggCoinMint) {
+      handledStateRef.current = true;
       document.getElementById("eggcoin")?.scrollIntoView({ behavior: "smooth" });
       setMintModalOpen(true);
       navigate(location.pathname, { replace: true, state: {} });

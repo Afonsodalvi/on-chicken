@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, QrCode } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import farmLogo from "@/assets/futuristic_farm_logo_embedded.svg";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -74,6 +74,15 @@ export const Header = () => {
           <div className="flex items-center gap-3">
             <EggCoinButton size="sm" />
             <NetworkBadge />
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-[#32BCAD] text-[#32BCAD] hover:bg-[#32BCAD] hover:text-white"
+              onClick={() => navigate("/buy")}
+            >
+              <QrCode className="h-4 w-4 mr-1" />
+              PIX
+            </Button>
             <LanguageSelector />
             <ConnectWallet size="sm" />
           </div>
@@ -123,6 +132,15 @@ export const Header = () => {
             <div className="flex gap-2 flex-wrap">
               <EggCoinButton size="sm" className="flex-1" />
               <NetworkBadge />
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#32BCAD] text-[#32BCAD] hover:bg-[#32BCAD] hover:text-white"
+                onClick={() => { navigate("/buy"); setIsMenuOpen(false); }}
+              >
+                <QrCode className="h-4 w-4 mr-1" />
+                PIX
+              </Button>
               <LanguageSelector />
               <ConnectWallet size="sm" className="flex-1" />
             </div>
