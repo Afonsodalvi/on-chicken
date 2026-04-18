@@ -13,19 +13,21 @@ import { toast } from "sonner";
 import { Address, decodeEventLog } from "viem";
 import { PUDGY_CHICKEN_ABI, ERC20_ABI } from "@/lib/abi";
 import { MintSuccessModal } from "./MintSuccessModal";
-import { 
-  getPudgyChickenCollectionAddress, 
-  isWhitelisted, 
+import {
+  getPudgyChickenCollectionAddress,
+  isWhitelisted,
   PaymentType,
   getTokenPrice,
   getERC20Balance,
   getETHBalance,
   getERC20Allowance,
   getTokenAddress,
-  formatTokenAmount
+  formatTokenAmount,
+  getRemainingFreeMints,
 } from "@/lib/contracts-helpers";
 import { CHAIN_IDS, isSupportedBaseChain } from "@/lib/contracts";
 import { getAllTokenAssets, TokenAsset, getTokenAsset } from "@/lib/token-assets";
+import { whitelistService } from "@/lib/supabase";
 import { ConnectWallet } from "./ConnectWallet";
 
 interface MintChickenProps {
@@ -44,6 +46,7 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
 
   const [isCheckingWhitelist, setIsCheckingWhitelist] = useState(false);
   const [isWhitelistedUser, setIsWhitelistedUser] = useState<boolean | null>(null);
+  const [remainingFreeMints, setRemainingFreeMints] = useState<bigint | null>(null);
   const [selectedTokenId, setSelectedTokenId] = useState<number>(1);
   const [quantity, setQuantity] = useState<number>(1);
   const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.ETH);
@@ -97,6 +100,15 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
       setIsWhitelistedUser(null);
     }
   }, [isConnected, address, publicClient, chainId]);
+
+  // Carregar free mints restantes apenas para usuários whitelistados
+  useEffect(() => {
+    if (isWhitelistedUser && isConnected && address && publicClient && chainId) {
+      refreshRemainingFreeMints();
+    } else {
+      setRemainingFreeMints(null);
+    }
+  }, [isWhitelistedUser, isConnected, address, publicClient, chainId]);
 
   // Consultar preço quando tokenId, quantity ou paymentType mudar
   useEffect(() => {
@@ -174,10 +186,13 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
           // Resetar formulário
           setQuantity(1);
           setSelectedTokenId(1);
+          // Recarregar quota de free mint do usuário (zerou se era free mint)
+          refreshRemainingFreeMints();
         } catch (err) {
           console.error("Erro ao buscar evento:", err);
           toast.success(t('mint.successToast'));
           onSuccess?.();
+          refreshRemainingFreeMints();
         }
       };
 
@@ -260,13 +275,36 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
         return;
       }
 
-      const whitelisted = await isWhitelisted(collectionAddress, address, publicClient);
-      setIsWhitelistedUser(whitelisted);
+      // Combina on-chain (verdade) + Supabase aprovado (fallback)
+      const [whitelistedOnChain, approvedInDB] = await Promise.all([
+        isWhitelisted(collectionAddress, address, publicClient),
+        whitelistService.isApprovedInDB(address),
+      ]);
+      setIsWhitelistedUser(whitelistedOnChain || approvedInDB);
     } catch (error) {
       console.error("Erro ao verificar whitelist:", error);
       toast.error(t('mint.error.whitelistCheck'));
     } finally {
       setIsCheckingWhitelist(false);
+    }
+  };
+
+  const refreshRemainingFreeMints = async () => {
+    if (!address || !publicClient || !chainId) {
+      setRemainingFreeMints(null);
+      return;
+    }
+    const collectionAddress = getPudgyChickenCollectionAddress(chainId);
+    if (!collectionAddress) {
+      setRemainingFreeMints(null);
+      return;
+    }
+    try {
+      const remaining = await getRemainingFreeMints(collectionAddress, address, publicClient);
+      setRemainingFreeMints(remaining);
+    } catch (err) {
+      console.error("Erro ao consultar free mints restantes:", err);
+      setRemainingFreeMints(null);
     }
   };
 
@@ -782,10 +820,35 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
           </Alert>
         )}
 
+        {/* Aviso: usuário whitelistado já consumiu o(s) free mint(s) */}
+        {isWhitelistedUser && remainingFreeMints !== null && remainingFreeMints === 0n && (
+          <Alert className="border-amber-500 bg-amber-500/10">
+            <CheckCircle className="h-4 w-4 text-amber-500" />
+            <AlertDescription className="text-amber-600 dark:text-amber-400">
+              Você já realizou seu free mint. Não há mais mints gratuitos disponíveis para esta carteira.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Status: free mints restantes (informativo) */}
+        {isWhitelistedUser && remainingFreeMints !== null && remainingFreeMints > 0n && (
+          <div className="text-xs text-muted-foreground text-center">
+            Free mints restantes para esta carteira:{" "}
+            <span className="font-semibold text-foreground">{remainingFreeMints.toString()}</span>
+          </div>
+        )}
+
         {/* Botão de Mint */}
         <Button
           onClick={handleMint}
-          disabled={!canMint || !isSupportedBaseChain(chainId) || isLoadingPrice || isCheckingBalance || (price !== null && balance !== null && balance < price)}
+          disabled={
+            !canMint ||
+            !isSupportedBaseChain(chainId) ||
+            isLoadingPrice ||
+            isCheckingBalance ||
+            (price !== null && balance !== null && balance < price) ||
+            (isWhitelistedUser === true && remainingFreeMints === 0n)
+          }
           className="w-full"
           size="lg"
         >
@@ -793,6 +856,11 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               {isLoadingPrice ? t('mint.buttonCheckingPrice') : isCheckingBalance ? t('mint.buttonCheckingBalance') : isPending ? t('mint.buttonWaitingConfirmation') : t('mint.buttonProcessing')}
+            </>
+          ) : isWhitelistedUser && remainingFreeMints === 0n ? (
+            <>
+              <CheckCircle className="mr-2 h-4 w-4" />
+              Free mint já realizado
             </>
           ) : (
             <>

@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import {
   Shield, Lock, Loader2, CheckCircle, AlertTriangle, Coins,
   Send, Package, Swords, Egg, ArrowDownToLine, Settings, Sparkles,
+  UserPlus, UserMinus, Hash,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -163,6 +164,117 @@ function TxButton({
 // Section Components
 // ---------------------------------------------------------------------------
 
+function WhitelistManagerCard({ contractAddress }: { contractAddress: Address | null }) {
+  const [bulkInput, setBulkInput] = useState("");
+
+  // Aceita endereços separados por vírgula, ponto-e-vírgula, espaço ou nova linha.
+  const parsed = bulkInput
+    .split(/[\s,;]+/)
+    .map((a) => a.trim())
+    .filter(Boolean);
+  const validAddresses = parsed.filter((a) => isAddress(a)) as Address[];
+  const invalidAddresses = parsed.filter((a) => !isAddress(a));
+  const hasValid = validAddresses.length > 0;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center gap-2">
+          <UserPlus className="h-5 w-5 text-primary" />
+          Whitelist Manager (on-chain)
+        </CardTitle>
+        <p className="text-xs text-muted-foreground">
+          Adiciona ou remove endereços da whitelist do contrato. Aceita 1 endereço ou vários
+          (separe por vírgula, espaço ou nova linha).
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <textarea
+          className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
+          placeholder={"0xabc...\n0xdef...\n0x123..."}
+          value={bulkInput}
+          onChange={(e) => setBulkInput(e.target.value)}
+        />
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <Badge variant="outline">{validAddresses.length} válido(s)</Badge>
+          {invalidAddresses.length > 0 && (
+            <Badge variant="destructive">{invalidAddresses.length} inválido(s)</Badge>
+          )}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <TxButton
+            label="Adicionar à Whitelist"
+            icon={UserPlus}
+            contractAddress={contractAddress}
+            abi={PUDGY_CHICKEN_ABI}
+            functionName="addMultipleToWhitelist"
+            args={[validAddresses]}
+            disabled={!hasValid}
+          />
+          <TxButton
+            label="Remover da Whitelist"
+            icon={UserMinus}
+            contractAddress={contractAddress}
+            abi={PUDGY_CHICKEN_ABI}
+            functionName="removeMultipleFromWhitelist"
+            args={[validAddresses]}
+            disabled={!hasValid}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Requer DEFAULT_ADMIN_ROLE no contrato PudgyChicken. Cada endereço inválido é ignorado.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function MaxFreeMintsCard({ contractAddress }: { contractAddress: Address | null }) {
+  const [newMax, setNewMax] = useState("");
+  const parsed = newMax.trim();
+  const isValid = /^\d+$/.test(parsed);
+  const value = isValid ? BigInt(parsed) : 0n;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Hash className="h-5 w-5 text-primary" />
+          Max Free Mints por Endereço
+        </CardTitle>
+        <p className="text-xs text-muted-foreground">
+          Define quantos mints gratuitos cada wallet whitelistada pode reivindicar.
+          Aplica-se a todos os endereços (limite global por wallet).
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div>
+          <Label className="text-sm font-medium mb-1.5 block">Novo limite</Label>
+          <Input
+            type="number"
+            min="0"
+            placeholder="Ex.: 1, 3, 5..."
+            value={newMax}
+            onChange={(e) => setNewMax(e.target.value)}
+          />
+        </div>
+        <TxButton
+          label={`Atualizar para ${isValid ? value.toString() : "..."}`}
+          icon={Hash}
+          contractAddress={contractAddress}
+          abi={PUDGY_CHICKEN_ABI}
+          functionName="setMaxFreeMintsPerAddress"
+          args={[value]}
+          disabled={!isValid}
+        />
+        <p className="text-xs text-muted-foreground">
+          Requer DEFAULT_ADMIN_ROLE. Use 0 para desabilitar free mint.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
 function CollectionSection({ contractAddress }: { contractAddress: Address | null }) {
   const [mintTo, setMintTo] = useState("");
   const [mintTokenId, setMintTokenId] = useState("");
@@ -222,6 +334,12 @@ function CollectionSection({ contractAddress }: { contractAddress: Address | nul
           />
         </CardContent>
       </Card>
+
+      {/* Whitelist Manager (on-chain add/remove) */}
+      <WhitelistManagerCard contractAddress={contractAddress} />
+
+      {/* Max Free Mints por endereço */}
+      <MaxFreeMintsCard contractAddress={contractAddress} />
 
       {/* Mint Special Token */}
       <Card>

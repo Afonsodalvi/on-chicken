@@ -69,92 +69,92 @@ export function useAllUserNFTs() {
           throw new Error("Contrato não encontrado para esta rede");
         }
 
+        // Buscar TODOS os balances em paralelo — o transport agrupa via multicall3
+        // (1 request HTTP em vez de 18). Mesmo nas RPCs públicas, cai bem abaixo do rate limit.
+        const standardTokenIds = Array.from({ length: 10 }, (_, i) => i + 1);
+        const allTokenIds = [...standardTokenIds, ...UNIQUE_COLLECTIBLES_TOKEN_IDS];
+
+        const balances = await Promise.all(
+          allTokenIds.map((tokenId) =>
+            getTokenBalance(collectionAddress, address as Address, BigInt(tokenId), publicClient)
+          )
+        );
+
+        // Filtrar apenas IDs com saldo > 0 antes de buscar dados extras
+        const ownedIds = allTokenIds.filter((_, i) => balances[i] > 0n);
+        const ownedBalances = new Map(allTokenIds.map((id, i) => [id, balances[i]]));
+        const standardOwned = ownedIds.filter((id) => id <= 10);
+        const specialOwned = ownedIds.filter((id) => id >= 11);
+
+        // Para tokens 1–10: alive + rarity em paralelo (também via multicall)
+        const [aliveResults, rarityResults] = await Promise.all([
+          Promise.all(
+            standardOwned.map((id) =>
+              isTokenAlive(collectionAddress, BigInt(id), publicClient).catch(() => true)
+            )
+          ),
+          Promise.all(
+            standardOwned.map((id) =>
+              getRarityTier(collectionAddress, BigInt(id), publicClient).catch(() => null)
+            )
+          ),
+        ]);
+
         const owned: UserNFTItem[] = [];
 
-        // Tokens 1–10 (assets locais + contrato)
-        for (let tokenId = 1; tokenId <= 10; tokenId++) {
-          try {
-            const balance = await getTokenBalance(
-              collectionAddress,
-              address as Address,
-              BigInt(tokenId),
-              publicClient
-            );
-            if (balance === 0n) continue;
+        standardOwned.forEach((tokenId, idx) => {
+          const asset = getTokenAsset(tokenId);
+          if (!asset) return;
 
-            const alive = await isTokenAlive(
-              collectionAddress,
-              BigInt(tokenId),
-              publicClient
-            );
-            const asset = getTokenAsset(tokenId);
-            if (!asset) continue;
-
-            let rarity: UserNFTRarity = "common";
-            try {
-              const tier = await getRarityTier(
-                collectionAddress,
-                BigInt(tokenId),
-                publicClient
-              );
-              switch (tier) {
-                case RarityTier.LEGENDARY: rarity = "legendary"; break;
-                case RarityTier.EPIC: rarity = "epic"; break;
-                case RarityTier.RARE: rarity = "rare"; break;
-                default: rarity = "common";
-              }
-            } catch {
-              if (tokenId <= 2) rarity = "legendary";
-              else if (tokenId <= 4) rarity = "epic";
-              else if (tokenId <= 7) rarity = "rare";
+          let rarity: UserNFTRarity = "common";
+          const tier = rarityResults[idx];
+          if (tier !== null) {
+            switch (tier) {
+              case RarityTier.LEGENDARY: rarity = "legendary"; break;
+              case RarityTier.EPIC: rarity = "epic"; break;
+              case RarityTier.RARE: rarity = "rare"; break;
+              default: rarity = "common";
             }
-
-            owned.push({
-              tokenId,
-              name: asset.metadata.name || `Pudgy Chicken #${String(tokenId).padStart(3, "0")}`,
-              image: asset.image,
-              description: asset.metadata.description,
-              rarity,
-              collection: "Pudgy Chickens",
-              owner: address,
-              isAlive: alive,
-              balance,
-              isSpecial: false,
-            });
-          } catch (err) {
-            console.error(`Erro ao verificar token ${tokenId}:`, err);
+          } else {
+            if (tokenId <= 2) rarity = "legendary";
+            else if (tokenId <= 4) rarity = "epic";
+            else if (tokenId <= 7) rarity = "rare";
           }
-        }
 
-        // Tokens 11–18 (metadado IPFS)
-        for (const tokenId of UNIQUE_COLLECTIBLES_TOKEN_IDS) {
-          try {
-            const balance = await getTokenBalance(
-              collectionAddress,
-              address as Address,
-              BigInt(tokenId),
-              publicClient
-            );
-            if (balance === 0n) continue;
+          owned.push({
+            tokenId,
+            name: asset.metadata.name || `Pudgy Chicken #${String(tokenId).padStart(3, "0")}`,
+            image: asset.image,
+            description: asset.metadata.description,
+            rarity,
+            collection: "Pudgy Chickens",
+            owner: address,
+            isAlive: aliveResults[idx],
+            balance: ownedBalances.get(tokenId) ?? 0n,
+            isSpecial: false,
+          });
+        });
 
-            const metadata: UniqueCollectibleMetadata | null = await fetchUniqueCollectibleMetadata(tokenId);
-            owned.push({
-              tokenId,
-              name: metadata?.name ?? `Pudgy Chicken #${tokenId}`,
-              image: metadata?.image ?? "",
-              description: metadata?.description,
-              rarity: "legendary",
-              collection: "Pudgy Chickens",
-              owner: address,
-              isAlive: true,
-              balance,
-              isSpecial: true,
-              attributes: metadata?.attributes,
-            });
-          } catch (err) {
-            console.error(`Erro ao verificar token especial ${tokenId}:`, err);
-          }
-        }
+        // Tokens 11–18: metadados IPFS em paralelo
+        const specialMetadata = await Promise.all(
+          specialOwned.map((id) => fetchUniqueCollectibleMetadata(id).catch(() => null))
+        );
+        specialOwned.forEach((tokenId, idx) => {
+          const metadata: UniqueCollectibleMetadata | null = specialMetadata[idx];
+          owned.push({
+            tokenId,
+            name: metadata?.name ?? `Pudgy Chicken #${tokenId}`,
+            image: metadata?.image ?? "",
+            description: metadata?.description,
+            rarity: "legendary",
+            collection: "Pudgy Chickens",
+            owner: address,
+            isAlive: true,
+            balance: ownedBalances.get(tokenId) ?? 0n,
+            isSpecial: true,
+            attributes: metadata?.attributes,
+          });
+        });
 
         owned.sort((a, b) => a.tokenId - b.tokenId);
         setNfts(owned);

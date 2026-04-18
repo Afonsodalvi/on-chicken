@@ -32,7 +32,7 @@ export const CONTRACTS = {
   PUDGY_CHICKEN_IMPLEMENTATION: {
     mainnet: "0x" as Address,
     polygon: "0x" as Address,
-    base: "0x852626fCeb3eEf7aAeFcDDD58FD37eCEa968f833" as Address, // Base Mainnet
+    base: "0xEb694f46f057A23F24Af845F853E3a963df9bD38" as Address, // Base Mainnet (broadcast Apr 12)
     sepolia: "0x" as Address,
     polygonMumbai: "0x" as Address,
     baseSepolia: "0xbD7cB806a97b25d714D48Da679706578A1fE7FF0" as Address, // Base Sepolia

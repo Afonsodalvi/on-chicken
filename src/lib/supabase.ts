@@ -34,6 +34,10 @@ export interface WhitelistStats {
   requests_today: number
 }
 
+// Endereços EVM são case-insensitive (checksum só é display).
+// Sempre comparar/persistir em lowercase para evitar falsos negativos.
+const normalizeAddress = (addr: string) => addr.trim().toLowerCase()
+
 // Funções para gerenciar a whitelist
 export const whitelistService = {
   // Adicionar endereço à whitelist
@@ -44,9 +48,11 @@ export const whitelistService = {
         throw new Error('Chave API do Supabase não configurada. Verifique o arquivo .env')
       }
 
+      const payload = { ...data, wallet_address: normalizeAddress(data.wallet_address) }
+
       const { data: result, error } = await supabase
         .from('wallet_whitelist')
-        .insert([data])
+        .insert([payload])
         .select()
         .single()
 
@@ -58,21 +64,21 @@ export const whitelistService = {
       return { success: true, data: result }
     } catch (error: any) {
       console.error('Erro ao adicionar à whitelist:', error)
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.message || 'Erro desconhecido ao conectar com o banco de dados'
       }
     }
   },
 
-  // Verificar se endereço está na whitelist
+  // Verificar se endereço está na whitelist (case-insensitive)
   async checkWhitelistStatus(walletAddress: string) {
     try {
       const { data, error } = await supabase
         .from('wallet_whitelist')
         .select('*')
-        .eq('wallet_address', walletAddress)
-        .single()
+        .ilike('wallet_address', normalizeAddress(walletAddress))
+        .maybeSingle()
 
       if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
         throw error
@@ -82,6 +88,27 @@ export const whitelistService = {
     } catch (error) {
       console.error('Erro ao verificar whitelist:', error)
       return { success: false, error: error.message }
+    }
+  },
+
+  // Verificação leve: apenas booleano se endereço está aprovado no DB
+  async isApprovedInDB(walletAddress: string): Promise<boolean> {
+    try {
+      const { data, error } = await supabase
+        .from('wallet_whitelist')
+        .select('status')
+        .ilike('wallet_address', normalizeAddress(walletAddress))
+        .eq('status', 'approved')
+        .maybeSingle()
+
+      if (error && error.code !== 'PGRST116') {
+        console.warn('isApprovedInDB:', error.message)
+        return false
+      }
+      return !!data
+    } catch (e) {
+      console.warn('isApprovedInDB exception:', e)
+      return false
     }
   },
 
