@@ -6,7 +6,7 @@ import { isSupportedBaseChain } from "@/lib/contracts";
 import { whitelistService } from "@/lib/supabase";
 import {
   UNIQUE_COLLECTIBLES_TOKEN_IDS,
-  fetchUniqueCollectibleMetadata,
+  fetchUniqueCollectibleMetadataOnChain,
   type UniqueCollectibleMetadata,
 } from "@/lib/unique-collectibles";
 
@@ -94,7 +94,11 @@ export function useWalletEligibility(): WalletEligibilityResult {
         }
 
         const tokenId = UNIQUE_COLLECTIBLES_TOKEN_IDS[firstOwnedIndex];
-        const metadata = await fetchUniqueCollectibleMetadata(tokenId);
+        const metadata = await fetchUniqueCollectibleMetadataOnChain(
+          collectionAddress,
+          tokenId,
+          publicClient
+        );
         if (metadata) {
           setUniqueCollectible({ tokenId, metadata });
         } else {

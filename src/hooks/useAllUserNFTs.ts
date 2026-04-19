@@ -12,7 +12,7 @@ import { isSupportedBaseChain } from "@/lib/contracts";
 import { RarityTier } from "@/lib/contracts-helpers";
 import {
   UNIQUE_COLLECTIBLES_TOKEN_IDS,
-  fetchUniqueCollectibleMetadata,
+  fetchUniqueCollectibleMetadataOnChain,
   type UniqueCollectibleMetadata,
 } from "@/lib/unique-collectibles";
 
@@ -135,9 +135,15 @@ export function useAllUserNFTs() {
           });
         });
 
-        // Tokens 11–18: metadados IPFS em paralelo
+        // Tokens 11–18: lemos tokenURI on-chain e buscamos metadados.
+        // Isso faz com que alterações on-chain (ex.: IDs 13 e 17) apareçam
+        // imediatamente no front sem precisar de redeploy do app.
         const specialMetadata = await Promise.all(
-          specialOwned.map((id) => fetchUniqueCollectibleMetadata(id).catch(() => null))
+          specialOwned.map((id) =>
+            fetchUniqueCollectibleMetadataOnChain(collectionAddress, id, publicClient).catch(
+              () => null
+            )
+          )
         );
         specialOwned.forEach((tokenId, idx) => {
           const metadata: UniqueCollectibleMetadata | null = specialMetadata[idx];

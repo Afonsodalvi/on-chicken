@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,18 +19,26 @@ import {
   Wind,
   Volume2,
   Shield,
-  Users,
   Clock,
   Search,
   Loader2,
   AlertCircle,
+  Sparkles,
 } from "lucide-react";
 import { useAccount, usePublicClient } from "wagmi";
-import { Address, formatUnits } from "viem";
+import { Address } from "viem";
 import { PUDGY_CHICKEN_ABI } from "@/lib/abi";
-import { getPudgyChickenCollectionAddress } from "@/lib/contracts-helpers";
-import { CONTRACTS } from "@/lib/contracts";
+import {
+  getPudgyChickenCollectionAddress,
+  getTokenBalance,
+} from "@/lib/contracts-helpers";
+import { isSupportedBaseChain, CHAIN_IDS } from "@/lib/contracts";
 import { getTokenAsset } from "@/lib/token-assets";
+import {
+  UNIQUE_COLLECTIBLES_TOKEN_IDS,
+  fetchUniqueCollectibleMetadataOnChain,
+  type UniqueCollectibleMetadata,
+} from "@/lib/unique-collectibles";
 import { toast } from "sonner";
 
 interface InstanceSkills {
@@ -67,63 +75,90 @@ interface TokenInfoModalProps {
   defaultTokenId?: number;
 }
 
+const SPECIAL_IDS_SET = new Set<number>(UNIQUE_COLLECTIBLES_TOKEN_IDS as readonly number[]);
+
 export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
   open,
   onOpenChange,
   defaultAddress,
   defaultTokenId,
 }) => {
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const publicClient = usePublicClient();
   const [searchAddress, setSearchAddress] = useState<string>(defaultAddress || address || "");
   const [selectedTokenId, setSelectedTokenId] = useState<number>(defaultTokenId || 1);
   const [tokenInfo, setTokenInfo] = useState<TokenUserInfo | null>(null);
+  const [specialMetadata, setSpecialMetadata] = useState<UniqueCollectibleMetadata | null>(null);
+  const [specialBalance, setSpecialBalance] = useState<bigint | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const isSpecial = SPECIAL_IDS_SET.has(Number(selectedTokenId));
+
   useEffect(() => {
-    if (defaultAddress) {
-      setSearchAddress(defaultAddress);
-    }
-    if (defaultTokenId) {
-      setSelectedTokenId(defaultTokenId);
-    }
+    if (defaultAddress) setSearchAddress(defaultAddress);
+    if (defaultTokenId) setSelectedTokenId(defaultTokenId);
   }, [defaultAddress, defaultTokenId]);
+
+  const fetchTokenInfo = useCallback(async () => {
+    if (!searchAddress || !publicClient) return;
+
+    const activeChain = isSupportedBaseChain(chainId) ? (chainId as number) : CHAIN_IDS.baseSepolia;
+    const collectionAddress = getPudgyChickenCollectionAddress(activeChain);
+    if (!collectionAddress) {
+      setError("Contrato não encontrado para esta rede");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setTokenInfo(null);
+    setSpecialMetadata(null);
+    setSpecialBalance(null);
+
+    try {
+      if (SPECIAL_IDS_SET.has(selectedTokenId)) {
+        // Colecionáveis 11–18: não têm instances/battles — mostramos metadado + balance.
+        const [metadata, balance] = await Promise.all([
+          fetchUniqueCollectibleMetadataOnChain(collectionAddress, selectedTokenId, publicClient),
+          getTokenBalance(
+            collectionAddress,
+            searchAddress as Address,
+            BigInt(selectedTokenId),
+            publicClient
+          ),
+        ]);
+        setSpecialMetadata(metadata);
+        setSpecialBalance(balance);
+        if (!metadata) {
+          setError("Não foi possível carregar o metadado desse colecionável.");
+        }
+        return;
+      }
+
+      // Tokens padrão (1–10)
+      const info = (await publicClient.readContract({
+        address: collectionAddress,
+        abi: PUDGY_CHICKEN_ABI,
+        functionName: "getUserTokenCompleteInfo",
+        args: [searchAddress as Address, BigInt(selectedTokenId)],
+      })) as TokenUserInfo;
+      setTokenInfo(info);
+    } catch (err: any) {
+      console.error("Erro ao buscar informações do token:", err);
+      const msg = err?.shortMessage || err?.message || "Erro ao buscar informações";
+      setError(msg);
+      toast.error("Erro ao buscar informações do token");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [publicClient, chainId, searchAddress, selectedTokenId]);
 
   useEffect(() => {
     if (open && searchAddress && selectedTokenId && publicClient) {
       fetchTokenInfo();
     }
-  }, [open, searchAddress, selectedTokenId, publicClient]);
-
-  const fetchTokenInfo = async () => {
-    if (!searchAddress || !publicClient) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const collectionAddress = getPudgyChickenCollectionAddress(84532); // Base Sepolia
-      if (!collectionAddress) {
-        throw new Error("Contrato não encontrado");
-      }
-
-      const info = await publicClient.readContract({
-        address: collectionAddress,
-        abi: PUDGY_CHICKEN_ABI,
-        functionName: "getUserTokenCompleteInfo",
-        args: [searchAddress as Address, BigInt(selectedTokenId)],
-      }) as TokenUserInfo;
-
-      setTokenInfo(info);
-    } catch (err: any) {
-      console.error("Erro ao buscar informações do token:", err);
-      setError(err.message || "Erro ao buscar informações");
-      toast.error("Erro ao buscar informações do token");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [open, fetchTokenInfo, searchAddress, selectedTokenId, publicClient]);
 
   const handleSearch = () => {
     if (!searchAddress) {
@@ -142,7 +177,7 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
     return `${Math.floor(hours)}h`;
   };
 
-  const tokenAsset = selectedTokenId ? getTokenAsset(selectedTokenId) : null;
+  const tokenAsset = !isSpecial && selectedTokenId ? getTokenAsset(selectedTokenId) : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -177,7 +212,7 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
                     id="tokenId"
                     type="number"
                     min="1"
-                    max="10"
+                    max="18"
                     value={selectedTokenId}
                     onChange={(e) => setSelectedTokenId(Number(e.target.value))}
                   />
@@ -192,6 +227,13 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
                   </Button>
                 </div>
               </div>
+              {isSpecial && (
+                <p className="mt-3 text-xs text-muted-foreground flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                  Colecionável especial (ID {selectedTokenId}) — exibindo metadado on-chain.
+                  Estes NFTs não possuem instâncias de batalha.
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -217,8 +259,55 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
             </Card>
           )}
 
-          {/* Token Info */}
-          {tokenInfo && !isLoading && (
+          {/* Special collectible view */}
+          {!isLoading && isSpecial && specialMetadata && (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={specialMetadata.image}
+                    alt={specialMetadata.name}
+                    className="w-24 h-24 rounded-lg object-cover border"
+                  />
+                  <div className="flex-1">
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-amber-500" />
+                      {specialMetadata.name}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Token ID: {selectedTokenId}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Quantidade desta carteira:{" "}
+                      <span className="font-semibold text-foreground">
+                        {(specialBalance ?? 0n).toString()}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {specialMetadata.description && (
+                  <p className="text-sm text-muted-foreground">{specialMetadata.description}</p>
+                )}
+                {specialMetadata.attributes && specialMetadata.attributes.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Atributos</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {specialMetadata.attributes.map((attr, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          {attr.trait_type}: {attr.value}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Standard token view */}
+          {!isLoading && !isSpecial && tokenInfo && (
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="overview">Visão Geral</TabsTrigger>
@@ -265,17 +354,13 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Status</p>
-                        <Badge
-                          className={tokenInfo.isAlive ? "bg-green-500" : "bg-red-500"}
-                        >
+                        <Badge className={tokenInfo.isAlive ? "bg-green-500" : "bg-red-500"}>
                           {tokenInfo.isAlive ? "Vivo" : "Expirado"}
                         </Badge>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Incubação</p>
-                        <Badge
-                          variant={tokenInfo.isIncubating ? "default" : "outline"}
-                        >
+                        <Badge variant={tokenInfo.isIncubating ? "default" : "outline"}>
                           {tokenInfo.isIncubating ? "Sim" : "Não"}
                         </Badge>
                       </div>
@@ -288,7 +373,9 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
                             <Clock className="h-5 w-5 text-primary" />
                             <div>
                               <p className="text-sm font-semibold">Tempo de Vida Restante</p>
-                              <p className="text-lg">{formatLifespan(tokenInfo.remainingLifespan)}</p>
+                              <p className="text-lg">
+                                {formatLifespan(tokenInfo.remainingLifespan)}
+                              </p>
                             </div>
                           </div>
                         </CardContent>
@@ -308,61 +395,52 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
                   </Card>
                 ) : (
                   <div className="grid gap-4">
-                    {tokenInfo.instances.map((instance, index) => {
-                      const totalStats =
-                        Number(instance.instanceSkills.power) +
-                        Number(instance.instanceSkills.speed) +
-                        Number(instance.instanceSkills.health) +
-                        Number(instance.instanceSkills.clucking) +
-                        Number(instance.instanceSkills.broodPower);
-
-                      return (
-                        <Card key={index}>
-                          <CardHeader>
-                            <div className="flex items-center justify-between">
-                              <CardTitle className="text-lg">
-                                Instância #{instance.instanceIndex.toString()}
-                              </CardTitle>
-                              <Badge variant="outline">
-                                Instance ID: {instance.instanceId.toString()}
-                              </Badge>
+                    {tokenInfo.instances.map((instance, index) => (
+                      <Card key={index}>
+                        <CardHeader>
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-lg">
+                              Instância #{instance.instanceIndex.toString()}
+                            </CardTitle>
+                            <Badge variant="outline">
+                              Instance ID: {instance.instanceId.toString()}
+                            </Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                            {[
+                              { name: "Power", value: instance.instanceSkills.power, icon: Zap, color: "text-yellow-500" },
+                              { name: "Speed", value: instance.instanceSkills.speed, icon: Wind, color: "text-blue-500" },
+                              { name: "Health", value: instance.instanceSkills.health, icon: Heart, color: "text-red-500" },
+                              { name: "Clucking", value: instance.instanceSkills.clucking, icon: Volume2, color: "text-purple-500" },
+                              { name: "Brood Power", value: instance.instanceSkills.broodPower, icon: Shield, color: "text-green-500" },
+                            ].map((skill) => {
+                              const Icon = skill.icon;
+                              const value = Number(skill.value);
+                              return (
+                                <div key={skill.name} className="text-center">
+                                  <Icon className={`h-5 w-5 ${skill.color} mx-auto mb-1`} />
+                                  <p className="text-xs text-muted-foreground">{skill.name}</p>
+                                  <p className="text-xl font-bold">{value}</p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div className="flex items-center justify-between pt-2 border-t">
+                            <div className="flex items-center gap-2">
+                              <Trophy className="h-4 w-4 text-yellow-500" />
+                              <span className="text-sm">
+                                Vitórias: <strong>{instance.battleWins.toString()}</strong>
+                              </span>
                             </div>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                              {[
-                                { name: "Power", value: instance.instanceSkills.power, icon: Zap, color: "text-yellow-500" },
-                                { name: "Speed", value: instance.instanceSkills.speed, icon: Wind, color: "text-blue-500" },
-                                { name: "Health", value: instance.instanceSkills.health, icon: Heart, color: "text-red-500" },
-                                { name: "Clucking", value: instance.instanceSkills.clucking, icon: Volume2, color: "text-purple-500" },
-                                { name: "Brood Power", value: instance.instanceSkills.broodPower, icon: Shield, color: "text-green-500" },
-                              ].map((skill) => {
-                                const Icon = skill.icon;
-                                const value = Number(skill.value);
-                                return (
-                                  <div key={skill.name} className="text-center">
-                                    <Icon className={`h-5 w-5 ${skill.color} mx-auto mb-1`} />
-                                    <p className="text-xs text-muted-foreground">{skill.name}</p>
-                                    <p className="text-xl font-bold">{value}</p>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                            <div className="flex items-center justify-between pt-2 border-t">
-                              <div className="flex items-center gap-2">
-                                <Trophy className="h-4 w-4 text-yellow-500" />
-                                <span className="text-sm">
-                                  Vitórias: <strong>{instance.battleWins.toString()}</strong>
-                                </span>
-                              </div>
-                              <Badge variant={instance.isIncubating ? "default" : "outline"}>
-                                {instance.isIncubating ? "Incubando" : "Disponível"}
-                              </Badge>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      );
-                    })}
+                            <Badge variant={instance.isIncubating ? "default" : "outline"}>
+                              {instance.isIncubating ? "Incubando" : "Disponível"}
+                            </Badge>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
                 )}
               </TabsContent>
@@ -388,4 +466,3 @@ export const TokenInfoModal: React.FC<TokenInfoModalProps> = ({
     </Dialog>
   );
 };
-

@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { MyNFTsSection } from "@/components/MyNFTsSection";
+import { SpecialCollectiblesShowcase } from "@/components/SpecialCollectiblesShowcase";
 import { EggCoinSection } from "@/components/EggCoinSection";
 import { Collection } from "@/components/Collection";
 import { Shop } from "@/components/Shop";
@@ -14,6 +15,7 @@ const Index = () => {
       <Header />
       <Hero />
       <AnimatedSection />
+      <SpecialCollectiblesShowcase />
       <MyNFTsSection />
       <EggCoinSection />
       <Collection />

@@ -138,7 +138,16 @@ const translations = {
     'myNFTs.rarity.rare': 'Raro',
     'myNFTs.rarity.epic': 'Épico',
     'myNFTs.rarity.legendary': 'Lendário',
-    
+
+    // Special collectibles showcase
+    'specialShowcase.title': 'Colecionáveis Especiais',
+    'specialShowcase.subtitle': 'Conheça os personagens exclusivos da coleção PudgyFarms — cada NFT representa um participante único da comunidade.',
+    'specialShowcase.participants': 'Participantes',
+    'specialShowcase.viewDetails': 'Ver detalhes',
+    'specialShowcase.loading': 'Carregando colecionáveis…',
+    'specialShowcase.error': 'Não foi possível carregar os metadados on-chain.',
+    'specialShowcase.tokenId': 'Token ID',
+
     // Shop
     'shop.title': 'Loja de Ativos',
     'shop.subtitle': 'Colecione galinhas únicas tokenizadas. Cada ativo é único e possui raridade e características especiais. Comece sua coleção hoje!',
@@ -910,7 +919,16 @@ const translations = {
     'myNFTs.rarity.rare': 'Rare',
     'myNFTs.rarity.epic': 'Epic',
     'myNFTs.rarity.legendary': 'Legendary',
-    
+
+    // Special collectibles showcase
+    'specialShowcase.title': 'Special Collectibles',
+    'specialShowcase.subtitle': 'Meet the exclusive characters of the PudgyFarms collection — each NFT represents a unique participant in the community.',
+    'specialShowcase.participants': 'Participants',
+    'specialShowcase.viewDetails': 'View details',
+    'specialShowcase.loading': 'Loading collectibles…',
+    'specialShowcase.error': 'Unable to load on-chain metadata.',
+    'specialShowcase.tokenId': 'Token ID',
+
     // Shop
     'shop.title': 'Asset Shop',
     'shop.subtitle': 'Collect unique tokenized chickens. Each asset is unique and has special rarity and characteristics. Start your collection today!',
