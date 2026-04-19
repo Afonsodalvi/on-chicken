@@ -1902,11 +1902,19 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
   };
 
   // Buscar batalhas ativas do contrato (view – qualquer pessoa pode ver, mesmo sem carteira)
+  //
+  // IMPORTANTE: o cliente RPC e o endereço do contrato DEVEM pertencer à mesma chain.
+  // Se o usuário estiver numa chain Base suportada (Sepolia ou Mainnet), usamos o client
+  // conectado. Caso contrário (sem carteira ou rede não suportada), caímos para Sepolia
+  // como preview somente-leitura. Antes: usávamos `publicClientBaseSepolia ?? publicClient`
+  // sempre, o que mandava calls de endereços mainnet para a RPC Sepolia → revert.
   const fetchActiveMatches = async () => {
-    const client = publicClientBaseSepolia ?? publicClient;
+    const useConnected = isCorrectNetwork && !!publicClient && !!chainId;
+    const client = useConnected ? publicClient : publicClientBaseSepolia;
+    const effectiveChainId = useConnected ? (chainId as number) : CHAIN_IDS.baseSepolia;
     if (!client) return;
 
-    const fightAddress = getFightAddress(chainId!);
+    const fightAddress = getFightAddress(effectiveChainId);
     if (!fightAddress || fightAddress === "0x") return;
 
     setIsLoadingMatches(true);
@@ -2129,9 +2137,11 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     }
   };
 
-  // Lista de batalhas: carregar assim que houver client (Base Sepolia), com ou sem carteira conectada
+  // Lista de batalhas: carrega quando há qualquer client disponível. Se a rede conectada
+  // for suportada (Sepolia/Mainnet), usa-se a chain do usuário; senão cai para Sepolia.
   useEffect(() => {
-    const client = publicClientBaseSepolia ?? publicClient;
+    const useConnected = isCorrectNetwork && !!publicClient;
+    const client = useConnected ? publicClient : publicClientBaseSepolia;
     if (!client) return;
 
     fetchActiveMatches();
@@ -2143,7 +2153,7 @@ export const BattleLobby = ({ onJoinBattle, onCreateBattle }: BattleLobbyProps) 
     }, 10000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicClientBaseSepolia, publicClient, isConnected, isCorrectNetwork, monitoredMatches.size]);
+  }, [publicClientBaseSepolia, publicClient, isConnected, isCorrectNetwork, chainId, monitoredMatches.size]);
 
   // Buscar batalhas encerradas quando o usuário conectar ou quando mostrar a aba
   useEffect(() => {
