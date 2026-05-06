@@ -359,12 +359,6 @@ git push origin main
 
 ### Deploy Manual
 
-### Lovable (Recomendado)
-1. Acesse [Lovable](https://lovable.dev)
-2. Conecte o repositório
-3. Configure as variáveis de ambiente
-4. Clique em "Share → Publish"
-
 ### Vercel
 ```bash
 # Instalar Vercel CLI
