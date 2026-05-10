@@ -20,8 +20,16 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: [
+      "@reown/appkit/core",
+      "@walletconnect/ethereum-provider",
+      "@coinbase/wallet-sdk",
+    ],
+  },
   esbuild: {
-    drop: mode === "production" ? ["console", "debugger"] : [],
+    drop: mode === "production" ? ["debugger"] : [],
+    pure: mode === "production" ? ["console.log", "console.debug", "console.info"] : [],
   },
   build: {
     minify: "esbuild",

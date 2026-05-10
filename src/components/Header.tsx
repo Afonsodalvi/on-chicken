@@ -65,7 +65,7 @@ export const Header = () => {
           <Link to="/farm" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all uppercase tracking-wide">
             {t('nav.farm')}
           </Link>
-          <Link to="/whitelist" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all uppercase tracking-wide">
+          <Link to="/mint" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all uppercase tracking-wide">
             {t('nav.whitelist')}
           </Link>
           <a href="#community" className="text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gradient-to-r after:from-primary/60 after:to-accent/60 hover:after:w-full after:transition-all uppercase tracking-wide">
@@ -123,7 +123,7 @@ export const Header = () => {
             <Link to="/farm" className="block text-foreground/90 hover:text-foreground transition-colors">
               {t('nav.farm')}
             </Link>
-            <Link to="/whitelist" className="block text-foreground/90 hover:text-foreground transition-colors">
+            <Link to="/mint" className="block text-foreground/90 hover:text-foreground transition-colors" onClick={() => setIsMenuOpen(false)}>
               {t('nav.whitelist')}
             </Link>
             <a href="#community" className="block text-foreground/90 hover:text-foreground transition-colors">

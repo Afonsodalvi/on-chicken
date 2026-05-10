@@ -47,7 +47,7 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
   const [isCheckingWhitelist, setIsCheckingWhitelist] = useState(false);
   const [isWhitelistedUser, setIsWhitelistedUser] = useState<boolean | null>(null);
   const [remainingFreeMints, setRemainingFreeMints] = useState<bigint | null>(null);
-  const [selectedTokenId, setSelectedTokenId] = useState<number>(1);
+  const [selectedTokenId, setSelectedTokenId] = useState<number>(10);
   const [quantity, setQuantity] = useState<number>(1);
   const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.ETH);
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([]);
@@ -61,30 +61,15 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
   const [instanceMintedData, setInstanceMintedData] = useState<any>(null);
   const [mintedTokenAsset, setMintedTokenAsset] = useState<TokenAsset | null>(null);
 
-  // Carregar assets dos tokens
   useEffect(() => {
     const assets = getAllTokenAssets();
     setTokenAssets(assets);
     if (assets.length > 0) {
-      // Se for whitelist, começar com token #10, senão token #1
-      const defaultToken = isWhitelistedUser 
-        ? assets.find((a) => a.tokenId === 10) || assets[0]
-        : assets[0];
+      const defaultToken = assets.find((a) => a.tokenId === 10) || assets[0];
       setSelectedToken(defaultToken);
       setSelectedTokenId(defaultToken.tokenId);
     }
   }, []);
-
-  // Atualizar para token #10 quando whitelist for verificada
-  useEffect(() => {
-    if (isWhitelistedUser && tokenAssets.length > 0) {
-      const token10 = tokenAssets.find((a) => a.tokenId === 10);
-      if (token10) {
-        setSelectedToken(token10);
-        setSelectedTokenId(10);
-      }
-    }
-  }, [isWhitelistedUser, tokenAssets]);
 
   // Atualizar token selecionado quando tokenId mudar
   useEffect(() => {
@@ -183,9 +168,8 @@ export const MintChicken: React.FC<MintChickenProps> = ({ onSuccess }) => {
           
           toast.success(t('mint.successToast'));
           onSuccess?.();
-          // Resetar formulário
           setQuantity(1);
-          setSelectedTokenId(1);
+          setSelectedTokenId(10);
           // Recarregar quota de free mint do usuário (zerou se era free mint)
           refreshRemainingFreeMints();
         } catch (err) {

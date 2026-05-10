@@ -2,14 +2,17 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-// Filtro cosmético: silencia o warning gerado pela inpage.js da MetaMask quando
-// outra extensão de carteira (Phantom/Coinbase/Backpack/Rabby...) trava
-// window.ethereum como getter-only. Não é bug do app — EIP-6963 já cobre
-// detecção de múltiplas carteiras. Só esconde o ruído visual no console.
 const SILENCED_PATTERNS = [
   "MetaMask encountered an error setting the global Ethereum provider",
   "Cannot set property ethereum of #<Window>",
 ];
+
+const isFromExtension = (text: string) =>
+  /chrome-extension:\/\/|moz-extension:\/\/|safari-web-extension:\/\//.test(text);
+
+const isSilenced = (text: string) =>
+  Boolean(text) && SILENCED_PATTERNS.some((p) => text.includes(p));
+
 const origConsoleError = console.error.bind(console);
 console.error = (...args: unknown[]) => {
   const first = args[0];
@@ -19,8 +22,32 @@ console.error = (...args: unknown[]) => {
       : first instanceof Error
         ? first.message
         : "";
-  if (text && SILENCED_PATTERNS.some((p) => text.includes(p))) return;
+  if (isSilenced(text)) return;
   origConsoleError(...args);
 };
+
+if (typeof window !== "undefined") {
+  window.addEventListener("unhandledrejection", (event) => {
+    const reason = event.reason;
+    const text =
+      typeof reason === "string"
+        ? reason
+        : reason instanceof Error
+          ? `${reason.message}\n${reason.stack ?? ""}`
+          : "";
+
+    if (isFromExtension(text)) return;
+    if (isSilenced(text)) return;
+
+    console.warn("[unhandledrejection]", reason);
+  });
+
+  window.addEventListener("error", (event) => {
+    const text = event.message ?? "";
+    const sourceText = `${event.filename ?? ""} ${text}`;
+    if (isFromExtension(sourceText)) return;
+    if (isSilenced(text)) return;
+  });
+}
 
 createRoot(document.getElementById("root")!).render(<App />);
