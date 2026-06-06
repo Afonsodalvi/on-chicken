@@ -66,11 +66,30 @@ export interface PnlBySymbolSide {
   trades?: number;
 }
 
+export interface HlAccountBalance {
+  wallet_id?: string;
+  address?: string;
+  perp_usd?: number;
+  margin_used_usd?: number;
+  spot_usdc?: number;
+  total_usd?: number;
+  open_positions?: number;
+}
+
+export interface HlAccounts {
+  ts?: string;
+  equity_total_usd?: number;
+  open_positions_exchange?: number;
+  wallets?: HlAccountBalance[];
+}
+
 export interface HlSummary {
   env?: PanelEnv | string;
   empty?: boolean;
   reason?: string;
   kpis?: PanelKpis;
+  /** Saldos por wallet direto da corretora (inclui a wallet DCA). */
+  accounts?: HlAccounts | null;
   wallets?: HlWallet[];
   agents?: HlAgent[];
   pnl_by_symbol_side?: PnlBySymbolSide[];

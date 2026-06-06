@@ -685,6 +685,7 @@ function AgentsTab({ bundle }: { bundle: PanelBundle }) {
 function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
   const hl = bundle.hl;
   const kpis = hl?.kpis;
+  const accounts = hl?.accounts;
 
   return (
     <div className="space-y-8">
@@ -695,6 +696,53 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
         <MetricTile label="Posicoes abertas" value={formatNumber(kpis?.open_positions)} icon={Table2} />
         <MetricTile label="Liquidacoes" value={formatNumber(kpis?.liquidations)} icon={AlertTriangle} />
       </div>
+
+      {accounts && (
+        <div className="space-y-4">
+          <SectionTitle icon={Database} title="Carteiras na corretora" />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <MetricTile
+              label="Equity total (todas as carteiras)"
+              value={formatCurrency(accounts.equity_total_usd)}
+              icon={LineChart}
+            />
+            <MetricTile
+              label="Posicoes abertas (corretora)"
+              value={formatNumber(accounts.open_positions_exchange)}
+              icon={Table2}
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {(accounts.wallets ?? []).map((w) => (
+              <article key={w.wallet_id} className="surface rounded-lg p-4">
+                <div className="text-sm font-semibold capitalize">{w.wallet_id}</div>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <div className="text-xs text-muted-foreground">Perp (margem)</div>
+                    <div className="font-medium">{formatCurrency(w.perp_usd)}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Spot USDC</div>
+                    <div className="font-medium">{formatCurrency(w.spot_usdc)}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Total</div>
+                    <div className="font-medium">{formatCurrency(w.total_usd)}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Posicoes</div>
+                    <div className="font-medium">{formatNumber(w.open_positions)}</div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Saldos lidos direto da corretora pelo Master Observer (inclui a carteira DCA,
+            que nao entra no equity de trading acima).
+          </p>
+        </div>
+      )}
 
       <div className="space-y-4">
         <SectionTitle icon={BarChart3} title="PnL por ativo e lado" />

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-06T12:30:00.171Z",
+  "generatedAt": "2026-06-06T14:02:31.426Z",
   "source": "http://127.0.0.1:8765",
   "bundles": {
     "testnet": {
       "schemaVersion": 1,
       "env": "testnet",
-      "capturedAt": "2026-06-06T12:30:00.136Z",
+      "capturedAt": "2026-06-06T14:02:31.389Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -43,7 +43,7 @@
       "overview": {
         "env": "testnet",
         "hl_kpis": {
-          "equity_usd": 1479.169465,
+          "equity_usd": 1488.861046,
           "realized_pnl_usd": 3.53,
           "win_rate_pct": 52,
           "open_positions": 0,
@@ -58,13 +58,13 @@
         "circuit_breaker": {
           "available": true,
           "date": "2026-06-06",
-          "peak_usd": 1479.55,
+          "peak_usd": 1488.92,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
         "regime": {
-          "macro_regime": "risk_on",
-          "ts": "2026-06-06T12:24:47.245067+00:00",
+          "macro_regime": "risk_off",
+          "ts": "2026-06-06T13:59:30.000592+00:00",
           "note": "per-asset regime é calculado ao vivo (não persistido)"
         },
         "hl_empty": false,
@@ -73,11 +73,48 @@
       "hl": {
         "env": "testnet",
         "kpis": {
-          "equity_usd": 1479.169465,
+          "equity_usd": 1488.861046,
           "realized_pnl_usd": 3.53,
           "win_rate_pct": 52,
           "open_positions": 0,
           "liquidations": 0
+        },
+        "accounts": {
+          "ts": "2026-06-06T14:02:07.358277+00:00",
+          "wallets": [
+            {
+              "wallet_id": "directional",
+              "address": "0x7c079992E69E7Ecd91c3f99D28C79b6e7d5e75Bd",
+              "perp_usd": 0,
+              "margin_used_usd": 0,
+              "spot_usdc": 793.51,
+              "unified": false,
+              "total_usd": 793.51,
+              "open_positions": 0
+            },
+            {
+              "wallet_id": "contrarian",
+              "address": "0x1373f81a2324Ac0C1e6EF868956c256ce31287FF",
+              "perp_usd": 17.74,
+              "margin_used_usd": 17.76,
+              "spot_usdc": 677.14,
+              "unified": false,
+              "total_usd": 694.88,
+              "open_positions": 2
+            },
+            {
+              "wallet_id": "dca_btc",
+              "address": "0xBAf3446AB1123Dd59eC74Dd29002f890EA9389D0",
+              "perp_usd": 418.58,
+              "margin_used_usd": 470.3,
+              "spot_usdc": 418.58,
+              "unified": true,
+              "total_usd": 418.58,
+              "open_positions": 1
+            }
+          ],
+          "equity_total_usd": 1906.97,
+          "open_positions_exchange": 3
         },
         "wallets": [
           {
@@ -1727,16 +1764,16 @@
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 463,
-        "open": 1,
-        "wins": 242,
-        "win_rate_pct": 52.3,
-        "net_pnl_usd": 27.27,
+        "closed": 466,
+        "open": 2,
+        "wins": 244,
+        "win_rate_pct": 52.4,
+        "net_pnl_usd": 27.55,
         "by_agent": {
           "scalper": {
-            "closed": 442,
-            "wins": 235,
-            "net_pnl_usd": -6.48
+            "closed": 445,
+            "wins": 237,
+            "net_pnl_usd": -6.2
           },
           "mean_reverter": {
             "closed": 21,
@@ -1818,7 +1855,7 @@
     "prod": {
       "schemaVersion": 1,
       "env": "prod",
-      "capturedAt": "2026-06-06T12:30:00.171Z",
+      "capturedAt": "2026-06-06T14:02:31.426Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -1859,7 +1896,7 @@
         "circuit_breaker": {
           "available": true,
           "date": "2026-06-06",
-          "peak_usd": 1479.55,
+          "peak_usd": 1488.92,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
@@ -1892,16 +1929,16 @@
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 463,
-        "open": 1,
-        "wins": 242,
-        "win_rate_pct": 52.3,
-        "net_pnl_usd": 27.27,
+        "closed": 466,
+        "open": 2,
+        "wins": 244,
+        "win_rate_pct": 52.4,
+        "net_pnl_usd": 27.55,
         "by_agent": {
           "scalper": {
-            "closed": 442,
-            "wins": 235,
-            "net_pnl_usd": -6.48
+            "closed": 445,
+            "wins": 237,
+            "net_pnl_usd": -6.2
           },
           "mean_reverter": {
             "closed": 21,
