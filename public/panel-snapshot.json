@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-06T14:02:31.426Z",
+  "generatedAt": "2026-06-06T19:23:52.785Z",
   "source": "http://127.0.0.1:8765",
   "bundles": {
     "testnet": {
       "schemaVersion": 1,
       "env": "testnet",
-      "capturedAt": "2026-06-06T14:02:31.389Z",
+      "capturedAt": "2026-06-06T19:23:52.750Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -43,28 +43,28 @@
       "overview": {
         "env": "testnet",
         "hl_kpis": {
-          "equity_usd": 1488.861046,
-          "realized_pnl_usd": 3.53,
-          "win_rate_pct": 52,
+          "equity_usd": 1376.130561,
+          "realized_pnl_usd": 4.06,
+          "win_rate_pct": 52.3,
           "open_positions": 0,
           "liquidations": 0
         },
         "defi_kpis": {
-          "value_usd": 3396.08,
-          "rewards_usd": 24.5,
+          "value_usd": 3378.07,
+          "rewards_usd": 24.49,
           "positions": 13,
           "in_range_pct": 30.8
         },
         "circuit_breaker": {
           "available": true,
           "date": "2026-06-06",
-          "peak_usd": 1488.92,
+          "peak_usd": 1528.46,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
         "regime": {
           "macro_regime": "risk_off",
-          "ts": "2026-06-06T13:59:30.000592+00:00",
+          "ts": "2026-06-06T19:20:55.814780+00:00",
           "note": "per-asset regime é calculado ao vivo (não persistido)"
         },
         "hl_empty": false,
@@ -73,47 +73,44 @@
       "hl": {
         "env": "testnet",
         "kpis": {
-          "equity_usd": 1488.861046,
-          "realized_pnl_usd": 3.53,
-          "win_rate_pct": 52,
+          "equity_usd": 1376.130561,
+          "realized_pnl_usd": 4.06,
+          "win_rate_pct": 52.3,
           "open_positions": 0,
           "liquidations": 0
         },
         "accounts": {
-          "ts": "2026-06-06T14:02:07.358277+00:00",
+          "ts": "2026-06-06T19:23:29.572515+00:00",
           "wallets": [
             {
               "wallet_id": "directional",
               "address": "0x7c079992E69E7Ecd91c3f99D28C79b6e7d5e75Bd",
-              "perp_usd": 0,
-              "margin_used_usd": 0,
-              "spot_usdc": 793.51,
-              "unified": false,
-              "total_usd": 793.51,
-              "open_positions": 0
+              "perp_usd": 47.59,
+              "margin_used_usd": 47.37,
+              "spot_usdc": 642.14,
+              "total_usd": 642.14,
+              "open_positions": 1
             },
             {
               "wallet_id": "contrarian",
               "address": "0x1373f81a2324Ac0C1e6EF868956c256ce31287FF",
-              "perp_usd": 17.74,
-              "margin_used_usd": 17.76,
-              "spot_usdc": 677.14,
-              "unified": false,
-              "total_usd": 694.88,
-              "open_positions": 2
+              "perp_usd": 9.16,
+              "margin_used_usd": 9.19,
+              "spot_usdc": 677.69,
+              "total_usd": 677.69,
+              "open_positions": 1
             },
             {
               "wallet_id": "dca_btc",
               "address": "0xBAf3446AB1123Dd59eC74Dd29002f890EA9389D0",
-              "perp_usd": 418.58,
-              "margin_used_usd": 470.3,
-              "spot_usdc": 418.58,
-              "unified": true,
-              "total_usd": 418.58,
+              "perp_usd": 519.13,
+              "margin_used_usd": 519.13,
+              "spot_usdc": 565.74,
+              "total_usd": 565.74,
               "open_positions": 1
             }
           ],
-          "equity_total_usd": 1906.97,
+          "equity_total_usd": 1885.57,
           "open_positions_exchange": 3
         },
         "wallets": [
@@ -122,8 +119,8 @@
             "label": "B — Contrária",
             "leverage": 8,
             "role": "contrarian",
-            "trades": 17,
-            "realized_pnl_usd": 1.49
+            "trades": 18,
+            "realized_pnl_usd": 2.02
           },
           {
             "id": "directional",
@@ -144,9 +141,9 @@
           },
           {
             "agent_id": "mean_reverter",
-            "trades": 12,
-            "wins": 11,
-            "realized_pnl_usd": 3.03,
+            "trades": 13,
+            "wins": 12,
+            "realized_pnl_usd": 3.56,
             "status": "shadow"
           },
           {
@@ -182,8 +179,8 @@
           {
             "symbol": "SUI",
             "side": "SELL",
-            "pnl_usd": 8.95,
-            "trades": 12
+            "pnl_usd": 9.48,
+            "trades": 13
           },
           {
             "symbol": "AVAX",
@@ -290,9 +287,25 @@
       "hlClosed": {
         "env": "testnet",
         "count": 80,
-        "wins": 57,
-        "net_pnl_usd": 7.97,
+        "wins": 58,
+        "net_pnl_usd": 8.51,
         "trades": [
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 95,
+            "entry_px": null,
+            "exit_px": 0.7137,
+            "realized_pnl_usd": 0.53,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-06T15:12:10.870000+00:00",
+            "closed_at": "2026-06-06T15:12:10.870000+00:00"
+          },
           {
             "symbol": "ADA",
             "side": "SELL",
@@ -1556,30 +1569,14 @@
             "close_reason": "exit_filled",
             "opened_at": "2026-05-18T01:35:16.792000+00:00",
             "closed_at": "2026-05-18T01:35:16.792000+00:00"
-          },
-          {
-            "symbol": "BTC",
-            "side": "BUY",
-            "agent_id": "unknown",
-            "wallet_id": "contrarian",
-            "size": 0.0001,
-            "entry_px": null,
-            "exit_px": 78150,
-            "realized_pnl_usd": -0.01,
-            "max_roe_pct": null,
-            "min_roe_pct": null,
-            "duration_min": null,
-            "close_reason": "exit_filled",
-            "opened_at": "2026-05-18T01:00:19.424000+00:00",
-            "closed_at": "2026-05-18T01:00:19.424000+00:00"
           }
         ]
       },
       "defi": {
         "env": "testnet",
         "kpis": {
-          "value_usd": 3396.08,
-          "rewards_usd": 24.5,
+          "value_usd": 3378.07,
+          "rewards_usd": 24.49,
           "positions": 13,
           "in_range_pct": 30.8
         },
@@ -1663,13 +1660,13 @@
           }
         ],
         "diversification": {
-          "WETH": 62.3,
+          "WETH": 62.5,
           "USDT": 0,
           "ENA": 1.4,
           "ONDO": 1,
           "ETHFI": 0.6,
           "WBTC": 2.6,
-          "LINK": 3.8,
+          "LINK": 3.7,
           "USDC": 10.1,
           "PENDLE": 1.6,
           "USD₮0": 0,
@@ -1684,9 +1681,9 @@
             "from_pair": "USDC/cbBTC",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 129,
-            "est_monthly_usd": 54.74,
-            "notional_usd": 509.21,
+            "apr_gain_pct": 144.3,
+            "est_monthly_usd": 60.92,
+            "notional_usd": 506.66,
             "payback_days": 0
           },
           {
@@ -1694,9 +1691,9 @@
             "from_pair": "VIRTUAL/ACOLYT",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 129,
-            "est_monthly_usd": 1.46,
-            "notional_usd": 13.54,
+            "apr_gain_pct": 144.3,
+            "est_monthly_usd": 1.62,
+            "notional_usd": 13.45,
             "payback_days": 0
           },
           {
@@ -1704,9 +1701,9 @@
             "from_pair": "VIRTUAL/WETH",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 129,
-            "est_monthly_usd": 3.71,
-            "notional_usd": 34.48,
+            "apr_gain_pct": 144.3,
+            "est_monthly_usd": 4.07,
+            "notional_usd": 33.87,
             "payback_days": 0
           },
           {
@@ -1714,9 +1711,9 @@
             "from_pair": "VIRTUAL/COOKIE",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 129,
-            "est_monthly_usd": 0.49,
-            "notional_usd": 4.59,
+            "apr_gain_pct": 144.3,
+            "est_monthly_usd": 0.54,
+            "notional_usd": 4.46,
             "payback_days": 0
           },
           {
@@ -1724,9 +1721,9 @@
             "from_pair": "WETH/cbBTC",
             "to_pair": "WETH/USDC",
             "network": "arbitrum",
-            "apr_gain_pct": 32.6,
-            "est_monthly_usd": 5.22,
-            "notional_usd": 192.48,
+            "apr_gain_pct": 39.5,
+            "est_monthly_usd": 6.32,
+            "notional_usd": 191.73,
             "payback_days": 0
           },
           {
@@ -1734,9 +1731,9 @@
             "from_pair": "PENDLE/USD₮0",
             "to_pair": "WETH/USDC",
             "network": "arbitrum",
-            "apr_gain_pct": 32.6,
-            "est_monthly_usd": 1.49,
-            "notional_usd": 54.98,
+            "apr_gain_pct": 39.5,
+            "est_monthly_usd": 1.74,
+            "notional_usd": 52.91,
             "payback_days": 0
           },
           {
@@ -1744,36 +1741,36 @@
             "from_pair": "USDC/WETH",
             "to_pair": "WETH/USDC",
             "network": "ethereum",
-            "apr_gain_pct": 126,
-            "est_monthly_usd": 81.34,
-            "notional_usd": 774.48,
-            "payback_days": 3
+            "apr_gain_pct": 140.6,
+            "est_monthly_usd": 90.55,
+            "notional_usd": 772.88,
+            "payback_days": 2.7
           },
           {
             "action": "realloc",
             "from_pair": "LINK/WETH",
             "to_pair": "WETH/USDC",
             "network": "ethereum",
-            "apr_gain_pct": 124.6,
-            "est_monthly_usd": 26.72,
-            "notional_usd": 257.29,
-            "payback_days": 9.1
+            "apr_gain_pct": 137.1,
+            "est_monthly_usd": 29.3,
+            "notional_usd": 256.46,
+            "payback_days": 8.3
           }
         ],
-        "last_run": "2026-06-06T11:59:22.367785+00:00"
+        "last_run": "2026-06-06T18:01:02.285684+00:00"
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 466,
-        "open": 2,
-        "wins": 244,
-        "win_rate_pct": 52.4,
-        "net_pnl_usd": 27.55,
+        "closed": 485,
+        "open": 1,
+        "wins": 259,
+        "win_rate_pct": 53.4,
+        "net_pnl_usd": 31.19,
         "by_agent": {
           "scalper": {
-            "closed": 445,
-            "wins": 237,
-            "net_pnl_usd": -6.2
+            "closed": 464,
+            "wins": 252,
+            "net_pnl_usd": -2.56
           },
           "mean_reverter": {
             "closed": 21,
@@ -1855,7 +1852,7 @@
     "prod": {
       "schemaVersion": 1,
       "env": "prod",
-      "capturedAt": "2026-06-06T14:02:31.426Z",
+      "capturedAt": "2026-06-06T19:23:52.785Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -1896,7 +1893,7 @@
         "circuit_breaker": {
           "available": true,
           "date": "2026-06-06",
-          "peak_usd": 1488.92,
+          "peak_usd": 1528.46,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
@@ -1929,16 +1926,16 @@
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 466,
-        "open": 2,
-        "wins": 244,
-        "win_rate_pct": 52.4,
-        "net_pnl_usd": 27.55,
+        "closed": 485,
+        "open": 1,
+        "wins": 259,
+        "win_rate_pct": 53.4,
+        "net_pnl_usd": 31.19,
         "by_agent": {
           "scalper": {
-            "closed": 445,
-            "wins": 237,
-            "net_pnl_usd": -6.2
+            "closed": 464,
+            "wins": 252,
+            "net_pnl_usd": -2.56
           },
           "mean_reverter": {
             "closed": 21,
