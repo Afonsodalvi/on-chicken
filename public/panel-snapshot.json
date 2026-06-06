@@ -1,0 +1,1984 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-06T12:30:00.171Z",
+  "source": "http://127.0.0.1:8765",
+  "bundles": {
+    "testnet": {
+      "schemaVersion": 1,
+      "env": "testnet",
+      "capturedAt": "2026-06-06T12:30:00.136Z",
+      "catalog": {
+        "service": "openclaw-panel-api",
+        "version": "v1",
+        "auth": "X-API-Key header or ?api_key=",
+        "env_param": "?env=testnet|prod (default testnet)",
+        "routes": [
+          "/api/v1/defi/diversification",
+          "/api/v1/defi/kpis",
+          "/api/v1/defi/positions",
+          "/api/v1/defi/suggestions",
+          "/api/v1/defi/summary",
+          "/api/v1/defi/wallets",
+          "/api/v1/hl/agents",
+          "/api/v1/hl/agents/{agent_id}",
+          "/api/v1/hl/circuit-breaker",
+          "/api/v1/hl/closed",
+          "/api/v1/hl/kpis",
+          "/api/v1/hl/pnl-by-symbol",
+          "/api/v1/hl/positions",
+          "/api/v1/hl/regime",
+          "/api/v1/hl/summary",
+          "/api/v1/hl/wallets",
+          "/api/v1/hl/wallets/{wallet_id}",
+          "/api/v1/lab/lateral",
+          "/api/v1/meta/agents",
+          "/api/v1/meta/wallets",
+          "/api/v1/overview"
+        ],
+        "public_routes": [
+          "/health",
+          "/api/v1"
+        ]
+      },
+      "overview": {
+        "env": "testnet",
+        "hl_kpis": {
+          "equity_usd": 1479.169465,
+          "realized_pnl_usd": 3.53,
+          "win_rate_pct": 52,
+          "open_positions": 0,
+          "liquidations": 0
+        },
+        "defi_kpis": {
+          "value_usd": 3396.08,
+          "rewards_usd": 24.5,
+          "positions": 13,
+          "in_range_pct": 30.8
+        },
+        "circuit_breaker": {
+          "available": true,
+          "date": "2026-06-06",
+          "peak_usd": 1479.55,
+          "threshold_pct": 12,
+          "halt_mode": "entry-only (nunca fecha posição)"
+        },
+        "regime": {
+          "macro_regime": "risk_on",
+          "ts": "2026-06-06T12:24:47.245067+00:00",
+          "note": "per-asset regime é calculado ao vivo (não persistido)"
+        },
+        "hl_empty": false,
+        "defi_empty": false
+      },
+      "hl": {
+        "env": "testnet",
+        "kpis": {
+          "equity_usd": 1479.169465,
+          "realized_pnl_usd": 3.53,
+          "win_rate_pct": 52,
+          "open_positions": 0,
+          "liquidations": 0
+        },
+        "wallets": [
+          {
+            "id": "contrarian",
+            "label": "B — Contrária",
+            "leverage": 8,
+            "role": "contrarian",
+            "trades": 17,
+            "realized_pnl_usd": 1.49
+          },
+          {
+            "id": "directional",
+            "label": "A — Direcional",
+            "leverage": 5,
+            "role": "directional",
+            "trades": 156,
+            "realized_pnl_usd": 2.04
+          }
+        ],
+        "agents": [
+          {
+            "agent_id": "swing_rider",
+            "trades": 27,
+            "wins": 27,
+            "realized_pnl_usd": 25.58,
+            "status": "live"
+          },
+          {
+            "agent_id": "mean_reverter",
+            "trades": 12,
+            "wins": 11,
+            "realized_pnl_usd": 3.03,
+            "status": "shadow"
+          },
+          {
+            "agent_id": "unknown",
+            "trades": 77,
+            "wins": 27,
+            "realized_pnl_usd": 2.44,
+            "status": "neutro"
+          },
+          {
+            "agent_id": "bear_hunter",
+            "trades": 3,
+            "wins": 1,
+            "realized_pnl_usd": -1.51,
+            "status": "shadow"
+          },
+          {
+            "agent_id": "hedge_balancer",
+            "trades": 2,
+            "wins": 0,
+            "realized_pnl_usd": -1.65,
+            "status": "shadow"
+          },
+          {
+            "agent_id": "momentum_hunter",
+            "trades": 52,
+            "wins": 24,
+            "realized_pnl_usd": -24.38,
+            "status": "quarentena"
+          }
+        ],
+        "pnl_by_symbol_side": [
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "pnl_usd": 8.95,
+            "trades": 12
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "pnl_usd": 8.29,
+            "trades": 10
+          },
+          {
+            "symbol": "BTC",
+            "side": "SELL",
+            "pnl_usd": 7.27,
+            "trades": 43
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "pnl_usd": 6.72,
+            "trades": 9
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "pnl_usd": 3.81,
+            "trades": 7
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "pnl_usd": 1.9,
+            "trades": 8
+          },
+          {
+            "symbol": "ETC",
+            "side": "SELL",
+            "pnl_usd": 1.47,
+            "trades": 2
+          },
+          {
+            "symbol": "ADA",
+            "side": "BUY",
+            "pnl_usd": 1.1,
+            "trades": 3
+          },
+          {
+            "symbol": "BTC",
+            "side": "BUY",
+            "pnl_usd": 0.73,
+            "trades": 6
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "pnl_usd": 0.36,
+            "trades": 6
+          },
+          {
+            "symbol": "SUI",
+            "side": "BUY",
+            "pnl_usd": -1.23,
+            "trades": 3
+          },
+          {
+            "symbol": "SOL",
+            "side": "SELL",
+            "pnl_usd": -2.03,
+            "trades": 22
+          },
+          {
+            "symbol": "DOGE",
+            "side": "SELL",
+            "pnl_usd": -2.14,
+            "trades": 2
+          },
+          {
+            "symbol": "BNB",
+            "side": "BUY",
+            "pnl_usd": -2.34,
+            "trades": 4
+          },
+          {
+            "symbol": "SOL",
+            "side": "BUY",
+            "pnl_usd": -5.34,
+            "trades": 3
+          },
+          {
+            "symbol": "ETH",
+            "side": "SELL",
+            "pnl_usd": -7.74,
+            "trades": 29
+          },
+          {
+            "symbol": "ETH",
+            "side": "BUY",
+            "pnl_usd": -16.26,
+            "trades": 4
+          }
+        ]
+      },
+      "hlPositions": {
+        "env": "testnet",
+        "positions": []
+      },
+      "hlClosed": {
+        "env": "testnet",
+        "count": 80,
+        "wins": 57,
+        "net_pnl_usd": 7.97,
+        "trades": [
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 1098,
+            "entry_px": null,
+            "exit_px": 0.2134,
+            "realized_pnl_usd": 0.96,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-03T15:25:28.527000+00:00",
+            "closed_at": "2026-06-03T15:25:28.527000+00:00"
+          },
+          {
+            "symbol": "ETH",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0554,
+            "entry_px": null,
+            "exit_px": 1836.8,
+            "realized_pnl_usd": -16.61,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-03T03:36:18.235000+00:00",
+            "closed_at": "2026-06-03T03:36:18.235000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 80.5,
+            "entry_px": null,
+            "exit_px": 0.8465,
+            "realized_pnl_usd": 0.38,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-02T13:54:06.148000+00:00",
+            "closed_at": "2026-06-02T13:54:06.148000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 26.99,
+            "entry_px": null,
+            "exit_px": 8.6598,
+            "realized_pnl_usd": 1.27,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-02T09:26:12.530000+00:00",
+            "closed_at": "2026-06-02T09:26:12.530000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 18.31,
+            "entry_px": null,
+            "exit_px": 8.7292,
+            "realized_pnl_usd": 0.76,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-01T13:58:15.606000+00:00",
+            "closed_at": "2026-06-01T13:58:15.606000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 265.6,
+            "entry_px": null,
+            "exit_px": 0.8818,
+            "realized_pnl_usd": 1.39,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-01T06:09:10.718000+00:00",
+            "closed_at": "2026-06-01T06:09:10.718000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 1007,
+            "entry_px": null,
+            "exit_px": 0.2331,
+            "realized_pnl_usd": 1.08,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-31T16:25:42.598000+00:00",
+            "closed_at": "2026-05-31T16:25:42.598000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 292,
+            "entry_px": null,
+            "exit_px": 0.233,
+            "realized_pnl_usd": 0.36,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-31T16:25:16.424000+00:00",
+            "closed_at": "2026-05-31T16:25:16.424000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 26.7,
+            "entry_px": null,
+            "exit_px": 0.897,
+            "realized_pnl_usd": 0.18,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-31T14:02:58.339000+00:00",
+            "closed_at": "2026-05-31T14:02:58.339000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 234,
+            "entry_px": null,
+            "exit_px": 0.8972,
+            "realized_pnl_usd": 1.48,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-31T14:02:58.339000+00:00",
+            "closed_at": "2026-05-31T14:02:58.339000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 75,
+            "entry_px": null,
+            "exit_px": 0.9119,
+            "realized_pnl_usd": 0.09,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-30T22:00:39.744000+00:00",
+            "closed_at": "2026-05-30T22:00:39.744000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 7.63,
+            "entry_px": null,
+            "exit_px": 8.967,
+            "realized_pnl_usd": 0.1,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-30T20:30:43.843000+00:00",
+            "closed_at": "2026-05-30T20:30:43.843000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 7.73,
+            "entry_px": null,
+            "exit_px": 8.8276,
+            "realized_pnl_usd": 0.26,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-30T04:34:52.944000+00:00",
+            "closed_at": "2026-05-30T04:34:52.944000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 177.3,
+            "entry_px": null,
+            "exit_px": 0.9002,
+            "realized_pnl_usd": 0.95,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-30T04:21:57.052000+00:00",
+            "closed_at": "2026-05-30T04:21:57.052000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 693,
+            "entry_px": null,
+            "exit_px": 0.2307,
+            "realized_pnl_usd": 0.84,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-29T19:19:13.681000+00:00",
+            "closed_at": "2026-05-29T19:19:13.681000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 0.252,
+            "entry_px": null,
+            "exit_px": 633.9,
+            "realized_pnl_usd": 0.79,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-29T14:25:28.282000+00:00",
+            "closed_at": "2026-05-29T14:25:28.282000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 690,
+            "entry_px": null,
+            "exit_px": 0.2315,
+            "realized_pnl_usd": 0.83,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-29T14:24:23.120000+00:00",
+            "closed_at": "2026-05-29T14:24:23.120000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 18.04,
+            "entry_px": null,
+            "exit_px": 8.8463,
+            "realized_pnl_usd": 0.95,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-29T04:08:32.779000+00:00",
+            "closed_at": "2026-05-29T04:08:32.779000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 17.81,
+            "entry_px": null,
+            "exit_px": 8.9082,
+            "realized_pnl_usd": 1.49,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-28T03:18:48.695000+00:00",
+            "closed_at": "2026-05-28T03:18:48.695000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 679,
+            "entry_px": null,
+            "exit_px": 0.2352,
+            "realized_pnl_usd": 0.8,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-28T03:18:14.558000+00:00",
+            "closed_at": "2026-05-28T03:18:14.558000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 0.246,
+            "entry_px": null,
+            "exit_px": 648.78,
+            "realized_pnl_usd": 0.77,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-27T21:46:29.919000+00:00",
+            "closed_at": "2026-05-27T21:46:29.919000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 672,
+            "entry_px": null,
+            "exit_px": 0.2376,
+            "realized_pnl_usd": 0.74,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-27T21:44:52.733000+00:00",
+            "closed_at": "2026-05-27T21:44:52.733000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 0.104,
+            "entry_px": null,
+            "exit_px": 654.78,
+            "realized_pnl_usd": 0.27,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-27T17:09:13.326000+00:00",
+            "closed_at": "2026-05-27T17:09:13.326000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 67.9,
+            "entry_px": null,
+            "exit_px": 1.0022,
+            "realized_pnl_usd": 0.48,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-27T13:04:55.783000+00:00",
+            "closed_at": "2026-05-27T13:04:55.783000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 0.244,
+            "entry_px": null,
+            "exit_px": 653.48,
+            "realized_pnl_usd": 0.8,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-27T04:19:33.698000+00:00",
+            "closed_at": "2026-05-27T04:19:33.698000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 7.47,
+            "entry_px": null,
+            "exit_px": 9.1385,
+            "realized_pnl_usd": 0.24,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-27T01:59:05.275000+00:00",
+            "closed_at": "2026-05-27T01:59:05.275000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 157.7,
+            "entry_px": null,
+            "exit_px": 1.0129,
+            "realized_pnl_usd": 0.86,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T17:26:09.320000+00:00",
+            "closed_at": "2026-05-26T17:26:09.320000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 17.36,
+            "entry_px": null,
+            "exit_px": 9.1936,
+            "realized_pnl_usd": 1.05,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T17:21:23.714000+00:00",
+            "closed_at": "2026-05-26T17:21:23.714000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 157.4,
+            "entry_px": null,
+            "exit_px": 1.0166,
+            "realized_pnl_usd": 0.76,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T16:12:58.981000+00:00",
+            "closed_at": "2026-05-26T16:12:58.981000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 156.5,
+            "entry_px": null,
+            "exit_px": 1.0205,
+            "realized_pnl_usd": 1.01,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T16:08:13.832000+00:00",
+            "closed_at": "2026-05-26T16:08:13.832000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 0.103,
+            "entry_px": null,
+            "exit_px": 663.09,
+            "realized_pnl_usd": 0.21,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T14:39:35.650000+00:00",
+            "closed_at": "2026-05-26T14:39:35.650000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 17.35,
+            "entry_px": null,
+            "exit_px": 9.2098,
+            "realized_pnl_usd": 0.92,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T00:52:57.188000+00:00",
+            "closed_at": "2026-05-26T00:52:57.188000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 0.242,
+            "entry_px": null,
+            "exit_px": 658.27,
+            "realized_pnl_usd": 1.02,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-26T00:52:55.070000+00:00",
+            "closed_at": "2026-05-26T00:52:55.070000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 279,
+            "entry_px": null,
+            "exit_px": 0.2443,
+            "realized_pnl_usd": 0.25,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-25T20:42:35.742000+00:00",
+            "closed_at": "2026-05-25T20:42:35.742000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 0.103,
+            "entry_px": null,
+            "exit_px": 663.7,
+            "realized_pnl_usd": -0.05,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-25T17:15:46.176000+00:00",
+            "closed_at": "2026-05-25T17:15:46.176000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 65,
+            "entry_px": null,
+            "exit_px": 1.0474,
+            "realized_pnl_usd": 0.44,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-25T15:31:22.996000+00:00",
+            "closed_at": "2026-05-25T15:31:22.996000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 17.52,
+            "entry_px": null,
+            "exit_px": 9.0956,
+            "realized_pnl_usd": 1.25,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-24T21:35:15.365000+00:00",
+            "closed_at": "2026-05-24T21:35:15.365000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 1577,
+            "entry_px": null,
+            "exit_px": 0.1013,
+            "realized_pnl_usd": 0.84,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-24T21:29:58.448000+00:00",
+            "closed_at": "2026-05-24T21:29:58.448000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 658,
+            "entry_px": null,
+            "exit_px": 0.2425,
+            "realized_pnl_usd": 0.86,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-24T14:16:45.851000+00:00",
+            "closed_at": "2026-05-24T14:16:45.851000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 153.6,
+            "entry_px": null,
+            "exit_px": 1.0404,
+            "realized_pnl_usd": 0.93,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-24T14:14:36.284000+00:00",
+            "closed_at": "2026-05-24T14:14:36.284000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 107.9,
+            "entry_px": null,
+            "exit_px": 1.0743,
+            "realized_pnl_usd": -2.02,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:48:10.748000+00:00",
+            "closed_at": "2026-05-23T21:48:10.748000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 2008,
+            "entry_px": null,
+            "exit_px": 0.1031,
+            "realized_pnl_usd": -2.28,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:47:28.313000+00:00",
+            "closed_at": "2026-05-23T21:47:28.313000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 287,
+            "entry_px": null,
+            "exit_px": 0.1031,
+            "realized_pnl_usd": -0.33,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:47:28.313000+00:00",
+            "closed_at": "2026-05-23T21:47:28.313000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.007,
+            "entry_px": null,
+            "exit_px": 659.26,
+            "realized_pnl_usd": -0.02,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:30:16.266000+00:00",
+            "closed_at": "2026-05-23T21:30:16.266000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.105,
+            "entry_px": null,
+            "exit_px": 658.05,
+            "realized_pnl_usd": -0.5,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:30:16.266000+00:00",
+            "closed_at": "2026-05-23T21:30:16.266000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.105,
+            "entry_px": null,
+            "exit_px": 657.57,
+            "realized_pnl_usd": -0.55,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:30:16.266000+00:00",
+            "closed_at": "2026-05-23T21:30:16.266000+00:00"
+          },
+          {
+            "symbol": "BNB",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.206,
+            "entry_px": null,
+            "exit_px": 656.63,
+            "realized_pnl_usd": -1.27,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:30:16.266000+00:00",
+            "closed_at": "2026-05-23T21:30:16.266000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 18.08,
+            "entry_px": null,
+            "exit_px": 9.4698,
+            "realized_pnl_usd": -0.69,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:29:37.170000+00:00",
+            "closed_at": "2026-05-23T21:29:37.170000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 17.69,
+            "entry_px": null,
+            "exit_px": 9.4697,
+            "realized_pnl_usd": -0.68,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:29:37.170000+00:00",
+            "closed_at": "2026-05-23T21:29:37.170000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 16.69,
+            "entry_px": null,
+            "exit_px": 9.4688,
+            "realized_pnl_usd": -0.65,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:29:37.170000+00:00",
+            "closed_at": "2026-05-23T21:29:37.170000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1499,
+            "entry_px": null,
+            "exit_px": 0.2489,
+            "realized_pnl_usd": -0.66,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:12:48.595000+00:00",
+            "closed_at": "2026-05-23T21:12:48.595000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 502,
+            "entry_px": null,
+            "exit_px": 0.2489,
+            "realized_pnl_usd": -0.22,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:12:48.595000+00:00",
+            "closed_at": "2026-05-23T21:12:48.595000+00:00"
+          },
+          {
+            "symbol": "ADA",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1407,
+            "entry_px": null,
+            "exit_px": 0.2503,
+            "realized_pnl_usd": 1.98,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:00:57.343000+00:00",
+            "closed_at": "2026-05-23T21:00:57.343000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 2051,
+            "entry_px": null,
+            "exit_px": 0.1046,
+            "realized_pnl_usd": 1.02,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:00:23.102000+00:00",
+            "closed_at": "2026-05-23T21:00:23.102000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 270,
+            "entry_px": null,
+            "exit_px": 0.1046,
+            "realized_pnl_usd": 0.13,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T21:00:23.102000+00:00",
+            "closed_at": "2026-05-23T21:00:23.102000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 19.78,
+            "entry_px": null,
+            "exit_px": 9.515,
+            "realized_pnl_usd": 1.07,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:58:14.265000+00:00",
+            "closed_at": "2026-05-23T20:58:14.265000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 10.66,
+            "entry_px": null,
+            "exit_px": 9.515,
+            "realized_pnl_usd": 0.58,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:58:14.265000+00:00",
+            "closed_at": "2026-05-23T20:58:14.265000+00:00"
+          },
+          {
+            "symbol": "ETH",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0081,
+            "entry_px": null,
+            "exit_px": 2132.9,
+            "realized_pnl_usd": 0.07,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:55:31.256000+00:00",
+            "closed_at": "2026-05-23T20:55:31.256000+00:00"
+          },
+          {
+            "symbol": "ETH",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0649,
+            "entry_px": null,
+            "exit_px": 2132.9,
+            "realized_pnl_usd": 0.53,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:55:31.256000+00:00",
+            "closed_at": "2026-05-23T20:55:31.256000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 224.4,
+            "entry_px": null,
+            "exit_px": 1.0845,
+            "realized_pnl_usd": 0.79,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:48:39.381000+00:00",
+            "closed_at": "2026-05-23T20:48:39.381000+00:00"
+          },
+          {
+            "symbol": "SUI",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1.3,
+            "entry_px": null,
+            "exit_px": 1.0845,
+            "realized_pnl_usd": 0,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:48:39.381000+00:00",
+            "closed_at": "2026-05-23T20:48:39.381000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "BUY",
+            "agent_id": "unknown",
+            "wallet_id": "directional",
+            "size": 0.0013,
+            "entry_px": null,
+            "exit_px": 76483,
+            "realized_pnl_usd": 0.54,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:38:18.633000+00:00",
+            "closed_at": "2026-05-23T20:38:18.633000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 19.89,
+            "entry_px": null,
+            "exit_px": 9.3326,
+            "realized_pnl_usd": 1.08,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:37:45.024000+00:00",
+            "closed_at": "2026-05-23T20:37:45.024000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 18.45,
+            "entry_px": null,
+            "exit_px": 9.3317,
+            "realized_pnl_usd": 0.98,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:37:45.024000+00:00",
+            "closed_at": "2026-05-23T20:37:45.024000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 4.03,
+            "entry_px": null,
+            "exit_px": 9.3317,
+            "realized_pnl_usd": 0.21,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:37:45.024000+00:00",
+            "closed_at": "2026-05-23T20:37:45.024000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1812,
+            "entry_px": null,
+            "exit_px": 0.1027,
+            "realized_pnl_usd": 1.02,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:37:11.570000+00:00",
+            "closed_at": "2026-05-23T20:37:11.570000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "BUY",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1417,
+            "entry_px": null,
+            "exit_px": 0.1027,
+            "realized_pnl_usd": 0.8,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T20:37:11.570000+00:00",
+            "closed_at": "2026-05-23T20:37:11.570000+00:00"
+          },
+          {
+            "symbol": "DOGE",
+            "side": "SELL",
+            "agent_id": "bear_hunter",
+            "wallet_id": "contrarian",
+            "size": 2688,
+            "entry_px": null,
+            "exit_px": 0.1002,
+            "realized_pnl_usd": -2.98,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T13:25:29.332000+00:00",
+            "closed_at": "2026-05-23T13:25:29.332000+00:00"
+          },
+          {
+            "symbol": "ETC",
+            "side": "SELL",
+            "agent_id": "bear_hunter",
+            "wallet_id": "contrarian",
+            "size": 46.2,
+            "entry_px": null,
+            "exit_px": 8.6894,
+            "realized_pnl_usd": -1.9,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-23T13:00:19.837000+00:00",
+            "closed_at": "2026-05-23T13:00:19.837000+00:00"
+          },
+          {
+            "symbol": "ETC",
+            "side": "SELL",
+            "agent_id": "bear_hunter",
+            "wallet_id": "contrarian",
+            "size": 38.44,
+            "entry_px": null,
+            "exit_px": 8.7918,
+            "realized_pnl_usd": 3.37,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-19T14:48:08.850000+00:00",
+            "closed_at": "2026-05-19T14:48:08.850000+00:00"
+          },
+          {
+            "symbol": "SOL",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.24,
+            "entry_px": null,
+            "exit_px": 85.91,
+            "realized_pnl_usd": -0.34,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T12:41:49.879000+00:00",
+            "closed_at": "2026-05-18T12:41:49.879000+00:00"
+          },
+          {
+            "symbol": "SOL",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.38,
+            "entry_px": null,
+            "exit_px": 85.92,
+            "realized_pnl_usd": -0.55,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T12:41:49.879000+00:00",
+            "closed_at": "2026-05-18T12:41:49.879000+00:00"
+          },
+          {
+            "symbol": "SOL",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1.14,
+            "entry_px": null,
+            "exit_px": 85.987,
+            "realized_pnl_usd": -1.72,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T12:41:49.879000+00:00",
+            "closed_at": "2026-05-18T12:41:49.879000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0003,
+            "entry_px": null,
+            "exit_px": 78019,
+            "realized_pnl_usd": -0.33,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T12:17:28.824000+00:00",
+            "closed_at": "2026-05-18T12:17:28.824000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0024,
+            "entry_px": null,
+            "exit_px": 78020,
+            "realized_pnl_usd": -2.37,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T12:17:28.824000+00:00",
+            "closed_at": "2026-05-18T12:17:28.824000+00:00"
+          },
+          {
+            "symbol": "SOL",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 1.54,
+            "entry_px": null,
+            "exit_px": 84.463,
+            "realized_pnl_usd": 0.8,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T10:05:23.063000+00:00",
+            "closed_at": "2026-05-18T10:05:23.063000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0015,
+            "entry_px": null,
+            "exit_px": 77254,
+            "realized_pnl_usd": 0.59,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T01:35:16.792000+00:00",
+            "closed_at": "2026-05-18T01:35:16.792000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.001,
+            "entry_px": null,
+            "exit_px": 77286,
+            "realized_pnl_usd": 0.35,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T01:35:16.792000+00:00",
+            "closed_at": "2026-05-18T01:35:16.792000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "SELL",
+            "agent_id": "momentum_hunter",
+            "wallet_id": "directional",
+            "size": 0.0005,
+            "entry_px": null,
+            "exit_px": 77366,
+            "realized_pnl_usd": 0.13,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T01:35:16.792000+00:00",
+            "closed_at": "2026-05-18T01:35:16.792000+00:00"
+          },
+          {
+            "symbol": "BTC",
+            "side": "BUY",
+            "agent_id": "unknown",
+            "wallet_id": "contrarian",
+            "size": 0.0001,
+            "entry_px": null,
+            "exit_px": 78150,
+            "realized_pnl_usd": -0.01,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-05-18T01:00:19.424000+00:00",
+            "closed_at": "2026-05-18T01:00:19.424000+00:00"
+          }
+        ]
+      },
+      "defi": {
+        "env": "testnet",
+        "kpis": {
+          "value_usd": 3396.08,
+          "rewards_usd": 24.5,
+          "positions": 13,
+          "in_range_pct": 30.8
+        },
+        "wallets": [
+          {
+            "network": "ethereum",
+            "positions": 7,
+            "value_usd": 3252.31
+          },
+          {
+            "network": "base",
+            "positions": 4,
+            "value_usd": 711.95
+          },
+          {
+            "network": "arbitrum",
+            "positions": 2,
+            "value_usd": 331.55
+          }
+        ],
+        "positions": [
+          {
+            "pair": "WBTC/WETH",
+            "network": "ethereum",
+            "value_usd": 974.62,
+            "apr_pct": 0
+          },
+          {
+            "pair": "WETH/USDT",
+            "network": "ethereum",
+            "value_usd": 932.89,
+            "apr_pct": 2.85
+          },
+          {
+            "pair": "USDC/WETH",
+            "network": "ethereum",
+            "value_usd": 876.33,
+            "apr_pct": 1.85
+          },
+          {
+            "pair": "USDC/cbBTC",
+            "network": "base",
+            "value_usd": 633.18,
+            "apr_pct": 0
+          },
+          {
+            "pair": "LINK/WETH",
+            "network": "ethereum",
+            "value_usd": 335.75,
+            "apr_pct": 1.71
+          },
+          {
+            "pair": "WETH/cbBTC",
+            "network": "arbitrum",
+            "value_usd": 256.4,
+            "apr_pct": 0.38
+          },
+          {
+            "pair": "PENDLE/USD₮0",
+            "network": "arbitrum",
+            "value_usd": 75.15,
+            "apr_pct": 41.1
+          },
+          {
+            "pair": "WETH/ONDO",
+            "network": "ethereum",
+            "value_usd": 56.44,
+            "apr_pct": 1.71
+          },
+          {
+            "pair": "VIRTUAL/WETH",
+            "network": "base",
+            "value_usd": 51.04,
+            "apr_pct": 15.7
+          },
+          {
+            "pair": "ENA/WETH",
+            "network": "ethereum",
+            "value_usd": 49.07,
+            "apr_pct": 1.4
+          }
+        ],
+        "diversification": {
+          "WETH": 62.3,
+          "USDT": 0,
+          "ENA": 1.4,
+          "ONDO": 1,
+          "ETHFI": 0.6,
+          "WBTC": 2.6,
+          "LINK": 3.8,
+          "USDC": 10.1,
+          "PENDLE": 1.6,
+          "USD₮0": 0,
+          "cbBTC": 15,
+          "VIRTUAL": 1,
+          "COOKIE": 0.1,
+          "ACOLYT": 0.4
+        },
+        "suggestions": [
+          {
+            "action": "reposition",
+            "from_pair": "USDC/cbBTC",
+            "to_pair": "WETH/USDC",
+            "network": "base",
+            "apr_gain_pct": 129,
+            "est_monthly_usd": 54.74,
+            "notional_usd": 509.21,
+            "payback_days": 0
+          },
+          {
+            "action": "reposition",
+            "from_pair": "VIRTUAL/ACOLYT",
+            "to_pair": "WETH/USDC",
+            "network": "base",
+            "apr_gain_pct": 129,
+            "est_monthly_usd": 1.46,
+            "notional_usd": 13.54,
+            "payback_days": 0
+          },
+          {
+            "action": "reposition",
+            "from_pair": "VIRTUAL/WETH",
+            "to_pair": "WETH/USDC",
+            "network": "base",
+            "apr_gain_pct": 129,
+            "est_monthly_usd": 3.71,
+            "notional_usd": 34.48,
+            "payback_days": 0
+          },
+          {
+            "action": "reposition",
+            "from_pair": "VIRTUAL/COOKIE",
+            "to_pair": "WETH/USDC",
+            "network": "base",
+            "apr_gain_pct": 129,
+            "est_monthly_usd": 0.49,
+            "notional_usd": 4.59,
+            "payback_days": 0
+          },
+          {
+            "action": "reposition",
+            "from_pair": "WETH/cbBTC",
+            "to_pair": "WETH/USDC",
+            "network": "arbitrum",
+            "apr_gain_pct": 32.6,
+            "est_monthly_usd": 5.22,
+            "notional_usd": 192.48,
+            "payback_days": 0
+          },
+          {
+            "action": "reposition",
+            "from_pair": "PENDLE/USD₮0",
+            "to_pair": "WETH/USDC",
+            "network": "arbitrum",
+            "apr_gain_pct": 32.6,
+            "est_monthly_usd": 1.49,
+            "notional_usd": 54.98,
+            "payback_days": 0
+          },
+          {
+            "action": "realloc",
+            "from_pair": "USDC/WETH",
+            "to_pair": "WETH/USDC",
+            "network": "ethereum",
+            "apr_gain_pct": 126,
+            "est_monthly_usd": 81.34,
+            "notional_usd": 774.48,
+            "payback_days": 3
+          },
+          {
+            "action": "realloc",
+            "from_pair": "LINK/WETH",
+            "to_pair": "WETH/USDC",
+            "network": "ethereum",
+            "apr_gain_pct": 124.6,
+            "est_monthly_usd": 26.72,
+            "notional_usd": 257.29,
+            "payback_days": 9.1
+          }
+        ],
+        "last_run": "2026-06-06T11:59:22.367785+00:00"
+      },
+      "lab": {
+        "lab": "lateral_shadow",
+        "closed": 463,
+        "open": 1,
+        "wins": 242,
+        "win_rate_pct": 52.3,
+        "net_pnl_usd": 27.27,
+        "by_agent": {
+          "scalper": {
+            "closed": 442,
+            "wins": 235,
+            "net_pnl_usd": -6.48
+          },
+          "mean_reverter": {
+            "closed": 21,
+            "wins": 7,
+            "net_pnl_usd": 33.75
+          }
+        }
+      },
+      "metaAgents": {
+        "agents": {
+          "swing_rider": {
+            "family": "swing",
+            "desc": "Tendência: cross EMA50/200 + ADX. Shorta alt fraco em death-cross. Edge comprovado (live)."
+          },
+          "trend_rider": {
+            "family": "trend",
+            "desc": "Seguidor de tendência: rompimento Donchian55 + HMA50 + ADX. Conservador."
+          },
+          "momentum_hunter": {
+            "family": "momentum",
+            "desc": "Momentum (RSI/ROC/ADX). Segue regime. Em quarentena (histórico negativo)."
+          },
+          "mean_reverter": {
+            "family": "mean_reversion",
+            "desc": "Reversão à média: preço fora da Bollinger + Hurst<0.45. Para mercado de range."
+          },
+          "scalper": {
+            "family": "scalper",
+            "desc": "Scalp curto: RSI(7) extremo + ROC contrário + ADX<30. TP 0.45%/SL 0.35%. Range/low-vol."
+          },
+          "hedge_balancer": {
+            "family": "hedge",
+            "desc": "Hedge cruzado: opera ativos SEM posição quando o portfólio está em loss."
+          },
+          "bear_hunter": {
+            "family": "momentum",
+            "desc": "Short-only: 2 de 3 (RSI alto, ROC negativo, close<EMA) + ADX. Bloqueia em BTC risk_on."
+          }
+        }
+      },
+      "metaWallets": {
+        "wallets": [
+          {
+            "id": "directional",
+            "label": "A — Direcional",
+            "leverage": 5,
+            "role": "directional",
+            "agents": [
+              "trend_rider",
+              "swing_rider",
+              "momentum_hunter"
+            ],
+            "desc": "Segue tendências. Carteira que mais opera."
+          },
+          {
+            "id": "contrarian",
+            "label": "B — Contrária",
+            "leverage": 8,
+            "role": "contrarian",
+            "agents": [
+              "mean_reverter",
+              "hedge_balancer",
+              "scalper",
+              "bear_hunter"
+            ],
+            "desc": "Reversão à média + hedge."
+          },
+          {
+            "id": "dca_btc",
+            "label": "C — DCA BTC",
+            "leverage": 1,
+            "role": "accumulator",
+            "agents": [],
+            "desc": "Acumula BTC (spot sintético 1x) nas quedas. Não pode ser liquidada."
+          }
+        ]
+      }
+    },
+    "prod": {
+      "schemaVersion": 1,
+      "env": "prod",
+      "capturedAt": "2026-06-06T12:30:00.171Z",
+      "catalog": {
+        "service": "openclaw-panel-api",
+        "version": "v1",
+        "auth": "X-API-Key header or ?api_key=",
+        "env_param": "?env=testnet|prod (default testnet)",
+        "routes": [
+          "/api/v1/defi/diversification",
+          "/api/v1/defi/kpis",
+          "/api/v1/defi/positions",
+          "/api/v1/defi/suggestions",
+          "/api/v1/defi/summary",
+          "/api/v1/defi/wallets",
+          "/api/v1/hl/agents",
+          "/api/v1/hl/agents/{agent_id}",
+          "/api/v1/hl/circuit-breaker",
+          "/api/v1/hl/closed",
+          "/api/v1/hl/kpis",
+          "/api/v1/hl/pnl-by-symbol",
+          "/api/v1/hl/positions",
+          "/api/v1/hl/regime",
+          "/api/v1/hl/summary",
+          "/api/v1/hl/wallets",
+          "/api/v1/hl/wallets/{wallet_id}",
+          "/api/v1/lab/lateral",
+          "/api/v1/meta/agents",
+          "/api/v1/meta/wallets",
+          "/api/v1/overview"
+        ],
+        "public_routes": [
+          "/health",
+          "/api/v1"
+        ]
+      },
+      "overview": {
+        "env": "prod",
+        "hl_kpis": null,
+        "defi_kpis": null,
+        "circuit_breaker": {
+          "available": true,
+          "date": "2026-06-06",
+          "peak_usd": 1479.55,
+          "threshold_pct": 12,
+          "halt_mode": "entry-only (nunca fecha posição)"
+        },
+        "regime": {
+          "macro_regime": null
+        },
+        "hl_empty": true,
+        "defi_empty": true
+      },
+      "hl": {
+        "env": "prod",
+        "empty": true,
+        "reason": "aguardando go-live mainnet"
+      },
+      "hlPositions": {
+        "env": "prod",
+        "positions": []
+      },
+      "hlClosed": {
+        "env": "prod",
+        "count": 0,
+        "wins": 0,
+        "net_pnl_usd": 0,
+        "trades": []
+      },
+      "defi": {
+        "env": "prod",
+        "empty": true,
+        "reason": "aguardando go-live mainnet"
+      },
+      "lab": {
+        "lab": "lateral_shadow",
+        "closed": 463,
+        "open": 1,
+        "wins": 242,
+        "win_rate_pct": 52.3,
+        "net_pnl_usd": 27.27,
+        "by_agent": {
+          "scalper": {
+            "closed": 442,
+            "wins": 235,
+            "net_pnl_usd": -6.48
+          },
+          "mean_reverter": {
+            "closed": 21,
+            "wins": 7,
+            "net_pnl_usd": 33.75
+          }
+        }
+      },
+      "metaAgents": {
+        "agents": {
+          "swing_rider": {
+            "family": "swing",
+            "desc": "Tendência: cross EMA50/200 + ADX. Shorta alt fraco em death-cross. Edge comprovado (live)."
+          },
+          "trend_rider": {
+            "family": "trend",
+            "desc": "Seguidor de tendência: rompimento Donchian55 + HMA50 + ADX. Conservador."
+          },
+          "momentum_hunter": {
+            "family": "momentum",
+            "desc": "Momentum (RSI/ROC/ADX). Segue regime. Em quarentena (histórico negativo)."
+          },
+          "mean_reverter": {
+            "family": "mean_reversion",
+            "desc": "Reversão à média: preço fora da Bollinger + Hurst<0.45. Para mercado de range."
+          },
+          "scalper": {
+            "family": "scalper",
+            "desc": "Scalp curto: RSI(7) extremo + ROC contrário + ADX<30. TP 0.45%/SL 0.35%. Range/low-vol."
+          },
+          "hedge_balancer": {
+            "family": "hedge",
+            "desc": "Hedge cruzado: opera ativos SEM posição quando o portfólio está em loss."
+          },
+          "bear_hunter": {
+            "family": "momentum",
+            "desc": "Short-only: 2 de 3 (RSI alto, ROC negativo, close<EMA) + ADX. Bloqueia em BTC risk_on."
+          }
+        }
+      },
+      "metaWallets": {
+        "wallets": [
+          {
+            "id": "directional",
+            "label": "A — Direcional",
+            "leverage": 5,
+            "role": "directional",
+            "agents": [
+              "trend_rider",
+              "swing_rider",
+              "momentum_hunter"
+            ],
+            "desc": "Segue tendências. Carteira que mais opera."
+          },
+          {
+            "id": "contrarian",
+            "label": "B — Contrária",
+            "leverage": 8,
+            "role": "contrarian",
+            "agents": [
+              "mean_reverter",
+              "hedge_balancer",
+              "scalper",
+              "bear_hunter"
+            ],
+            "desc": "Reversão à média + hedge."
+          },
+          {
+            "id": "dca_btc",
+            "label": "C — DCA BTC",
+            "leverage": 1,
+            "role": "accumulator",
+            "agents": [],
+            "desc": "Acumula BTC (spot sintético 1x) nas quedas. Não pode ser liquidada."
+          }
+        ]
+      }
+    }
+  }
+}

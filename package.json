@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:with-panel": "npm run panel:snapshot && npm run build",
     "lint": "eslint .",
+    "panel:snapshot": "node scripts/update-panel-snapshot.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

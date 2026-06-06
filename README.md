@@ -167,6 +167,23 @@ npm run build
 npm run preview
 ```
 
+### Painel Holders / Panel API
+
+O painel de holders consome a Panel API local quando `VITE_PANEL_API_KEY` estiver configurada no ambiente local. Para deploy publico sem proxy em nuvem, gere o snapshot estatico antes do build:
+
+```bash
+npm run panel:snapshot
+npm run build
+```
+
+Atalho:
+
+```bash
+npm run build:with-panel
+```
+
+O script le `PANEL_API_KEY` do ambiente ou de `~/openclaw/.env.secrets` e salva `public/panel-snapshot.json`. Nao configure `VITE_PANEL_API_KEY` no deploy publico.
+
 ## 🗄️ Banco de Dados
 
 ### Configuração do Supabase

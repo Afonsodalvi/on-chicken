@@ -18,6 +18,7 @@ import { WalletEligibilityHandler } from "./components/WalletEligibilityHandler"
 
 const Admin = lazy(() => import("./pages/Admin"));
 const Buy = lazy(() => import("./pages/Buy"));
+const Holders = lazy(() => import("./pages/Holders"));
 const Mint = lazy(() => import("./pages/Mint"));
 
 const queryClient = new QueryClient({
@@ -47,6 +48,7 @@ const App = () => (
                     <Route path="/" element={<Index />} />
                     <Route path="/battle" element={<Battle />} />
                     <Route path="/farm" element={<Farm />} />
+                    <Route path="/holders" element={<Holders />} />
                     <Route path="/whitelist" element={<Whitelist />} />
                     <Route path="/mint" element={<Mint />} />
                     <Route path="/details" element={<Details />} />
