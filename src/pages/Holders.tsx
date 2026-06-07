@@ -622,6 +622,9 @@ function OverviewTab({ bundle }: { bundle: PanelBundle }) {
   const regime = overview?.regime;
   const hlKpis = overview?.hl_kpis ?? bundle.hl?.kpis;
   const defiKpis = overview?.defi_kpis ?? bundle.defi?.kpis;
+  const win = bundle.hl?.performance?.windows ?? {};
+  const cur = win["since_current"];
+  const cor = win["since_corrected"];
 
   return (
     <div className="space-y-8">
@@ -647,6 +650,48 @@ function OverviewTab({ bundle }: { bundle: PanelBundle }) {
         <MetricTile label="Valor DeFi" value={formatCurrency(defiKpis?.value_usd)} detail={`${formatNumber(defiKpis?.positions)} posicoes`} icon={Layers} />
         <MetricTile label="Rewards DeFi" value={formatCurrency(defiKpis?.rewards_usd)} detail={`${formatPct(defiKpis?.in_range_pct)} in range`} icon={Zap} />
       </div>
+
+      <article className="surface rounded-lg p-5">
+        <SectionTitle icon={Activity} title="Entendendo os numeros (leitura honesta)" />
+        <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+          <p>
+            O sistema passou por <b className="text-foreground">3 fases</b>: uma fase de
+            calibracao (14–23/05, comportamento corrigido pelas auditorias), uma fase
+            pos-correcoes (23–30/05) e a <b className="text-foreground">configuracao
+            ATUAL</b> (30/05 em diante — apenas os agentes comprovados operam). O numero
+            "30 dias" mistura as tres fases; o que representa o sistema de hoje e a
+            janela da configuracao atual.
+          </p>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {cur && (
+              <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3">
+                <div className="text-xs uppercase text-muted-foreground">Config atual (30/05→)</div>
+                <div className={`text-lg font-semibold ${pnlClass(cur.net_usd)}`}>{formatCurrency(cur.net_usd)}</div>
+                <div className="text-xs">
+                  {cur.trades ?? 0} trades · win {formatPct(cur.win_rate_pct)} · ≈ {formatSignedPct(cur.monthly_pct_estimate)}/mes
+                </div>
+              </div>
+            )}
+            {cor && (
+              <div className="rounded-md border border-border/60 bg-muted/10 p-3">
+                <div className="text-xs uppercase text-muted-foreground">Pos-correcoes (23/05→)</div>
+                <div className={`text-lg font-semibold ${pnlClass(cor.net_usd)}`}>{formatCurrency(cor.net_usd)}</div>
+                <div className="text-xs">
+                  {cor.trades ?? 0} trades · win {formatPct(cor.win_rate_pct)} · ≈ {formatSignedPct(cor.monthly_pct_estimate)}/mes
+                </div>
+              </div>
+            )}
+          </div>
+          <p>
+            Contexto importante: a semana da configuracao atual coincidiu com uma{" "}
+            <b className="text-foreground">queda brusca do mercado</b> (BTC -15%, ETH
+            -23%). Os agentes atuais venceram quase todas as operacoes proprias no
+            periodo; a perda visivel veio de uma posicao legada da fase anterior. Nenhum
+            numero aqui inclui o DCA — ele e acumulacao de longo prazo e aparece
+            separado.
+          </p>
+        </div>
+      </article>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="surface rounded-lg p-5">
@@ -960,16 +1005,75 @@ function ReadinessTab({ bundle }: { bundle: PanelBundle }) {
   );
 }
 
+const CURRENT_CONFIG_SINCE = "2026-05-30";
+
 function OperationsTab({ bundle }: { bundle: PanelBundle }) {
-  const closed = bundle.hlClosed;
+  const trades = bundle.hlClosed?.trades ?? [];
+  const isCurrent = (t: HlClosedTrade) => (t.closed_at ?? "") >= CURRENT_CONFIG_SINCE;
+  const current = trades.filter(isCurrent);
+  const legacy = trades.filter((t) => !isCurrent(t));
+  const net = (arr: HlClosedTrade[]) =>
+    arr.reduce((s, t) => s + (t.realized_pnl_usd ?? 0), 0);
+  const wins = (arr: HlClosedTrade[]) =>
+    arr.filter((t) => (t.realized_pnl_usd ?? 0) > 0).length;
+  const hasEthLegacy = current.some(
+    (t) => t.agent_id === "momentum_hunter" && (t.realized_pnl_usd ?? 0) < -10
+  );
+
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <MetricTile label="Operacoes" value={formatNumber(closed?.count)} icon={Table2} />
-        <MetricTile label="Vencedoras" value={formatNumber(closed?.wins)} icon={CheckCircle2} />
-        <MetricTile label="Net PnL" value={formatCurrency(closed?.net_pnl_usd)} icon={Activity} />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <article className="surface rounded-lg border-emerald-500/30 p-4">
+          <div className="text-xs uppercase tracking-wide text-muted-foreground">
+            Configuracao ATUAL (desde 30/05) — o sistema que vale hoje
+          </div>
+          <div className={`mt-2 text-2xl font-semibold ${pnlClass(net(current))}`}>
+            {formatCurrency(net(current))}
+          </div>
+          <div className="mt-1 text-sm text-muted-foreground">
+            {current.length} operacoes · {wins(current)} vencedoras (
+            {current.length ? Math.round((wins(current) / current.length) * 100) : 0}%)
+          </div>
+        </article>
+        <article className="surface rounded-lg p-4 opacity-80">
+          <div className="text-xs uppercase tracking-wide text-muted-foreground">
+            Fases anteriores (antes de 30/05) — configuracoes que NAO existem mais
+          </div>
+          <div className={`mt-2 text-2xl font-semibold ${pnlClass(net(legacy))}`}>
+            {formatCurrency(net(legacy))}
+          </div>
+          <div className="mt-1 text-sm text-muted-foreground">
+            {legacy.length} operacoes · {wins(legacy)} vencedoras — fase de
+            calibracao (auditorias de 23/05 e 30/05 corrigiram o comportamento)
+          </div>
+        </article>
       </div>
-      <TradesTable rows={closed?.trades ?? []} />
+
+      {hasEthLegacy && (
+        <p className="rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-sm text-muted-foreground">
+          ⚠️ A unica perda relevante da configuracao atual e uma posicao LEGADA do
+          Momentum Hunter (ETH), aberta ANTES da quarentena de 30/05 e fechada durante a
+          queda brusca do mercado. Os agentes ativos hoje nao abririam essa operacao.
+        </p>
+      )}
+
+      <div className="space-y-3">
+        <SectionTitle icon={Activity} title="Operacoes da configuracao atual" />
+        {current.length ? (
+          <TradesTable rows={current} />
+        ) : (
+          <EmptyBlock label="Sem operacoes fechadas na configuracao atual ainda." />
+        )}
+      </div>
+
+      <details className="space-y-3">
+        <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
+          Ver {legacy.length} operacoes das fases anteriores (historico de calibracao)
+        </summary>
+        <div className="mt-3 opacity-75">
+          <TradesTable rows={legacy} />
+        </div>
+      </details>
     </div>
   );
 }
@@ -1024,8 +1128,40 @@ function DefiTab({ bundle }: { bundle: PanelBundle }) {
   );
 }
 
-function LabTab({ lab }: { lab?: LabLateral | null }) {
+function LabTab({ bundle }: { bundle: PanelBundle }) {
+  const lab = bundle.lab;
   const byAgent = Object.entries(lab?.by_agent ?? {});
+  const labReadiness = (bundle.readiness?.components ?? []).find(
+    (c) => c.id === "mean_reverter_lateral"
+  );
+  const m = (labReadiness?.metrics ?? {}) as {
+    trades?: number;
+    net_usd?: number;
+    payoff?: number | null;
+    top1_share?: number | null;
+  };
+  const crit = [
+    {
+      label: "Amostra ≥ 40 operacoes",
+      ok: (m.trades ?? 0) >= 40,
+      atual: `${m.trades ?? 0}/40`,
+    },
+    {
+      label: "Lucro liquido > $0 (14d)",
+      ok: (m.net_usd ?? 0) > 0,
+      atual: formatCurrency(m.net_usd),
+    },
+    {
+      label: "Payoff (ganho medio / perda media) ≥ 2",
+      ok: (m.payoff ?? 0) >= 2,
+      atual: m.payoff != null ? `${m.payoff}x` : "—",
+    },
+    {
+      label: "Maior trade < 50% do lucro (sem depender de 1 acerto)",
+      ok: m.top1_share != null && m.top1_share < 0.5,
+      atual: m.top1_share != null ? `${Math.round(m.top1_share * 100)}%` : "—",
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -1034,8 +1170,53 @@ function LabTab({ lab }: { lab?: LabLateral | null }) {
         <MetricTile label="Open" value={formatNumber(lab?.open)} icon={Activity} />
         <MetricTile label="Wins" value={formatNumber(lab?.wins)} icon={CheckCircle2} />
         <MetricTile label="Win rate" value={formatPct(lab?.win_rate_pct)} icon={BarChart3} />
-        <MetricTile label="Net PnL" value={formatCurrency(lab?.net_pnl_usd)} icon={LineChart} />
+        <MetricTile label="Net PnL (simulado)" value={formatCurrency(lab?.net_pnl_usd)} icon={LineChart} />
       </div>
+
+      <p className="text-xs text-muted-foreground">
+        O Lab opera em SOMBRA: simula as operacoes com precos reais, mas sem dinheiro.
+        O lucro acima e hipotetico — serve para provar (ou descartar) a estrategia antes
+        de coloca-la junto dos agentes reais.
+      </p>
+
+      <article className="surface rounded-lg border-primary/30 p-5">
+        <div className="flex flex-wrap items-center gap-3">
+          <Zap className="h-5 w-5 text-primary" />
+          <h3 className="text-lg font-semibold">Quando o Lab entra no time?</h3>
+          {statusBadge(labReadiness?.status)}
+        </div>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Decisao em <b>{bundle.readiness?.decision_date ?? "13/06"}</b>: se o Mean
+          Reverter (a estrategia promissora do Lab) cumprir TODOS os criterios abaixo,
+          ele e promovido — passa a operar de verdade com valores pequenos ($25–50 por
+          ordem), gated por mercado lateral, e a partir dai os resultados dele CONTAM no
+          % mensal estimado do time.
+        </p>
+        <div className="mt-4 space-y-2">
+          {crit.map((c) => (
+            <div key={c.label} className="flex items-center justify-between gap-3 rounded-md border border-border/60 bg-muted/10 px-3 py-2 text-sm">
+              <span className="flex items-center gap-2">
+                {c.ok ? (
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                ) : (
+                  <AlertTriangle className="h-4 w-4 text-amber-400" />
+                )}
+                {c.label}
+              </span>
+              <span className={c.ok ? "text-emerald-400" : "text-amber-400"}>{c.atual}</span>
+            </div>
+          ))}
+        </div>
+        {labReadiness?.reason && (
+          <p className="mt-3 text-xs text-muted-foreground">Status: {labReadiness.reason}</p>
+        )}
+        <p className="mt-3 text-xs text-muted-foreground">
+          Por que esperar? O lucro atual depende muito de poucos acertos grandes (feitos
+          durante a queda do mercado). Os criterios garantem que a estrategia funciona de
+          forma consistente antes de receber dinheiro. O Scalper ja foi REPROVADO em
+          definitivo (542 operacoes provaram que as taxas comem o ganho).
+        </p>
+      </article>
 
       {!byAgent.length ? (
         <EmptyBlock label="Sem dados de laboratorio lateral." />
@@ -1254,7 +1435,7 @@ function Dashboard({
           <OperationsTab bundle={bundle} />
         </TabsContent>
         <TabsContent value="lab">
-          <LabTab lab={bundle.lab} />
+          <LabTab bundle={bundle} />
         </TabsContent>
         <TabsContent value="producao">
           <ReadinessTab bundle={bundle} />
