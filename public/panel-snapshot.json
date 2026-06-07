@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-07T15:05:12.331Z",
+  "generatedAt": "2026-06-07T15:20:00.589Z",
   "source": "http://127.0.0.1:8765",
   "bundles": {
     "testnet": {
       "schemaVersion": 1,
       "env": "testnet",
-      "capturedAt": "2026-06-07T15:05:12.295Z",
+      "capturedAt": "2026-06-07T15:20:00.555Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -1826,16 +1826,16 @@
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 566,
-        "open": 2,
+        "closed": 567,
+        "open": 3,
         "wins": 301,
-        "win_rate_pct": 53.2,
-        "net_pnl_usd": 27.5,
+        "win_rate_pct": 53.1,
+        "net_pnl_usd": 27.06,
         "by_agent": {
           "scalper": {
-            "closed": 535,
+            "closed": 536,
             "wins": 293,
-            "net_pnl_usd": -1
+            "net_pnl_usd": -1.44
           },
           "mean_reverter": {
             "closed": 31,
@@ -1846,7 +1846,7 @@
       },
       "readiness": {
         "env": "testnet",
-        "as_of": "2026-06-07T15:05:12.294220+00:00",
+        "as_of": "2026-06-07T15:20:00.553380+00:00",
         "decision_date": "2026-06-13",
         "validation_window": "2026-06-06 → 2026-06-13",
         "overall": "conditional",
@@ -1984,7 +1984,7 @@
     "prod": {
       "schemaVersion": 1,
       "env": "prod",
-      "capturedAt": "2026-06-07T15:05:12.331Z",
+      "capturedAt": "2026-06-07T15:20:00.589Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -2059,16 +2059,16 @@
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 566,
-        "open": 2,
+        "closed": 567,
+        "open": 3,
         "wins": 301,
-        "win_rate_pct": 53.2,
-        "net_pnl_usd": 27.5,
+        "win_rate_pct": 53.1,
+        "net_pnl_usd": 27.06,
         "by_agent": {
           "scalper": {
-            "closed": 535,
+            "closed": 536,
             "wins": 293,
-            "net_pnl_usd": -1
+            "net_pnl_usd": -1.44
           },
           "mean_reverter": {
             "closed": 31,
@@ -2079,7 +2079,7 @@
       },
       "readiness": {
         "env": "prod",
-        "as_of": "2026-06-07T15:05:12.330642+00:00",
+        "as_of": "2026-06-07T15:20:00.588841+00:00",
         "decision_date": "2026-06-13",
         "validation_window": "2026-06-06 → 2026-06-13",
         "overall": "no_go",
