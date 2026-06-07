@@ -4,14 +4,60 @@ export type PanelDataSource = "live" | "remote-snapshot" | "browser-cache" | "st
 
 export interface PanelKpis {
   equity_usd?: number;
+  /** "exchange_portfolio" = fonte corretora (3 carteiras); "decisions_ab" = fallback */
+  equity_source?: string;
   realized_pnl_usd?: number;
   win_rate_pct?: number;
   open_positions?: number;
   liquidations?: number;
+  /** retorno % mensal estimado (janela 30d da corretora) */
+  monthly_pct_estimate?: number | null;
   value_usd?: number;
   rewards_usd?: number;
   positions?: number;
   in_range_pct?: number;
+}
+
+export interface PerfWindow {
+  trades?: number;
+  wins?: number;
+  losses?: number;
+  win_rate_pct?: number | null;
+  gross_usd?: number;
+  fees_usd?: number;
+  net_usd?: number;
+  since?: string;
+  days?: number;
+  monthly_pct_estimate?: number | null;
+}
+
+export interface HlPerformance {
+  ts?: string;
+  equity_base_usd?: number;
+  windows?: Record<string, PerfWindow>;
+}
+
+export interface ReadinessComponent {
+  id?: string;
+  label?: string;
+  status?: "go" | "no_go" | "pending" | string;
+  reason?: string;
+  metrics?: Record<string, unknown>;
+}
+
+export interface Readiness {
+  as_of?: string;
+  decision_date?: string;
+  validation_window?: string;
+  overall?: "go" | "conditional" | "no_go" | string;
+  summary?: string;
+  config_atual?: {
+    desde?: string;
+    net_usd?: number | null;
+    monthly_pct_estimate?: number | null;
+    nota?: string;
+  };
+  components?: ReadinessComponent[];
 }
 
 export interface PanelOverview {
@@ -90,6 +136,15 @@ export interface HlSummary {
   kpis?: PanelKpis;
   /** Saldos por wallet direto da corretora (inclui a wallet DCA). */
   accounts?: HlAccounts | null;
+  /** Janelas de resultado da corretora (fonte-verdade) + % mensal estimado. */
+  performance?: HlPerformance | null;
+  /** Visão atribuída pelo brain (sem fees) — só para a tabela de agentes. */
+  attributed?: {
+    realized_pnl_usd?: number;
+    win_rate_pct?: number;
+    closed_trades?: number;
+    open_positions_brain?: number;
+  };
   wallets?: HlWallet[];
   agents?: HlAgent[];
   pnl_by_symbol_side?: PnlBySymbolSide[];
@@ -208,6 +263,7 @@ export interface PanelBundle {
   hlClosed?: HlClosedResponse | null;
   defi?: DefiSummary | null;
   lab?: LabLateral | null;
+  readiness?: Readiness | null;
   metaAgents?: MetaAgents | null;
   metaWallets?: MetaWallets | null;
   endpointErrors?: Record<string, string>;
@@ -310,6 +366,7 @@ export async function fetchPanelBundle(env: PanelEnv): Promise<PanelBundle> {
     endpoint("hlClosed", panelApiGet<HlClosedResponse>("/hl/closed", env, { limit: CLOSED_TRADES_LIMIT })),
     endpoint("defi", panelApiGet<DefiSummary>("/defi/summary", env)),
     endpoint("lab", panelApiGet<LabLateral>("/lab/lateral", env)),
+    endpoint("readiness", panelApiGet<Readiness>("/readiness", env)),
     endpoint("metaAgents", panelApiGet<MetaAgents>("/meta/agents", env)),
     endpoint("metaWallets", panelApiGet<MetaWallets>("/meta/wallets", env)),
   ]);

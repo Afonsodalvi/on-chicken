@@ -690,12 +690,40 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <MetricTile label="Equity" value={formatCurrency(kpis?.equity_usd)} icon={LineChart} />
-        <MetricTile label="PnL realizado" value={formatCurrency(kpis?.realized_pnl_usd)} icon={Activity} />
-        <MetricTile label="Win rate" value={formatPct(kpis?.win_rate_pct)} icon={CheckCircle2} />
-        <MetricTile label="Posicoes abertas" value={formatNumber(kpis?.open_positions)} icon={Table2} />
-        <MetricTile label="Liquidacoes" value={formatNumber(kpis?.liquidations)} icon={AlertTriangle} />
+        <MetricTile label="Equity (3 carteiras)" value={formatCurrency(kpis?.equity_usd)} icon={LineChart} />
+        <MetricTile label="PnL liquido 30d (corretora)" value={formatCurrency(kpis?.realized_pnl_usd)} icon={Activity} />
+        <MetricTile label="Win rate (corretora)" value={formatPct(kpis?.win_rate_pct)} icon={CheckCircle2} />
+        <MetricTile label="Posicoes (corretora)" value={formatNumber(kpis?.open_positions)} icon={Table2} />
+        <MetricTile
+          label="% mes estimado (30d)"
+          value={kpis?.monthly_pct_estimate != null ? `${kpis.monthly_pct_estimate > 0 ? "+" : ""}${kpis.monthly_pct_estimate}%` : "—"}
+          icon={BarChart3}
+        />
       </div>
+
+      {hl?.performance?.windows && (
+        <div className="space-y-4">
+          <SectionTitle icon={Activity} title="Resultado por janela (fonte: corretora, com taxas)" />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {Object.entries(hl.performance.windows).map(([name, w]) => (
+              <article key={name} className="surface rounded-lg p-4">
+                <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                  {name === "since_current" ? "config atual (30/05→)" : name === "since_corrected" ? "pos-correcoes (23/05→)" : name}
+                </div>
+                <div className={`mt-2 text-xl font-semibold ${Number(w.net_usd) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  {formatCurrency(w.net_usd)}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {w.trades ?? 0} trades · win {w.win_rate_pct != null ? `${w.win_rate_pct}%` : "—"} · taxas {formatCurrency(w.fees_usd)}
+                </div>
+                <div className="mt-1 text-xs">
+                  ≈ {w.monthly_pct_estimate != null ? `${w.monthly_pct_estimate > 0 ? "+" : ""}${w.monthly_pct_estimate}%/mes` : "—"}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
 
       {accounts && (
         <div className="space-y-4">
@@ -753,6 +781,62 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
         <SectionTitle icon={Activity} title="Posicoes abertas" />
         <PositionsTable rows={bundle.hlPositions?.positions} />
       </div>
+    </div>
+  );
+}
+
+function statusBadge(status?: string) {
+  if (status === "go") return <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30">GO</Badge>;
+  if (status === "no_go") return <Badge className="bg-red-500/15 text-red-400 border-red-500/30">NO-GO</Badge>;
+  return <Badge className="bg-amber-500/15 text-amber-400 border-amber-500/30">PENDENTE</Badge>;
+}
+
+function ReadinessTab({ bundle }: { bundle: PanelBundle }) {
+  const r = bundle.readiness;
+  if (!r) return <EmptyBlock label="Scorecard de producao indisponivel neste snapshot." />;
+  const overallLabel =
+    r.overall === "go" ? "PRONTO (GO)" : r.overall === "no_go" ? "NAO PRONTO" : "CONDICIONAL";
+  return (
+    <div className="space-y-6">
+      <div className="surface rounded-lg p-6">
+        <div className="flex flex-wrap items-center gap-3">
+          <ShieldCheck className="h-6 w-6 text-primary" />
+          <h2 className="text-xl font-semibold">Prontos para producao?</h2>
+          {statusBadge(r.overall === "conditional" ? "pending" : r.overall)}
+          <span className="text-sm text-muted-foreground">{overallLabel}</span>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{r.summary}</p>
+        <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+          <span>Janela de validacao: {r.validation_window}</span>
+          <span>Decisao em: {r.decision_date}</span>
+          <span>Avaliado: {formatDateTime(r.as_of)}</span>
+        </div>
+        {r.config_atual && (
+          <div className="mt-4 rounded-md border border-border/60 bg-muted/20 p-3 text-sm">
+            <span className="font-medium">Config atual (desde {r.config_atual.desde}): </span>
+            {r.config_atual.nota}
+            {r.config_atual.monthly_pct_estimate != null && (
+              <span> · ritmo estimado {r.config_atual.monthly_pct_estimate > 0 ? "+" : ""}{r.config_atual.monthly_pct_estimate}%/mes</span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        {(r.components ?? []).map((c) => (
+          <article key={c.id} className="surface flex flex-col gap-2 rounded-lg p-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              {statusBadge(c.status)}
+              <span className="font-medium">{c.label}</span>
+            </div>
+            <p className="text-sm text-muted-foreground md:max-w-[60%] md:text-right">{c.reason}</p>
+          </article>
+        ))}
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Scorecard computado automaticamente dos dados (corretora + brain + lab) segundo
+        docs/GO-LIVE-CRITERIA.md — nao e opiniao manual.
+      </p>
     </div>
   );
 }
@@ -1025,6 +1109,10 @@ function Dashboard({
             <Zap className="h-4 w-4" />
             Lab
           </TabsTrigger>
+          <TabsTrigger value="producao" className="gap-2">
+            <ShieldCheck className="h-4 w-4" />
+            Producao
+          </TabsTrigger>
           <TabsTrigger value="snapshot" className="gap-2">
             <Database className="h-4 w-4" />
             Snapshot
@@ -1048,6 +1136,9 @@ function Dashboard({
         </TabsContent>
         <TabsContent value="lab">
           <LabTab lab={bundle.lab} />
+        </TabsContent>
+        <TabsContent value="producao">
+          <ReadinessTab bundle={bundle} />
         </TabsContent>
         <TabsContent value="snapshot">
           <SnapshotTab bundle={bundle} source={resolved.source} liveError={resolved.liveError} />

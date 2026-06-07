@@ -68,6 +68,7 @@ async function bundleForEnv(env) {
     endpoint("hlClosed", api("/hl/closed", env, { limit: CLOSED_TRADES_LIMIT })),
     endpoint("defi", api("/defi/summary", env)),
     endpoint("lab", api("/lab/lateral", env)),
+    endpoint("readiness", api("/readiness", env)),
     endpoint("metaAgents", api("/meta/agents", env)),
     endpoint("metaWallets", api("/meta/wallets", env)),
   ]);

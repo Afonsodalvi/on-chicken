@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-06T19:23:52.785Z",
+  "generatedAt": "2026-06-07T15:05:12.331Z",
   "source": "http://127.0.0.1:8765",
   "bundles": {
     "testnet": {
       "schemaVersion": 1,
       "env": "testnet",
-      "capturedAt": "2026-06-06T19:23:52.750Z",
+      "capturedAt": "2026-06-07T15:05:12.295Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -33,7 +33,8 @@
           "/api/v1/lab/lateral",
           "/api/v1/meta/agents",
           "/api/v1/meta/wallets",
-          "/api/v1/overview"
+          "/api/v1/overview",
+          "/api/v1/readiness"
         ],
         "public_routes": [
           "/health",
@@ -43,28 +44,30 @@
       "overview": {
         "env": "testnet",
         "hl_kpis": {
-          "equity_usd": 1376.130561,
-          "realized_pnl_usd": 4.06,
-          "win_rate_pct": 52.3,
-          "open_positions": 0,
-          "liquidations": 0
+          "equity_usd": 1888.83,
+          "equity_source": "exchange_portfolio",
+          "realized_pnl_usd": -31.67,
+          "win_rate_pct": 48.8,
+          "open_positions": 5,
+          "liquidations": 0,
+          "monthly_pct_estimate": -1.68
         },
         "defi_kpis": {
-          "value_usd": 3378.07,
-          "rewards_usd": 24.49,
+          "value_usd": 3521.49,
+          "rewards_usd": 25.79,
           "positions": 13,
           "in_range_pct": 30.8
         },
         "circuit_breaker": {
           "available": true,
-          "date": "2026-06-06",
-          "peak_usd": 1528.46,
+          "date": "2026-06-07",
+          "peak_usd": 1393.21,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
         "regime": {
           "macro_regime": "risk_off",
-          "ts": "2026-06-06T19:20:55.814780+00:00",
+          "ts": "2026-06-07T15:03:33.533483+00:00",
           "note": "per-asset regime é calculado ao vivo (não persistido)"
         },
         "hl_empty": false,
@@ -73,45 +76,107 @@
       "hl": {
         "env": "testnet",
         "kpis": {
-          "equity_usd": 1376.130561,
+          "equity_usd": 1888.83,
+          "equity_source": "exchange_portfolio",
+          "realized_pnl_usd": -31.67,
+          "win_rate_pct": 48.8,
+          "open_positions": 5,
+          "liquidations": 0,
+          "monthly_pct_estimate": -1.68
+        },
+        "attributed": {
           "realized_pnl_usd": 4.06,
           "win_rate_pct": 52.3,
-          "open_positions": 0,
-          "liquidations": 0
+          "closed_trades": 174,
+          "open_positions_brain": 0
         },
         "accounts": {
-          "ts": "2026-06-06T19:23:29.572515+00:00",
+          "ts": "2026-06-07T15:03:54.584312+00:00",
           "wallets": [
             {
               "wallet_id": "directional",
               "address": "0x7c079992E69E7Ecd91c3f99D28C79b6e7d5e75Bd",
-              "perp_usd": 47.59,
-              "margin_used_usd": 47.37,
-              "spot_usdc": 642.14,
-              "total_usd": 642.14,
+              "perp_usd": 45.72,
+              "margin_used_usd": 47.74,
+              "spot_usdc": 640.27,
+              "total_usd": 640.25,
               "open_positions": 1
             },
             {
               "wallet_id": "contrarian",
               "address": "0x1373f81a2324Ac0C1e6EF868956c256ce31287FF",
-              "perp_usd": 9.16,
-              "margin_used_usd": 9.19,
-              "spot_usdc": 677.69,
-              "total_usd": 677.69,
-              "open_positions": 1
+              "perp_usd": 24.32,
+              "margin_used_usd": 27.06,
+              "spot_usdc": 674.47,
+              "total_usd": 674.47,
+              "open_positions": 3
             },
             {
               "wallet_id": "dca_btc",
               "address": "0xBAf3446AB1123Dd59eC74Dd29002f890EA9389D0",
-              "perp_usd": 519.13,
-              "margin_used_usd": 519.13,
-              "spot_usdc": 565.74,
-              "total_usd": 565.74,
+              "perp_usd": 574.11,
+              "margin_used_usd": 583.3,
+              "spot_usdc": 574.11,
+              "total_usd": 574.11,
               "open_positions": 1
             }
           ],
-          "equity_total_usd": 1885.57,
-          "open_positions_exchange": 3
+          "equity_total_usd": 1888.83,
+          "open_positions_exchange": 5
+        },
+        "performance": {
+          "ts": "2026-06-07T15:03:54.589038+00:00",
+          "equity_base_usd": 1888.83,
+          "windows": {
+            "7d": {
+              "trades": 9,
+              "wins": 8,
+              "losses": 1,
+              "win_rate_pct": 88.9,
+              "gross_usd": -9.25,
+              "fees_usd": 1.24,
+              "net_usd": -10.48,
+              "since": "2026-05-31T15:03:54.589038+00:00",
+              "days": 7,
+              "monthly_pct_estimate": -2.38
+            },
+            "30d": {
+              "trades": 205,
+              "wins": 100,
+              "losses": 105,
+              "win_rate_pct": 48.8,
+              "gross_usd": -0.36,
+              "fees_usd": 31.31,
+              "net_usd": -31.67,
+              "since": "2026-05-08T15:03:54.589038+00:00",
+              "days": 30,
+              "monthly_pct_estimate": -1.68
+            },
+            "since_corrected": {
+              "trades": 70,
+              "wins": 54,
+              "losses": 16,
+              "win_rate_pct": 77.1,
+              "gross_usd": 13.07,
+              "fees_usd": 9.39,
+              "net_usd": 3.68,
+              "since": "2026-05-23T00:00:00+00:00",
+              "days": 15.6,
+              "monthly_pct_estimate": 0.37
+            },
+            "since_current": {
+              "trades": 15,
+              "wins": 14,
+              "losses": 1,
+              "win_rate_pct": 93.3,
+              "gross_usd": -5.91,
+              "fees_usd": 1.93,
+              "net_usd": -7.84,
+              "since": "2026-05-30T00:00:00+00:00",
+              "days": 8.6,
+              "monthly_pct_estimate": -1.44
+            }
+          }
         },
         "wallets": [
           {
@@ -1575,8 +1640,8 @@
       "defi": {
         "env": "testnet",
         "kpis": {
-          "value_usd": 3378.07,
-          "rewards_usd": 24.49,
+          "value_usd": 3521.49,
+          "rewards_usd": 25.79,
           "positions": 13,
           "in_range_pct": 30.8
         },
@@ -1660,17 +1725,17 @@
           }
         ],
         "diversification": {
-          "WETH": 62.5,
+          "WETH": 61.6,
           "USDT": 0,
-          "ENA": 1.4,
+          "ENA": 1.3,
           "ONDO": 1,
           "ETHFI": 0.6,
-          "WBTC": 2.6,
-          "LINK": 3.7,
-          "USDC": 10.1,
+          "WBTC": 2.8,
+          "LINK": 3.8,
+          "USDC": 10.9,
           "PENDLE": 1.6,
           "USD₮0": 0,
-          "cbBTC": 15,
+          "cbBTC": 14.9,
           "VIRTUAL": 1,
           "COOKIE": 0.1,
           "ACOLYT": 0.4
@@ -1681,9 +1746,9 @@
             "from_pair": "USDC/cbBTC",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 144.3,
-            "est_monthly_usd": 60.92,
-            "notional_usd": 506.66,
+            "apr_gain_pct": 53.9,
+            "est_monthly_usd": 23.52,
+            "notional_usd": 523.81,
             "payback_days": 0
           },
           {
@@ -1691,9 +1756,9 @@
             "from_pair": "VIRTUAL/ACOLYT",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 144.3,
-            "est_monthly_usd": 1.62,
-            "notional_usd": 13.45,
+            "apr_gain_pct": 53.9,
+            "est_monthly_usd": 0.65,
+            "notional_usd": 14.51,
             "payback_days": 0
           },
           {
@@ -1701,9 +1766,9 @@
             "from_pair": "VIRTUAL/WETH",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 144.3,
-            "est_monthly_usd": 4.07,
-            "notional_usd": 33.87,
+            "apr_gain_pct": 53.9,
+            "est_monthly_usd": 1.62,
+            "notional_usd": 36.09,
             "payback_days": 0
           },
           {
@@ -1711,29 +1776,29 @@
             "from_pair": "VIRTUAL/COOKIE",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 144.3,
-            "est_monthly_usd": 0.54,
-            "notional_usd": 4.46,
+            "apr_gain_pct": 53.9,
+            "est_monthly_usd": 0.21,
+            "notional_usd": 4.62,
             "payback_days": 0
           },
           {
             "action": "reposition",
             "from_pair": "WETH/cbBTC",
-            "to_pair": "WETH/USDC",
+            "to_pair": "WBTC/USDC",
             "network": "arbitrum",
-            "apr_gain_pct": 39.5,
-            "est_monthly_usd": 6.32,
-            "notional_usd": 191.73,
+            "apr_gain_pct": 15.5,
+            "est_monthly_usd": 2.59,
+            "notional_usd": 201.21,
             "payback_days": 0
           },
           {
             "action": "reposition",
             "from_pair": "PENDLE/USD₮0",
-            "to_pair": "WETH/USDC",
+            "to_pair": "WBTC/USDC",
             "network": "arbitrum",
-            "apr_gain_pct": 39.5,
-            "est_monthly_usd": 1.74,
-            "notional_usd": 52.91,
+            "apr_gain_pct": 15.5,
+            "est_monthly_usd": 0.72,
+            "notional_usd": 55.96,
             "payback_days": 0
           },
           {
@@ -1741,43 +1806,110 @@
             "from_pair": "USDC/WETH",
             "to_pair": "WETH/USDC",
             "network": "ethereum",
-            "apr_gain_pct": 140.6,
-            "est_monthly_usd": 90.55,
-            "notional_usd": 772.88,
-            "payback_days": 2.7
+            "apr_gain_pct": 52.3,
+            "est_monthly_usd": 34.54,
+            "notional_usd": 793.09,
+            "payback_days": 7
           },
           {
-            "action": "realloc",
+            "action": "hold",
             "from_pair": "LINK/WETH",
-            "to_pair": "WETH/USDC",
+            "to_pair": "",
             "network": "ethereum",
-            "apr_gain_pct": 137.1,
-            "est_monthly_usd": 29.3,
-            "notional_usd": 256.46,
-            "payback_days": 8.3
+            "apr_gain_pct": 0,
+            "est_monthly_usd": 0,
+            "notional_usd": 270.75,
+            "payback_days": 0
           }
         ],
-        "last_run": "2026-06-06T18:01:02.285684+00:00"
+        "last_run": "2026-06-07T12:06:28.000004+00:00"
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 485,
-        "open": 1,
-        "wins": 259,
-        "win_rate_pct": 53.4,
-        "net_pnl_usd": 31.19,
+        "closed": 566,
+        "open": 2,
+        "wins": 301,
+        "win_rate_pct": 53.2,
+        "net_pnl_usd": 27.5,
         "by_agent": {
           "scalper": {
-            "closed": 464,
-            "wins": 252,
-            "net_pnl_usd": -2.56
+            "closed": 535,
+            "wins": 293,
+            "net_pnl_usd": -1
           },
           "mean_reverter": {
-            "closed": 21,
-            "wins": 7,
-            "net_pnl_usd": 33.75
+            "closed": 31,
+            "wins": 8,
+            "net_pnl_usd": 28.5
           }
         }
+      },
+      "readiness": {
+        "env": "testnet",
+        "as_of": "2026-06-07T15:05:12.294220+00:00",
+        "decision_date": "2026-06-13",
+        "validation_window": "2026-06-06 → 2026-06-13",
+        "overall": "conditional",
+        "summary": "Produção condicional: começar com $300-500, somente swing_rider (+DCA opcional), lev ≤3x, ordem ≤$100, dia ≤$300 — SE os componentes dinâmicos passarem na data da decisão.",
+        "config_atual": {
+          "desde": "2026-05-30",
+          "net_usd": -7.84,
+          "monthly_pct_estimate": -1.44,
+          "nota": "config atual (swing-only) fez 14W/0L +$8,83 líquido na semana do crash (BTC -15%), excluída uma posição legada do momentum"
+        },
+        "components": [
+          {
+            "id": "infra",
+            "label": "Infraestrutura (brackets, idempotência, watchdog, breaker, alertas)",
+            "status": "go",
+            "reason": "provada em produção-de-teste: reboot com respawn automático, crash de margem detectado e alertado, cloid-idempotência em retry",
+            "metrics": {}
+          },
+          {
+            "id": "swing_rider",
+            "label": "swing_rider (único agente live)",
+            "status": "pending",
+            "reason": "aguardando trades da semana de validação (precisa ≥3, net ≥ $0 e zero SL falho)",
+            "metrics": {
+              "week_trades": 0,
+              "week_net_usd": 0,
+              "week_wins": 0
+            }
+          },
+          {
+            "id": "dca_btc",
+            "label": "DCA BTC (wallet C)",
+            "status": "pending",
+            "reason": "GO por filosofia (tese BTC, capital separado); requer margem destravada e ≥3 compras executadas na semana",
+            "metrics": {}
+          },
+          {
+            "id": "mean_reverter_lateral",
+            "label": "mean_reverter lateral-gated (lab)",
+            "status": "pending",
+            "reason": "net $28.5; falta: amostra 31/40, concentração top-1 92% (máx 50%)",
+            "metrics": {
+              "trades": 31,
+              "net_usd": 28.5,
+              "payoff": 6.08,
+              "top1_share": 0.92
+            }
+          },
+          {
+            "id": "scalper_lateral",
+            "label": "scalper (lab)",
+            "status": "no_go",
+            "reason": "465+ trades shadow provaram ausência de edge pós-fee (payoff 0,82)",
+            "metrics": {}
+          },
+          {
+            "id": "momentum_bear_hedge",
+            "label": "momentum / bear / hedge",
+            "status": "no_go",
+            "reason": "históricos negativos (momentum -$24 all-time); permanecem shadow/quarentena",
+            "metrics": {}
+          }
+        ]
       },
       "metaAgents": {
         "agents": {
@@ -1852,7 +1984,7 @@
     "prod": {
       "schemaVersion": 1,
       "env": "prod",
-      "capturedAt": "2026-06-06T19:23:52.785Z",
+      "capturedAt": "2026-06-07T15:05:12.331Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -1879,7 +2011,8 @@
           "/api/v1/lab/lateral",
           "/api/v1/meta/agents",
           "/api/v1/meta/wallets",
-          "/api/v1/overview"
+          "/api/v1/overview",
+          "/api/v1/readiness"
         ],
         "public_routes": [
           "/health",
@@ -1892,8 +2025,8 @@
         "defi_kpis": null,
         "circuit_breaker": {
           "available": true,
-          "date": "2026-06-06",
-          "peak_usd": 1528.46,
+          "date": "2026-06-07",
+          "peak_usd": 1393.21,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
@@ -1926,23 +2059,79 @@
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 485,
-        "open": 1,
-        "wins": 259,
-        "win_rate_pct": 53.4,
-        "net_pnl_usd": 31.19,
+        "closed": 566,
+        "open": 2,
+        "wins": 301,
+        "win_rate_pct": 53.2,
+        "net_pnl_usd": 27.5,
         "by_agent": {
           "scalper": {
-            "closed": 464,
-            "wins": 252,
-            "net_pnl_usd": -2.56
+            "closed": 535,
+            "wins": 293,
+            "net_pnl_usd": -1
           },
           "mean_reverter": {
-            "closed": 21,
-            "wins": 7,
-            "net_pnl_usd": 33.75
+            "closed": 31,
+            "wins": 8,
+            "net_pnl_usd": 28.5
           }
         }
+      },
+      "readiness": {
+        "env": "prod",
+        "as_of": "2026-06-07T15:05:12.330642+00:00",
+        "decision_date": "2026-06-13",
+        "validation_window": "2026-06-06 → 2026-06-13",
+        "overall": "no_go",
+        "summary": "Produção condicional: começar com $300-500, somente swing_rider (+DCA opcional), lev ≤3x, ordem ≤$100, dia ≤$300 — SE os componentes dinâmicos passarem na data da decisão.",
+        "config_atual": {
+          "desde": "2026-05-30",
+          "net_usd": null,
+          "monthly_pct_estimate": null,
+          "nota": "config atual (swing-only) fez 14W/0L +$8,83 líquido na semana do crash (BTC -15%), excluída uma posição legada do momentum"
+        },
+        "components": [
+          {
+            "id": "infra",
+            "label": "Infraestrutura (brackets, idempotência, watchdog, breaker, alertas)",
+            "status": "go",
+            "reason": "provada em produção-de-teste: reboot com respawn automático, crash de margem detectado e alertado, cloid-idempotência em retry",
+            "metrics": {}
+          },
+          {
+            "id": "dca_btc",
+            "label": "DCA BTC (wallet C)",
+            "status": "pending",
+            "reason": "GO por filosofia (tese BTC, capital separado); requer margem destravada e ≥3 compras executadas na semana",
+            "metrics": {}
+          },
+          {
+            "id": "mean_reverter_lateral",
+            "label": "mean_reverter lateral-gated (lab)",
+            "status": "pending",
+            "reason": "net $28.5; falta: amostra 31/40, concentração top-1 92% (máx 50%)",
+            "metrics": {
+              "trades": 31,
+              "net_usd": 28.5,
+              "payoff": 6.08,
+              "top1_share": 0.92
+            }
+          },
+          {
+            "id": "scalper_lateral",
+            "label": "scalper (lab)",
+            "status": "no_go",
+            "reason": "465+ trades shadow provaram ausência de edge pós-fee (payoff 0,82)",
+            "metrics": {}
+          },
+          {
+            "id": "momentum_bear_hedge",
+            "label": "momentum / bear / hedge",
+            "status": "no_go",
+            "reason": "históricos negativos (momentum -$24 all-time); permanecem shadow/quarentena",
+            "metrics": {}
+          }
+        ]
       },
       "metaAgents": {
         "agents": {
