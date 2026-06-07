@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-07T16:56:33.482Z",
+  "generatedAt": "2026-06-07T16:57:03.189Z",
   "source": "http://127.0.0.1:8765",
   "bundles": {
     "testnet": {
       "schemaVersion": 1,
       "env": "testnet",
-      "capturedAt": "2026-06-07T16:56:33.447Z",
+      "capturedAt": "2026-06-07T16:57:03.086Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -46,6 +46,8 @@
         "hl_kpis": {
           "equity_usd": 1886.85,
           "equity_source": "exchange_portfolio",
+          "equity_trading_usd": 1224.85,
+          "equity_dca_usd": 662,
           "realized_pnl_usd": -31.04,
           "win_rate_pct": 49,
           "open_positions": 5,
@@ -78,6 +80,8 @@
         "kpis": {
           "equity_usd": 1886.85,
           "equity_source": "exchange_portfolio",
+          "equity_trading_usd": 1224.85,
+          "equity_dca_usd": 662,
           "realized_pnl_usd": -31.04,
           "win_rate_pct": 49,
           "open_positions": 5,
@@ -183,6 +187,27 @@
             }
           },
           "scope": "trading_only"
+        },
+        "dca": {
+          "ts": "2026-06-07T16:55:57.966834+00:00",
+          "wallets": [
+            {
+              "wallet_id": "dca_btc",
+              "asset": "BTC",
+              "qty": 0.010449999999999997,
+              "avg_basis": 70915.79,
+              "invested_usd": 741.07,
+              "mark": 63233,
+              "entry_px": 70925.4,
+              "unrealized_usd": -80.69,
+              "unrealized_pct": -10.9,
+              "available_usd": 0,
+              "needed_usd": 53,
+              "cash_ok": false,
+              "status": "sem_caixa",
+              "message": "SEM CAIXA para a próxima compra (disponível $0.00; precisa ~$53.00). Aguardando aporte de USDC ou recuperação do mercado para realizar lucro."
+            }
+          ]
         },
         "wallets": [
           {
@@ -1852,7 +1877,7 @@
       },
       "readiness": {
         "env": "testnet",
-        "as_of": "2026-06-07T16:56:33.444768+00:00",
+        "as_of": "2026-06-07T16:57:03.084627+00:00",
         "decision_date": "2026-06-13",
         "validation_window": "2026-06-06 → 2026-06-13",
         "overall": "conditional",
@@ -1884,9 +1909,9 @@
           },
           {
             "id": "dca_btc",
-            "label": "DCA BTC (wallet C)",
-            "status": "pending",
-            "reason": "GO por filosofia (tese BTC, capital separado); requer margem destravada e ≥3 compras executadas na semana",
+            "label": "DCA BTC (wallet C) — longo prazo",
+            "status": "out_of_scope",
+            "reason": "FORA da decisão de produção: o DCA é acumulação de longo prazo (compra automática nas quedas para construir preço médio; realiza lucro em momentos ideais). Resultado dele é mark-to-market e depende de aportes — avaliado pela tese em BTC, não pela semana de validação dos traders.",
             "metrics": {}
           },
           {
@@ -1990,7 +2015,7 @@
     "prod": {
       "schemaVersion": 1,
       "env": "prod",
-      "capturedAt": "2026-06-07T16:56:33.482Z",
+      "capturedAt": "2026-06-07T16:57:03.189Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -2085,7 +2110,7 @@
       },
       "readiness": {
         "env": "prod",
-        "as_of": "2026-06-07T16:56:33.481710+00:00",
+        "as_of": "2026-06-07T16:57:03.188639+00:00",
         "decision_date": "2026-06-13",
         "validation_window": "2026-06-06 → 2026-06-13",
         "overall": "no_go",
@@ -2106,9 +2131,9 @@
           },
           {
             "id": "dca_btc",
-            "label": "DCA BTC (wallet C)",
-            "status": "pending",
-            "reason": "GO por filosofia (tese BTC, capital separado); requer margem destravada e ≥3 compras executadas na semana",
+            "label": "DCA BTC (wallet C) — longo prazo",
+            "status": "out_of_scope",
+            "reason": "FORA da decisão de produção: o DCA é acumulação de longo prazo (compra automática nas quedas para construir preço médio; realiza lucro em momentos ideais). Resultado dele é mark-to-market e depende de aportes — avaliado pela tese em BTC, não pela semana de validação dos traders.",
             "metrics": {}
           },
           {
