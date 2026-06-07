@@ -6,6 +6,10 @@ export interface PanelKpis {
   equity_usd?: number;
   /** "exchange_portfolio" = fonte corretora (3 carteiras); "decisions_ab" = fallback */
   equity_source?: string;
+  /** Equity das carteiras de TRADING (A+B) — base da decisão de produção. */
+  equity_trading_usd?: number | null;
+  /** Equity da carteira DCA (longo prazo) — reportada à parte. */
+  equity_dca_usd?: number | null;
   realized_pnl_usd?: number;
   win_rate_pct?: number;
   open_positions?: number;
@@ -120,6 +124,29 @@ export interface HlAccountBalance {
   spot_usdc?: number;
   total_usd?: number;
   open_positions?: number;
+  /** "trading" (A/B — decide produção) ou "dca" (longo prazo, à parte). */
+  kind?: "trading" | "dca" | string;
+}
+
+export interface DcaWalletStatus {
+  wallet_id?: string;
+  asset?: string;
+  qty?: number;
+  avg_basis?: number | null;
+  invested_usd?: number;
+  mark?: number | null;
+  unrealized_usd?: number;
+  unrealized_pct?: number | null;
+  available_usd?: number;
+  needed_usd?: number;
+  cash_ok?: boolean;
+  status?: "pronta" | "sem_caixa" | string;
+  message?: string;
+}
+
+export interface DcaStatus {
+  ts?: string;
+  wallets?: DcaWalletStatus[];
 }
 
 export interface HlAccounts {
@@ -136,8 +163,10 @@ export interface HlSummary {
   kpis?: PanelKpis;
   /** Saldos por wallet direto da corretora (inclui a wallet DCA). */
   accounts?: HlAccounts | null;
-  /** Janelas de resultado da corretora (fonte-verdade) + % mensal estimado. */
+  /** Janelas de resultado da corretora (escopo TRADING) + % mensal estimado. */
   performance?: HlPerformance | null;
+  /** Status didático da carteira DCA (longo prazo, fora da decisão). */
+  dca?: DcaStatus | null;
   /** Visão atribuída pelo brain (sem fees) — só para a tabela de agentes. */
   attributed?: {
     realized_pnl_usd?: number;

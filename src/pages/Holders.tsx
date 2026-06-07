@@ -58,6 +58,7 @@ import {
   type LabLateral,
   type MetaAgents,
   type MetaWallets,
+  type DcaStatus,
   type PanelBundle,
   type PanelDataSource,
   type PanelEnv,
@@ -624,9 +625,25 @@ function OverviewTab({ bundle }: { bundle: PanelBundle }) {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricTile label="Equity HL" value={formatCurrency(hlKpis?.equity_usd)} detail="HyperLiquid" icon={LineChart} />
-        <MetricTile label="PnL realizado" value={formatCurrency(hlKpis?.realized_pnl_usd)} detail={`Win rate ${formatPct(hlKpis?.win_rate_pct)}`} icon={Activity} />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <MetricTile
+          label="Equity Trading (A+B)"
+          value={formatCurrency(hlKpis?.equity_trading_usd)}
+          detail="decide a producao"
+          icon={LineChart}
+        />
+        <MetricTile
+          label="DCA BTC (longo prazo)"
+          value={formatCurrency(hlKpis?.equity_dca_usd)}
+          detail="fora dos percentuais"
+          icon={Database}
+        />
+        <MetricTile
+          label="PnL liquido 30d (trading)"
+          value={formatCurrency(hlKpis?.realized_pnl_usd)}
+          detail={`Win rate ${formatPct(hlKpis?.win_rate_pct)}`}
+          icon={Activity}
+        />
         <MetricTile label="Valor DeFi" value={formatCurrency(defiKpis?.value_usd)} detail={`${formatNumber(defiKpis?.positions)} posicoes`} icon={Layers} />
         <MetricTile label="Rewards DeFi" value={formatCurrency(defiKpis?.rewards_usd)} detail={`${formatPct(defiKpis?.in_range_pct)} in range`} icon={Zap} />
       </div>
@@ -690,16 +707,31 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <MetricTile label="Equity (3 carteiras)" value={formatCurrency(kpis?.equity_usd)} icon={LineChart} />
-        <MetricTile label="PnL liquido 30d (corretora)" value={formatCurrency(kpis?.realized_pnl_usd)} icon={Activity} />
-        <MetricTile label="Win rate (corretora)" value={formatPct(kpis?.win_rate_pct)} icon={CheckCircle2} />
-        <MetricTile label="Posicoes (corretora)" value={formatNumber(kpis?.open_positions)} icon={Table2} />
         <MetricTile
-          label="% mes estimado (30d)"
+          label="Equity TRADING (A+B)"
+          value={formatCurrency(kpis?.equity_trading_usd)}
+          icon={LineChart}
+        />
+        <MetricTile
+          label="DCA BTC (longo prazo)"
+          value={formatCurrency(kpis?.equity_dca_usd)}
+          icon={Database}
+        />
+        <MetricTile label="PnL liquido 30d (trading)" value={formatCurrency(kpis?.realized_pnl_usd)} icon={Activity} />
+        <MetricTile label="Win rate (trading)" value={formatPct(kpis?.win_rate_pct)} icon={CheckCircle2} />
+        <MetricTile
+          label="% mes estimado (trading)"
           value={formatSignedPct(kpis?.monthly_pct_estimate)}
           icon={BarChart3}
         />
       </div>
+      <p className="text-xs text-muted-foreground">
+        Percentuais e PnL acima sao SOMENTE das carteiras de trading (A+B). O DCA e
+        acumulacao de longo prazo e e mostrado separado abaixo — o resultado dele nao
+        contamina o desempenho dos agentes.
+      </p>
+
+      <DcaCard dca={hl?.dca} />
 
       {hl?.performance?.windows && Object.keys(hl.performance.windows).length > 0 && (
         <div className="space-y-4">
@@ -730,7 +762,7 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
           <SectionTitle icon={Database} title="Carteiras na corretora" />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <MetricTile
-              label="Equity total (todas as carteiras)"
+              label="Equity total (trading + DCA)"
               value={formatCurrency(accounts.equity_total_usd)}
               icon={LineChart}
             />
@@ -741,9 +773,20 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
             />
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {(accounts.wallets ?? []).map((w) => (
-              <article key={w.wallet_id} className="surface rounded-lg p-4">
-                <div className="text-sm font-semibold capitalize">{w.wallet_id}</div>
+            {(accounts.wallets ?? []).map((w, i) => (
+              <article
+                key={w.wallet_id ?? `w-${i}`}
+                className={`surface rounded-lg p-4 ${w.kind === "dca" ? "border-indigo-500/30" : ""}`}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="text-sm font-semibold capitalize">{w.wallet_id}</div>
+                  {w.kind === "dca" && (
+                    <Badge className="bg-indigo-500/15 text-indigo-300 border-indigo-500/30">DCA · longo prazo</Badge>
+                  )}
+                  {w.kind === "trading" && (
+                    <Badge className="bg-primary/10 text-primary border-primary/30">trading</Badge>
+                  )}
+                </div>
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                   <div>
                     <div className="text-xs text-muted-foreground">Perp (margem)</div>
@@ -766,8 +809,9 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
             ))}
           </div>
           <p className="text-xs text-muted-foreground">
-            Saldos lidos direto da corretora pelo Master Observer (inclui a carteira DCA,
-            que nao entra no equity de trading acima).
+            Saldos lidos direto da corretora pelo Master Observer. As carteiras de TRADING
+            (A direcional, B contraria) decidem a producao; a DCA acumula BTC no longo prazo
+            e e avaliada separadamente.
           </p>
         </div>
       )}
@@ -800,7 +844,65 @@ function windowRank(key: string) {
 function statusBadge(status?: string) {
   if (status === "go") return <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30">GO</Badge>;
   if (status === "no_go") return <Badge className="bg-red-500/15 text-red-400 border-red-500/30">NO-GO</Badge>;
+  if (status === "out_of_scope")
+    return <Badge className="bg-slate-500/15 text-slate-300 border-slate-500/30">FORA DA DECISAO</Badge>;
   return <Badge className="bg-amber-500/15 text-amber-400 border-amber-500/30">PENDENTE</Badge>;
+}
+
+function DcaCard({ dca }: { dca?: DcaStatus | null }) {
+  const w = dca?.wallets?.[0];
+  if (!w) return null;
+  const negative = typeof w.unrealized_usd === "number" && w.unrealized_usd < 0;
+  return (
+    <article className="surface rounded-lg border-indigo-500/30 p-5">
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="text-lg font-semibold">DCA BTC — longo prazo</h3>
+        <Badge className="bg-indigo-500/15 text-indigo-300 border-indigo-500/30">FORA DA DECISAO DE PRODUCAO</Badge>
+        {w.cash_ok ? (
+          <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30">CAIXA OK</Badge>
+        ) : (
+          <Badge className="bg-amber-500/15 text-amber-400 border-amber-500/30">SEM CAIXA</Badge>
+        )}
+      </div>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        Compra {w.asset ?? "BTC"} automaticamente nas quedas para construir um preco medio bom e
+        realiza lucro em momentos ideais. O resultado dela e de LONGO PRAZO (no papel) e nao entra
+        nos percentuais de trading nem na decisao de producao.
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
+        <div>
+          <div className="text-xs text-muted-foreground">Posicao</div>
+          <div className="font-medium">{w.qty ?? 0} {w.asset ?? "BTC"}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Preco medio</div>
+          <div className="font-medium">{formatCurrency(w.avg_basis)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Investido</div>
+          <div className="font-medium">{formatCurrency(w.invested_usd)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">No papel</div>
+          <div className={`font-medium ${negative ? "text-red-400" : "text-emerald-400"}`}>
+            {formatCurrency(w.unrealized_usd)}
+            {typeof w.unrealized_pct === "number" ? ` (${formatSignedPct(w.unrealized_pct)})` : ""}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Caixa disponivel</div>
+          <div className="font-medium">{formatCurrency(w.available_usd)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Precisa p/ proxima compra</div>
+          <div className="font-medium">{formatCurrency(w.needed_usd)}</div>
+        </div>
+      </div>
+      {w.message && (
+        <p className="mt-4 rounded-md border border-border/60 bg-muted/20 p-3 text-sm">{w.message}</p>
+      )}
+    </article>
+  );
 }
 
 function ReadinessTab({ bundle }: { bundle: PanelBundle }) {
