@@ -21,10 +21,13 @@ import {
   CheckCircle2,
   Clock3,
   Database,
+  ExternalLink,
+  Eye,
   Layers,
   LineChart,
   Loader2,
   Lock,
+  Newspaper,
   RefreshCw,
   ShieldCheck,
   Table2,
@@ -59,6 +62,12 @@ import {
   type MetaAgents,
   type MetaWallets,
   type DcaStatus,
+  type DirectionalBias,
+  type LivePosition,
+  type NewsPanelSummary,
+  type NewsSection,
+  type NewsSuggestion,
+  type NewsTopItem,
   type PanelBundle,
   type PanelDataSource,
   type PanelEnv,
@@ -732,10 +741,76 @@ function OverviewTab({ bundle }: { bundle: PanelBundle }) {
   );
 }
 
+function NewsSentinelAgentCard({ bundle }: { bundle: PanelBundle }) {
+  const sentinel = bundle.news?.sentinel;
+  const meta = bundle.metaAgents?.agents?.["news_sentinel"];
+  // Mostra o card mesmo sem dados (sentinel pode vir null se o endpoint /news
+  // ainda nao estiver no snapshot) — explica o papel do agente.
+  return (
+    <article className="surface rounded-lg border-sky-500/30 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="flex items-center gap-2 text-base font-semibold">
+            <Newspaper className="h-4 w-4 text-sky-300" />
+            News Sentinel
+          </h3>
+          <p className="mt-1 text-xs uppercase text-muted-foreground">
+            {meta?.family ?? "news_sentiment"}
+          </p>
+        </div>
+        <Badge variant="outline" className="border-sky-500/40 bg-sky-500/10 text-sky-300">
+          advisory
+        </Badge>
+      </div>
+      <p className="mt-4 min-h-[54px] text-sm leading-relaxed text-muted-foreground">
+        {meta?.desc ??
+          "Monitora noticias (cripto, Brasil, global, macro), mede sentimento e " +
+            "sugere acoes. Atua em CONJUNTO: vota no consenso com os agentes tecnicos " +
+            "e bloqueia entradas em evento critico. Nunca executa ordens proprias."}
+      </p>
+      <div className="mt-5 grid grid-cols-3 gap-3 text-sm">
+        <div>
+          <div className="text-xs text-muted-foreground">Noticias 24h</div>
+          <div className="font-semibold tabular-nums">{formatNumber(sentinel?.news_24h)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Sugestoes ativas</div>
+          <div className="font-semibold tabular-nums">{formatNumber(sentinel?.suggestions_active)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Decisoes conjuntas (7d)</div>
+          <div className="font-semibold tabular-nums">{formatNumber(sentinel?.joint_decisions_7d)}</div>
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+        {typeof sentinel?.critical_24h === "number" && sentinel.critical_24h > 0 && (
+          <Badge variant="outline" className="border-red-500/40 bg-red-500/10 text-red-300">
+            {sentinel.critical_24h} evento(s) critico(s) 24h
+          </Badge>
+        )}
+        <span>
+          Resultado de um agente consultivo nao e PnL proprio — veja a aba{" "}
+          <b className="text-foreground">Noticias</b> para sugestoes, mercados e impacto.
+        </span>
+      </div>
+    </article>
+  );
+}
+
 function AgentsTab({ bundle }: { bundle: PanelBundle }) {
   return (
     <div className="space-y-8">
       <AgentCards hl={bundle.hl} metaAgents={bundle.metaAgents} />
+      <div className="space-y-4">
+        <SectionTitle
+          icon={Newspaper}
+          title="Agente de inteligencia (advisory)"
+          description="Trabalha junto dos agentes trader: adiciona contexto de noticias e veta entradas de risco, sem operar sozinho."
+        />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          <NewsSentinelAgentCard bundle={bundle} />
+        </div>
+      </div>
       <div className="space-y-4">
         <SectionTitle icon={Wallet} title="Carteiras de trading" />
         <WalletTopology hl={bundle.hl} metaWallets={bundle.metaWallets} />
@@ -861,6 +936,8 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
         </div>
       )}
 
+      <DirectionalBiasSection bias={hl?.directional_bias} live={hl?.live_positions} />
+
       <div className="space-y-4">
         <SectionTitle icon={BarChart3} title="PnL por ativo e lado" />
         <PnlChart rows={hl?.pnl_by_symbol_side ?? []} />
@@ -870,6 +947,112 @@ function HyperLiquidTab({ bundle }: { bundle: PanelBundle }) {
         <SectionTitle icon={Activity} title="Posicoes abertas" />
         <PositionsTable rows={bundle.hlPositions?.positions} />
       </div>
+    </div>
+  );
+}
+
+function DirectionalBiasSection({
+  bias,
+  live,
+}: {
+  bias?: DirectionalBias | null;
+  live?: LivePosition[] | null;
+}) {
+  if (!bias) return null;
+  const buy = bias.buy_trades ?? 0;
+  const sell = bias.sell_trades ?? 0;
+  const total = buy + sell;
+  const shortPct = total ? Math.round((sell / total) * 100) : 0;
+  const longPct = 100 - shortPct;
+  const agents = (bias.by_agent ?? []).filter((a) => (a.buy ?? 0) + (a.sell ?? 0) > 0);
+
+  return (
+    <div className="space-y-4">
+      <SectionTitle icon={Activity} title="Vies Long / Short — os agentes operam os dois lados?" />
+      <article className="surface rounded-lg p-5">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium text-emerald-400">LONG (compra) · {longPct}%</span>
+          <span className="font-medium text-red-400">{shortPct}% · SHORT (venda)</span>
+        </div>
+        <div className="mt-2 flex h-3 overflow-hidden rounded-full bg-muted/40">
+          <div className="bg-emerald-500/70" style={{ width: `${longPct}%` }} />
+          <div className="bg-red-500/70" style={{ width: `${shortPct}%` }} />
+        </div>
+        <div className="mt-2 text-xs text-muted-foreground">
+          {buy} operacoes long · {sell} operacoes short (historico fechado)
+        </div>
+        <p className="mt-3 rounded-md border border-border/60 bg-muted/10 p-3 text-sm text-muted-foreground">
+          Predominancia de SHORT reflete o <b className="text-foreground">mercado de queda</b> do
+          periodo — nao e uma trava de codigo. Os motores sao bidirecionais: abrem LONG quando
+          aparece o setup de alta (cruzamento de medias para cima / fundo de range) e SHORT na
+          queda. Quando o mercado virar, os longs aparecem aqui.
+        </p>
+
+        {agents.length > 0 && (
+          <div className="mt-4 space-y-2">
+            {agents.map((a) => {
+              const t = (a.buy ?? 0) + (a.sell ?? 0);
+              const sp = t ? Math.round(((a.sell ?? 0) / t) * 100) : 0;
+              return (
+                <div key={a.agent_id} className="flex items-center gap-3 text-sm">
+                  <span className="w-32 shrink-0 font-medium">{agentLabel(a.agent_id)}</span>
+                  <div className="flex h-2 flex-1 overflow-hidden rounded-full bg-muted/40">
+                    <div className="bg-emerald-500/70" style={{ width: `${100 - sp}%` }} />
+                    <div className="bg-red-500/70" style={{ width: `${sp}%` }} />
+                  </div>
+                  <span className="w-28 shrink-0 text-right text-xs text-muted-foreground">
+                    {a.buy ?? 0}L / {a.sell ?? 0}S
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </article>
+
+      {live && live.length > 0 && (
+        <div className="surface rounded-lg overflow-hidden">
+          <div className="border-b border-border/60 px-4 py-3 text-sm font-medium">
+            Posicoes abertas agora (ao vivo, com P&amp;L no papel)
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Ativo</TableHead>
+                <TableHead>Direcao</TableHead>
+                <TableHead>Agente</TableHead>
+                <TableHead className="text-right">P&amp;L (papel)</TableHead>
+                <TableHead className="text-right">ROE</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {live.map((p, i) => (
+                <TableRow key={`${p.symbol}-${p.wallet_id}-${i}`}>
+                  <TableCell className="font-medium">{p.symbol}</TableCell>
+                  <TableCell>
+                    <span className={p.side === "LONG" ? "text-emerald-400" : "text-red-400"}>
+                      {p.side} {p.leverage ? `${p.leverage}x` : ""}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {p.agent_id ? agentLabel(p.agent_id) : p.wallet_id ?? "—"}
+                  </TableCell>
+                  <TableCell className={`text-right font-semibold ${pnlClass(p.unrealized_usd)}`}>
+                    {formatCurrency(p.unrealized_usd)}
+                  </TableCell>
+                  <TableCell className={`text-right ${pnlClass(p.roe_pct)}`}>
+                    {formatSignedPct(p.roe_pct)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <p className="px-4 py-3 text-xs text-muted-foreground">
+            P&amp;L "no papel" oscila ate a posicao fechar. Cada uma tem stop-loss e o robo de
+            saida fecha sozinho no lucro (ROE ≥ 2,8%) — nao precisa intervir.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -1128,6 +1311,368 @@ function DefiTab({ bundle }: { bundle: PanelBundle }) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// NewsSentinel — aba Notícias (didática, padrão DeFi/HL)
+// ---------------------------------------------------------------------------
+
+const NEWS_ACTION_LABEL: Record<string, string> = {
+  BUY: "Comprar",
+  INCREASE: "Aumentar",
+  HOLD: "Manter",
+  WATCH: "Observar",
+  WAIT_CONFIRMATION: "Aguardar confirmacao",
+  SELL: "Vender",
+  REDUCE: "Reduzir",
+  HEDGE: "Proteger (hedge)",
+  BLOCK_TRADE: "Entrada bloqueada",
+};
+
+const NEWS_MARKET_FLAG: Record<string, string> = {
+  CRYPTO: "🪙",
+  TRADITIONAL_BR: "🇧🇷",
+  TRADITIONAL_GLOBAL: "🌎",
+  MACRO_CROSS_MARKET: "🌐",
+};
+
+function newsActionClass(action?: string) {
+  if (action === "BUY" || action === "INCREASE")
+    return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
+  if (action === "SELL" || action === "REDUCE")
+    return "border-orange-500/40 bg-orange-500/10 text-orange-300";
+  if (action === "BLOCK_TRADE")
+    return "border-red-500/40 bg-red-500/10 text-red-300";
+  if (action === "HEDGE")
+    return "border-indigo-500/40 bg-indigo-500/10 text-indigo-300";
+  if (action === "WAIT_CONFIRMATION")
+    return "border-amber-500/40 bg-amber-500/10 text-amber-300";
+  return "border-sky-500/40 bg-sky-500/10 text-sky-300"; // WATCH/HOLD
+}
+
+function newsRiskClass(risk?: string) {
+  if (risk === "CRITICAL") return "border-red-500/40 bg-red-500/10 text-red-300";
+  if (risk === "HIGH") return "border-orange-500/40 bg-orange-500/10 text-orange-300";
+  if (risk === "MEDIUM") return "border-amber-500/40 bg-amber-500/10 text-amber-300";
+  return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
+}
+
+function sentimentBadge(sentiment?: string) {
+  if (sentiment === "positive")
+    return <Badge className="border-emerald-500/40 bg-emerald-500/10 text-emerald-300">otimista</Badge>;
+  if (sentiment === "negative")
+    return <Badge className="border-red-500/40 bg-red-500/10 text-red-300">pessimista</Badge>;
+  return <Badge variant="outline" className="text-muted-foreground">neutra</Badge>;
+}
+
+function safeNewsUrl(url?: string) {
+  if (!url) return undefined;
+  return url.startsWith("https://") || url.startsWith("http://") ? url : undefined;
+}
+
+function NewsItemCard({ item }: { item: NewsTopItem }) {
+  const href = safeNewsUrl(item.url);
+  return (
+    <article className="surface rounded-lg p-4">
+      <div className="flex flex-wrap items-center gap-2">
+        {sentimentBadge(item.sentiment)}
+        {(item.symbols ?? []).slice(0, 4).map((symbol) => (
+          <Badge key={symbol} variant="secondary" className="bg-secondary/80">
+            {symbol}
+          </Badge>
+        ))}
+        <span className="text-xs text-muted-foreground">
+          {item.source ?? "-"} · {formatDateTime(item.published_at)}
+        </span>
+      </div>
+      <p className="mt-2 text-sm font-medium leading-snug">
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-start gap-1 hover:text-primary"
+          >
+            {item.title ?? "-"}
+            <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+          </a>
+        ) : (
+          item.title ?? "-"
+        )}
+      </p>
+      {item.summary && (
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.summary}</p>
+      )}
+      <div className="mt-2 text-[11px] uppercase tracking-wide text-muted-foreground">
+        impacto {formatNumber(item.impact_score)} / 100 · relevancia {formatNumber(item.relevance_score)} / 100
+      </div>
+    </article>
+  );
+}
+
+function NewsSuggestionsTable({ suggestions }: { suggestions: NewsSuggestion[] }) {
+  if (!suggestions.length) return null;
+  return (
+    <div className="surface rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Ativo</TableHead>
+            <TableHead>Sugestao</TableHead>
+            <TableHead className="text-right">Confianca</TableHead>
+            <TableHead>Risco</TableHead>
+            <TableHead>Por que</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {suggestions.map((suggestion, index) => (
+            <TableRow key={`${suggestion.asset}-${suggestion.action}-${index}`}>
+              <TableCell className="font-medium">
+                {suggestion.asset === "*" ? "Todos os mercados" : suggestion.asset ?? "-"}
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline" className={newsActionClass(suggestion.action)}>
+                  {NEWS_ACTION_LABEL[suggestion.action ?? ""] ?? suggestion.action ?? "-"}
+                </Badge>
+                {suggestion.requires_human_review && (
+                  <Badge variant="outline" className="ml-2 border-amber-500/40 bg-amber-500/10 text-amber-300">
+                    revisao humana
+                  </Badge>
+                )}
+              </TableCell>
+              <TableCell className="text-right tabular-nums">
+                {formatPct(
+                  typeof suggestion.confidence === "number" ? suggestion.confidence * 100 : undefined,
+                )}
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline" className={newsRiskClass(suggestion.risk)}>
+                  {suggestion.risk ?? "-"}
+                </Badge>
+              </TableCell>
+              <TableCell className="max-w-[420px] text-sm text-muted-foreground">
+                {suggestion.reason ?? "-"}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+
+function NewsMarketSection({ section }: { section: NewsSection }) {
+  const news = section.topNews ?? [];
+  const suggestions = section.suggestions ?? [];
+  if (!news.length && !suggestions.length) return null;
+  const flag = NEWS_MARKET_FLAG[section.market ?? ""] ?? "📰";
+  return (
+    <div className="space-y-4">
+      <SectionTitle
+        icon={Newspaper}
+        title={`${flag} ${section.title ?? section.market ?? "Mercado"}`}
+        description={section.summary}
+      />
+      {suggestions.length > 0 && <NewsSuggestionsTable suggestions={suggestions} />}
+      {news.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          {news.map((item, index) => (
+            <NewsItemCard key={`${item.url}-${index}`} item={item} />
+          ))}
+        </div>
+      ) : (
+        <EmptyBlock label="Sem noticias relevantes nesta janela." />
+      )}
+    </div>
+  );
+}
+
+function NewsTab({ bundle }: { bundle: PanelBundle }) {
+  const news: NewsPanelSummary | null | undefined = bundle.news;
+  const sentinel = news?.sentinel;
+
+  if (!news) {
+    return (
+      <EmptyBlock label="Painel de noticias indisponivel neste snapshot — atualize o snapshot com o endpoint /news/summary." />
+    );
+  }
+  if (news.empty) {
+    return (
+      <div className="space-y-6">
+        <EmptyBlock label={news.reason ?? "Sem noticias na janela — aguardando o proximo ciclo do NewsSentinel."} />
+        {sentinel && <NewsSentinelPerformance sentinel={sentinel} />}
+      </div>
+    );
+  }
+
+  const blocks = (news.top_risks ?? []).filter((r) => r.action === "BLOCK_TRADE");
+
+  return (
+    <div className="space-y-8">
+      {/* Como ler — didatico, mesmo espirito do card "Entendendo os numeros" */}
+      <article className="surface rounded-lg p-5">
+        <SectionTitle icon={Newspaper} title="Como ler este painel (em 30 segundos)" />
+        <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+          <p>
+            O <b className="text-foreground">NewsSentinel</b> e o agente de noticias do time: ele le
+            fontes gratuitas de <b className="text-foreground">cripto, Brasil, mercado global e macroeconomia</b>,
+            mede o sentimento de cada noticia e transforma isso em <b className="text-foreground">sugestoes
+            por ativo</b> — comprar, observar, reduzir, proteger ou bloquear entrada.
+          </p>
+          <p>
+            Importante: ele <b className="text-foreground">nunca executa ordens</b>. As sugestoes entram na
+            decisao CONJUNTA com os agentes tecnicos (Swing Rider, Mean Reverter, etc.) e o gestor de
+            risco — noticia sozinha nao move dinheiro. Noticia critica (hack, insolvencia) apenas{" "}
+            <b className="text-foreground">bloqueia novas entradas</b> no ativo; nunca fecha posicao.
+          </p>
+          <div className="flex flex-wrap gap-2 text-xs">
+            <Badge variant="outline" className={newsActionClass("BUY")}>Comprar = noticia + tecnico alinhados</Badge>
+            <Badge variant="outline" className={newsActionClass("WATCH")}>Observar = relevante, sem direcao clara</Badge>
+            <Badge variant="outline" className={newsActionClass("WAIT_CONFIRMATION")}>Aguardar = fonte unica, falta confirmacao</Badge>
+            <Badge variant="outline" className={newsActionClass("BLOCK_TRADE")}>Bloqueio = evento critico no ativo</Badge>
+          </div>
+        </div>
+      </article>
+
+      {/* KPIs do ciclo */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <MetricTile
+          label="Noticias (24h)"
+          value={formatNumber(sentinel?.news_24h)}
+          detail={`ultimo ciclo ${formatDateTime(sentinel?.last_cycle_ts ?? undefined)}`}
+          icon={Newspaper}
+        />
+        <MetricTile
+          label="Eventos criticos (24h)"
+          value={formatNumber(sentinel?.critical_24h)}
+          detail="hack / insolvencia / depeg"
+          icon={AlertTriangle}
+        />
+        <MetricTile
+          label="Sugestoes ativas"
+          value={formatNumber(sentinel?.suggestions_active)}
+          detail={`${formatNumber(sentinel?.human_review_pending)} aguardando revisao humana`}
+          icon={Eye}
+        />
+        <MetricTile
+          label="Confianca media"
+          value={formatPct(
+            typeof sentinel?.avg_confidence_active === "number"
+              ? sentinel.avg_confidence_active * 100
+              : undefined,
+          )}
+          detail="das sugestoes ativas"
+          icon={CheckCircle2}
+        />
+      </div>
+
+      {/* Bloqueios criticos em destaque */}
+      {blocks.length > 0 && (
+        <div className="surface rounded-lg border-red-500/30 p-4">
+          <div className="flex items-center gap-2 font-semibold text-red-300">
+            <AlertTriangle className="h-4 w-4" />
+            Entradas bloqueadas por evento critico
+          </div>
+          <div className="mt-3 space-y-2 text-sm text-muted-foreground">
+            {blocks.map((block, index) => (
+              <p key={`${block.asset}-${index}`}>
+                <b className="text-foreground">{block.asset}</b>: {block.block_trade_reason ?? block.reason}
+              </p>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Bloqueio vale apenas para NOVAS entradas — posicoes abertas continuam gerenciadas
+            pelos daemons de protecao (mesmo contrato do circuit breaker).
+          </p>
+        </div>
+      )}
+
+      {/* Oportunidades + riscos */}
+      {(news.top_opportunities?.length ?? 0) > 0 && (
+        <div className="space-y-4">
+          <SectionTitle
+            icon={Zap}
+            title="Oportunidades em observacao"
+            description="Sugestoes positivas — so viram operacao com confirmacao dos agentes tecnicos."
+          />
+          <NewsSuggestionsTable suggestions={news.top_opportunities ?? []} />
+        </div>
+      )}
+      {(news.top_risks?.length ?? 0) > 0 && (
+        <div className="space-y-4">
+          <SectionTitle
+            icon={ShieldCheck}
+            title="Riscos e protecoes"
+            description="Onde o agente sugere reduzir, proteger ou esperar."
+          />
+          <NewsSuggestionsTable suggestions={news.top_risks ?? []} />
+        </div>
+      )}
+
+      {/* 4 mercados */}
+      {(news.sections ?? []).map((section) => (
+        <NewsMarketSection key={section.market} section={section} />
+      ))}
+
+      {/* Performance do agente */}
+      {sentinel && <NewsSentinelPerformance sentinel={sentinel} />}
+
+      <p className="text-xs text-muted-foreground">{news.disclaimer}</p>
+    </div>
+  );
+}
+
+function NewsSentinelPerformance({
+  sentinel,
+}: {
+  sentinel: NonNullable<NewsPanelSummary["sentinel"]>;
+}) {
+  const byAction = Object.entries(sentinel.by_action_7d ?? {});
+  return (
+    <article className="surface rounded-lg border-primary/30 p-5">
+      <div className="flex flex-wrap items-center gap-3">
+        <Bot className="h-5 w-5 text-primary" />
+        <h3 className="text-lg font-semibold">NewsSentinel — performance do agente</h3>
+        <Badge className="bg-sky-500/15 text-sky-300 border-sky-500/30">ADVISORY · nunca executa</Badge>
+      </div>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        Por ser um agente consultivo, a performance dele nao e PnL proprio: e a qualidade da
+        inteligencia produzida — noticias processadas, sugestoes emitidas e decisoes conjuntas
+        com os agentes tecnicos. Quando as decisoes conjuntas acumularem resultado, a taxa de
+        acerto aparece aqui.
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
+        <div>
+          <div className="text-xs text-muted-foreground">Sugestoes (7 dias)</div>
+          <div className="font-semibold tabular-nums">{formatNumber(sentinel.suggestions_7d)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Decisoes conjuntas (7d)</div>
+          <div className="font-semibold tabular-nums">{formatNumber(sentinel.joint_decisions_7d)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Revisao humana pendente</div>
+          <div className="font-semibold tabular-nums">{formatNumber(sentinel.human_review_pending)}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Ultimo ciclo</div>
+          <div className="font-semibold">{formatDateTime(sentinel.last_cycle_ts ?? undefined)}</div>
+        </div>
+      </div>
+      {byAction.length > 0 && (
+        <div className="mt-4">
+          <div className="text-xs uppercase text-muted-foreground">Distribuicao das sugestoes (7 dias)</div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {byAction.map(([action, count]) => (
+              <Badge key={action} variant="outline" className={newsActionClass(action)}>
+                {NEWS_ACTION_LABEL[action] ?? action}: {count}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+    </article>
+  );
+}
+
 function LabTab({ bundle }: { bundle: PanelBundle }) {
   const lab = bundle.lab;
   const byAgent = Object.entries(lab?.by_agent ?? {});
@@ -1346,7 +1891,8 @@ function Dashboard({
           </div>
           <h1 className="mt-4 text-3xl font-semibold md:text-5xl">Holders</h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Agentes trader, HyperLiquid, DeFi, risco, laboratorio e operacoes fechadas.
+            Agentes trader, HyperLiquid, DeFi, noticias de mercado, risco, laboratorio e
+            operacoes fechadas.
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             <span>Atualizado {formatDateTime(bundle.capturedAt)}</span>
@@ -1401,6 +1947,10 @@ function Dashboard({
             <Layers className="h-4 w-4" />
             DeFi
           </TabsTrigger>
+          <TabsTrigger value="news" className="gap-2">
+            <Newspaper className="h-4 w-4" />
+            Noticias
+          </TabsTrigger>
           <TabsTrigger value="ops" className="gap-2">
             <Table2 className="h-4 w-4" />
             Operacoes
@@ -1430,6 +1980,9 @@ function Dashboard({
         </TabsContent>
         <TabsContent value="defi">
           <DefiTab bundle={bundle} />
+        </TabsContent>
+        <TabsContent value="news">
+          <NewsTab bundle={bundle} />
         </TabsContent>
         <TabsContent value="ops">
           <OperationsTab bundle={bundle} />

@@ -149,6 +149,34 @@ export interface DcaStatus {
   wallets?: DcaWalletStatus[];
 }
 
+export interface DirectionalAgentBias {
+  agent_id?: string;
+  buy?: number;
+  sell?: number;
+  buy_pnl?: number;
+  sell_pnl?: number;
+}
+
+export interface DirectionalBias {
+  buy_trades?: number;
+  sell_trades?: number;
+  buy_pnl_usd?: number;
+  sell_pnl_usd?: number;
+  short_share_pct?: number | null;
+  by_agent?: DirectionalAgentBias[];
+}
+
+export interface LivePosition {
+  symbol?: string;
+  side?: "LONG" | "SHORT" | string;
+  leverage?: number;
+  entry_px?: number;
+  unrealized_usd?: number;
+  roe_pct?: number;
+  wallet_id?: string;
+  agent_id?: string;
+}
+
 export interface HlAccounts {
   ts?: string;
   equity_total_usd?: number;
@@ -167,6 +195,10 @@ export interface HlSummary {
   performance?: HlPerformance | null;
   /** Status didático da carteira DCA (longo prazo, fora da decisão). */
   dca?: DcaStatus | null;
+  /** Viés long/short por agente (histórico). */
+  directional_bias?: DirectionalBias | null;
+  /** Posições abertas ao vivo com direção/uPnL. */
+  live_positions?: LivePosition[] | null;
   /** Visão atribuída pelo brain (sem fees) — só para a tabela de agentes. */
   attributed?: {
     realized_pnl_usd?: number;
@@ -269,6 +301,108 @@ export interface MetaAgents {
   agents?: Record<string, { family?: string; desc?: string }>;
 }
 
+// --- NewsSentinel Free (painel de notícias do holder) -----------------------
+
+export type NewsMarket =
+  | "CRYPTO"
+  | "TRADITIONAL_BR"
+  | "TRADITIONAL_GLOBAL"
+  | "MACRO_CROSS_MARKET"
+  | string;
+
+export type NewsAction =
+  | "BUY"
+  | "SELL"
+  | "HOLD"
+  | "REDUCE"
+  | "INCREASE"
+  | "WATCH"
+  | "BLOCK_TRADE"
+  | "HEDGE"
+  | "WAIT_CONFIRMATION"
+  | string;
+
+export interface NewsTopItem {
+  title?: string;
+  summary?: string;
+  source?: string;
+  url?: string;
+  published_at?: string;
+  symbols?: string[];
+  event_type?: string;
+  sentiment?: "positive" | "negative" | "neutral" | string;
+  sentiment_score?: number | null;
+  impact_score?: number | null;
+  relevance_score?: number | null;
+}
+
+export interface NewsSuggestion {
+  asset?: string;
+  market?: NewsMarket;
+  action?: NewsAction;
+  time_horizon?: string;
+  reason?: string;
+  bullish_factors?: string[];
+  bearish_factors?: string[];
+  conflicting_signals?: string[];
+  agents_to_notify?: string[];
+  confidence?: number | null;
+  risk?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | string;
+  requires_human_review?: boolean;
+  block_trade_reason?: string | null;
+  ts?: string;
+}
+
+export interface NewsSection {
+  market?: NewsMarket;
+  title?: string;
+  summary?: string;
+  topNews?: NewsTopItem[];
+  suggestions?: NewsSuggestion[];
+}
+
+export interface NewsSentinelStats {
+  agent_id?: string;
+  /** "advisory" — o agente sugere e vota no consenso; nunca executa ordens. */
+  status?: string;
+  news_24h?: number;
+  critical_24h?: number;
+  suggestions_active?: number;
+  suggestions_7d?: number;
+  by_action_7d?: Record<string, number>;
+  human_review_pending?: number;
+  avg_confidence_active?: number | null;
+  joint_decisions_7d?: number;
+  last_cycle_ts?: string | null;
+}
+
+export interface NewsJointDecision {
+  symbol?: string;
+  market?: NewsMarket;
+  final_action?: NewsAction;
+  final_reason?: string;
+  news_score?: number | null;
+  technical_score?: number | null;
+  confidence?: number | null;
+  status?: string;
+  ts?: string;
+}
+
+export interface NewsPanelSummary {
+  dashboardType?: string;
+  env?: PanelEnv | string;
+  generated_at?: string;
+  window_hours?: number;
+  empty?: boolean;
+  reason?: string;
+  sentinel?: NewsSentinelStats | null;
+  sections?: NewsSection[];
+  top_opportunities?: NewsSuggestion[];
+  top_risks?: NewsSuggestion[];
+  joint_decisions?: NewsJointDecision[];
+  disclaimer?: string;
+}
+
 export interface MetaWallets {
   wallets?: HlWallet[];
 }
@@ -291,6 +425,7 @@ export interface PanelBundle {
   hlPositions?: HlPositionsResponse | null;
   hlClosed?: HlClosedResponse | null;
   defi?: DefiSummary | null;
+  news?: NewsPanelSummary | null;
   lab?: LabLateral | null;
   readiness?: Readiness | null;
   metaAgents?: MetaAgents | null;
@@ -394,6 +529,7 @@ export async function fetchPanelBundle(env: PanelEnv): Promise<PanelBundle> {
     endpoint("hlPositions", panelApiGet<HlPositionsResponse>("/hl/positions", env)),
     endpoint("hlClosed", panelApiGet<HlClosedResponse>("/hl/closed", env, { limit: CLOSED_TRADES_LIMIT })),
     endpoint("defi", panelApiGet<DefiSummary>("/defi/summary", env)),
+    endpoint("news", panelApiGet<NewsPanelSummary>("/news/summary", env)),
     endpoint("lab", panelApiGet<LabLateral>("/lab/lateral", env)),
     endpoint("readiness", panelApiGet<Readiness>("/readiness", env)),
     endpoint("metaAgents", panelApiGet<MetaAgents>("/meta/agents", env)),

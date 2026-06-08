@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-07T17:17:14.961Z",
+  "generatedAt": "2026-06-08T00:35:35.293Z",
   "source": "http://127.0.0.1:8765",
   "bundles": {
     "testnet": {
       "schemaVersion": 1,
       "env": "testnet",
-      "capturedAt": "2026-06-07T17:17:14.925Z",
+      "capturedAt": "2026-06-08T00:35:35.227Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -33,6 +33,7 @@
           "/api/v1/lab/lateral",
           "/api/v1/meta/agents",
           "/api/v1/meta/wallets",
+          "/api/v1/news/summary",
           "/api/v1/overview",
           "/api/v1/readiness"
         ],
@@ -44,32 +45,32 @@
       "overview": {
         "env": "testnet",
         "hl_kpis": {
-          "equity_usd": 1886.85,
+          "equity_usd": 1871.8,
           "equity_source": "exchange_portfolio",
-          "equity_trading_usd": 1224.85,
-          "equity_dca_usd": 662,
-          "realized_pnl_usd": -31.04,
-          "win_rate_pct": 49,
+          "equity_trading_usd": 1211.8,
+          "equity_dca_usd": 660,
+          "realized_pnl_usd": -29.47,
+          "win_rate_pct": 49.5,
           "open_positions": 5,
           "liquidations": 0,
-          "monthly_pct_estimate": -2.53
+          "monthly_pct_estimate": -2.43
         },
         "defi_kpis": {
-          "value_usd": 3521.49,
-          "rewards_usd": 25.79,
+          "value_usd": 3606.07,
+          "rewards_usd": 26.71,
           "positions": 13,
           "in_range_pct": 30.8
         },
         "circuit_breaker": {
           "available": true,
-          "date": "2026-06-07",
-          "peak_usd": 1962.94,
+          "date": "2026-06-08",
+          "peak_usd": 1965.22,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
         "regime": {
-          "macro_regime": "risk_off",
-          "ts": "2026-06-07T16:54:46.785505+00:00",
+          "macro_regime": "risk_on",
+          "ts": "2026-06-08T00:17:54.070465+00:00",
           "note": "per-asset regime é calculado ao vivo (não persistido)"
         },
         "hl_empty": false,
@@ -78,118 +79,216 @@
       "hl": {
         "env": "testnet",
         "kpis": {
-          "equity_usd": 1886.85,
+          "equity_usd": 1871.8,
           "equity_source": "exchange_portfolio",
-          "equity_trading_usd": 1224.85,
-          "equity_dca_usd": 662,
-          "realized_pnl_usd": -31.04,
-          "win_rate_pct": 49,
+          "equity_trading_usd": 1211.8,
+          "equity_dca_usd": 660,
+          "realized_pnl_usd": -29.47,
+          "win_rate_pct": 49.5,
           "open_positions": 5,
           "liquidations": 0,
-          "monthly_pct_estimate": -2.53
+          "monthly_pct_estimate": -2.43
         },
         "attributed": {
-          "realized_pnl_usd": 4.06,
-          "win_rate_pct": 52.3,
-          "closed_trades": 174,
+          "realized_pnl_usd": 5.84,
+          "win_rate_pct": 52.8,
+          "closed_trades": 176,
           "open_positions_brain": 0
         },
         "accounts": {
-          "ts": "2026-06-07T16:55:55.695501+00:00",
+          "ts": "2026-06-08T00:22:50.660603+00:00",
           "wallets": [
             {
               "wallet_id": "directional",
               "address": "0x7c079992E69E7Ecd91c3f99D28C79b6e7d5e75Bd",
-              "perp_usd": 47.47,
-              "margin_used_usd": 47.68,
-              "spot_usdc": 550.54,
-              "total_usd": 550.54,
-              "open_positions": 1,
+              "perp_usd": 77.19,
+              "margin_used_usd": 97.75,
+              "spot_usdc": 536.96,
+              "total_usd": 536.96,
+              "open_positions": 2,
+              "positions": [
+                {
+                  "symbol": "SUI",
+                  "side": "SHORT",
+                  "leverage": 5,
+                  "entry_px": 0.73091,
+                  "unrealized_usd": -8.24,
+                  "roe_pct": -17.5
+                },
+                {
+                  "symbol": "ADA",
+                  "side": "SHORT",
+                  "leverage": 5,
+                  "entry_px": 0.15831,
+                  "unrealized_usd": -9.14,
+                  "roe_pct": -19.4
+                }
+              ],
               "kind": "trading"
             },
             {
               "wallet_id": "contrarian",
               "address": "0x1373f81a2324Ac0C1e6EF868956c256ce31287FF",
-              "perp_usd": 24.21,
-              "margin_used_usd": 27.07,
-              "spot_usdc": 674.36,
-              "total_usd": 674.31,
-              "open_positions": 3,
+              "perp_usd": 15.6,
+              "margin_used_usd": 18.52,
+              "spot_usdc": 674.86,
+              "total_usd": 674.84,
+              "open_positions": 2,
+              "positions": [
+                {
+                  "symbol": "BTC",
+                  "side": "LONG",
+                  "leverage": 1,
+                  "entry_px": 77927,
+                  "unrealized_usd": -2.18,
+                  "roe_pct": -18.6
+                },
+                {
+                  "symbol": "SUI",
+                  "side": "SHORT",
+                  "leverage": 8,
+                  "entry_px": 0.71955,
+                  "unrealized_usd": -3.52,
+                  "roe_pct": -41
+                }
+              ],
               "kind": "trading"
             },
             {
               "wallet_id": "dca_btc",
               "address": "0xBAf3446AB1123Dd59eC74Dd29002f890EA9389D0",
-              "perp_usd": 662,
-              "margin_used_usd": 663.21,
-              "spot_usdc": 662,
-              "total_usd": 662,
+              "perp_usd": 660,
+              "margin_used_usd": 665.23,
+              "spot_usdc": 660,
+              "total_usd": 660,
               "open_positions": 1,
+              "positions": [
+                {
+                  "symbol": "BTC",
+                  "side": "LONG",
+                  "leverage": 1,
+                  "entry_px": 70925.4,
+                  "unrealized_usd": -78.77,
+                  "roe_pct": -10.6
+                }
+              ],
               "kind": "dca"
             }
           ],
-          "equity_total_usd": 1886.85,
+          "equity_total_usd": 1871.8,
           "open_positions_exchange": 5,
-          "equity_trading_usd": 1224.85,
-          "equity_dca_usd": 662
+          "live_positions": [
+            {
+              "symbol": "SUI",
+              "side": "SHORT",
+              "leverage": 5,
+              "entry_px": 0.73091,
+              "unrealized_usd": -8.24,
+              "roe_pct": -17.5,
+              "wallet_id": "directional",
+              "agent_id": "swing_rider"
+            },
+            {
+              "symbol": "ADA",
+              "side": "SHORT",
+              "leverage": 5,
+              "entry_px": 0.15831,
+              "unrealized_usd": -9.14,
+              "roe_pct": -19.4,
+              "wallet_id": "directional",
+              "agent_id": "swing_rider"
+            },
+            {
+              "symbol": "BTC",
+              "side": "LONG",
+              "leverage": 1,
+              "entry_px": 77927,
+              "unrealized_usd": -2.18,
+              "roe_pct": -18.6,
+              "wallet_id": "contrarian"
+            },
+            {
+              "symbol": "SUI",
+              "side": "SHORT",
+              "leverage": 8,
+              "entry_px": 0.71955,
+              "unrealized_usd": -3.52,
+              "roe_pct": -41,
+              "wallet_id": "contrarian",
+              "agent_id": "mean_reverter"
+            },
+            {
+              "symbol": "BTC",
+              "side": "LONG",
+              "leverage": 1,
+              "entry_px": 70925.4,
+              "unrealized_usd": -78.77,
+              "roe_pct": -10.6,
+              "wallet_id": "dca_btc"
+            }
+          ],
+          "live_long": 2,
+          "live_short": 3,
+          "equity_trading_usd": 1211.8,
+          "equity_dca_usd": 660
         },
         "performance": {
-          "ts": "2026-06-07T16:55:55.708284+00:00",
-          "equity_base_usd": 1224.85,
+          "ts": "2026-06-08T00:22:50.667228+00:00",
+          "equity_base_usd": 1211.8,
           "windows": {
             "7d": {
-              "trades": 7,
-              "wins": 6,
+              "trades": 9,
+              "wins": 8,
               "losses": 1,
-              "win_rate_pct": 85.7,
-              "gross_usd": -10.83,
-              "fees_usd": 1.04,
-              "net_usd": -11.87,
-              "since": "2026-05-31T16:55:55.708284+00:00",
+              "win_rate_pct": 88.9,
+              "gross_usd": -8.91,
+              "fees_usd": 1.39,
+              "net_usd": -10.3,
+              "since": "2026-06-01T00:22:50.667228+00:00",
               "days": 7,
-              "monthly_pct_estimate": -4.15
+              "monthly_pct_estimate": -3.64
             },
             "30d": {
-              "trades": 204,
-              "wins": 100,
+              "trades": 206,
+              "wins": 102,
               "losses": 104,
-              "win_rate_pct": 49,
-              "gross_usd": -0.05,
-              "fees_usd": 30.99,
-              "net_usd": -31.04,
-              "since": "2026-05-08T16:55:55.708284+00:00",
+              "win_rate_pct": 49.5,
+              "gross_usd": 1.87,
+              "fees_usd": 31.34,
+              "net_usd": -29.47,
+              "since": "2026-05-09T00:22:50.667228+00:00",
               "days": 30,
-              "monthly_pct_estimate": -2.53
+              "monthly_pct_estimate": -2.43
             },
             "since_corrected": {
-              "trades": 70,
-              "wins": 54,
+              "trades": 72,
+              "wins": 56,
               "losses": 16,
-              "win_rate_pct": 77.1,
-              "gross_usd": 13.07,
-              "fees_usd": 9.11,
-              "net_usd": 3.96,
+              "win_rate_pct": 77.8,
+              "gross_usd": 14.98,
+              "fees_usd": 9.46,
+              "net_usd": 5.52,
               "since": "2026-05-23T00:00:00+00:00",
-              "days": 15.7,
-              "monthly_pct_estimate": 0.62
+              "days": 16,
+              "monthly_pct_estimate": 0.85
             },
             "since_current": {
-              "trades": 15,
-              "wins": 14,
+              "trades": 17,
+              "wins": 16,
               "losses": 1,
-              "win_rate_pct": 93.3,
-              "gross_usd": -5.91,
-              "fees_usd": 1.86,
-              "net_usd": -7.77,
+              "win_rate_pct": 94.1,
+              "gross_usd": -4,
+              "fees_usd": 2.2,
+              "net_usd": -6.2,
               "since": "2026-05-30T00:00:00+00:00",
-              "days": 8.7,
-              "monthly_pct_estimate": -2.19
+              "days": 9,
+              "monthly_pct_estimate": -1.7
             }
           },
           "scope": "trading_only"
         },
         "dca": {
-          "ts": "2026-06-07T16:55:57.966834+00:00",
+          "ts": "2026-06-08T00:22:52.401560+00:00",
           "wallets": [
             {
               "wallet_id": "dca_btc",
@@ -197,10 +296,10 @@
               "qty": 0.010449999999999997,
               "avg_basis": 70915.79,
               "invested_usd": 741.07,
-              "mark": 63233,
+              "mark": 63416,
               "entry_px": 70925.4,
-              "unrealized_usd": -80.69,
-              "unrealized_pct": -10.9,
+              "unrealized_usd": -78.77,
+              "unrealized_pct": -10.6,
               "available_usd": 0,
               "needed_usd": 53,
               "cash_ok": false,
@@ -209,37 +308,138 @@
             }
           ]
         },
+        "directional_bias": {
+          "buy_trades": 37,
+          "sell_trades": 139,
+          "buy_pnl_usd": -21.08,
+          "sell_pnl_usd": 26.9,
+          "short_share_pct": 79,
+          "by_agent": [
+            {
+              "agent_id": "unknown",
+              "buy": 6,
+              "sell": 71,
+              "buy_pnl": 0.73,
+              "sell_pnl": 1.72
+            },
+            {
+              "agent_id": "momentum_hunter",
+              "buy": 29,
+              "sell": 23,
+              "buy_pnl": -20.16,
+              "sell_pnl": -4.22
+            },
+            {
+              "agent_id": "swing_rider",
+              "buy": 0,
+              "sell": 28,
+              "buy_pnl": 0,
+              "sell_pnl": 26.73
+            },
+            {
+              "agent_id": "mean_reverter",
+              "buy": 0,
+              "sell": 14,
+              "buy_pnl": 0,
+              "sell_pnl": 4.19
+            },
+            {
+              "agent_id": "bear_hunter",
+              "buy": 0,
+              "sell": 3,
+              "buy_pnl": 0,
+              "sell_pnl": -1.51
+            },
+            {
+              "agent_id": "hedge_balancer",
+              "buy": 2,
+              "sell": 0,
+              "buy_pnl": -1.65,
+              "sell_pnl": 0
+            }
+          ]
+        },
+        "live_positions": [
+          {
+            "symbol": "SUI",
+            "side": "SHORT",
+            "leverage": 5,
+            "entry_px": 0.73091,
+            "unrealized_usd": -8.24,
+            "roe_pct": -17.5,
+            "wallet_id": "directional",
+            "agent_id": "swing_rider"
+          },
+          {
+            "symbol": "ADA",
+            "side": "SHORT",
+            "leverage": 5,
+            "entry_px": 0.15831,
+            "unrealized_usd": -9.14,
+            "roe_pct": -19.4,
+            "wallet_id": "directional",
+            "agent_id": "swing_rider"
+          },
+          {
+            "symbol": "BTC",
+            "side": "LONG",
+            "leverage": 1,
+            "entry_px": 77927,
+            "unrealized_usd": -2.18,
+            "roe_pct": -18.6,
+            "wallet_id": "contrarian"
+          },
+          {
+            "symbol": "SUI",
+            "side": "SHORT",
+            "leverage": 8,
+            "entry_px": 0.71955,
+            "unrealized_usd": -3.52,
+            "roe_pct": -41,
+            "wallet_id": "contrarian",
+            "agent_id": "mean_reverter"
+          },
+          {
+            "symbol": "BTC",
+            "side": "LONG",
+            "leverage": 1,
+            "entry_px": 70925.4,
+            "unrealized_usd": -78.77,
+            "roe_pct": -10.6,
+            "wallet_id": "dca_btc"
+          }
+        ],
         "wallets": [
           {
             "id": "contrarian",
             "label": "B — Contrária",
             "leverage": 8,
             "role": "contrarian",
-            "trades": 18,
-            "realized_pnl_usd": 2.02
+            "trades": 19,
+            "realized_pnl_usd": 2.65
           },
           {
             "id": "directional",
             "label": "A — Direcional",
             "leverage": 5,
             "role": "directional",
-            "trades": 156,
-            "realized_pnl_usd": 2.04
+            "trades": 157,
+            "realized_pnl_usd": 3.19
           }
         ],
         "agents": [
           {
             "agent_id": "swing_rider",
-            "trades": 27,
-            "wins": 27,
-            "realized_pnl_usd": 25.58,
+            "trades": 28,
+            "wins": 28,
+            "realized_pnl_usd": 26.73,
             "status": "live"
           },
           {
             "agent_id": "mean_reverter",
-            "trades": 13,
-            "wins": 12,
-            "realized_pnl_usd": 3.56,
+            "trades": 14,
+            "wins": 13,
+            "realized_pnl_usd": 4.19,
             "status": "shadow"
           },
           {
@@ -281,7 +481,13 @@
           {
             "symbol": "AVAX",
             "side": "SELL",
-            "pnl_usd": 8.29,
+            "pnl_usd": 9.44,
+            "trades": 11
+          },
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "pnl_usd": 7.35,
             "trades": 10
           },
           {
@@ -289,12 +495,6 @@
             "side": "SELL",
             "pnl_usd": 7.27,
             "trades": 43
-          },
-          {
-            "symbol": "ADA",
-            "side": "SELL",
-            "pnl_usd": 6.72,
-            "trades": 9
           },
           {
             "symbol": "BNB",
@@ -384,8 +584,40 @@
         "env": "testnet",
         "count": 80,
         "wins": 58,
-        "net_pnl_usd": 8.51,
+        "net_pnl_usd": 9.81,
         "trades": [
+          {
+            "symbol": "ADA",
+            "side": "SELL",
+            "agent_id": "mean_reverter",
+            "wallet_id": "contrarian",
+            "size": 429,
+            "entry_px": null,
+            "exit_px": 0.1585,
+            "realized_pnl_usd": 0.63,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-07T19:43:01.034000+00:00",
+            "closed_at": "2026-06-07T19:43:01.034000+00:00"
+          },
+          {
+            "symbol": "AVAX",
+            "side": "SELL",
+            "agent_id": "swing_rider",
+            "wallet_id": "directional",
+            "size": 35.7,
+            "entry_px": null,
+            "exit_px": 6.5637,
+            "realized_pnl_usd": 1.15,
+            "max_roe_pct": null,
+            "min_roe_pct": null,
+            "duration_min": null,
+            "close_reason": "exit_filled",
+            "opened_at": "2026-06-07T19:16:49.306000+00:00",
+            "closed_at": "2026-06-07T19:16:49.306000+00:00"
+          },
           {
             "symbol": "SUI",
             "side": "SELL",
@@ -1633,46 +1865,14 @@
             "close_reason": "exit_filled",
             "opened_at": "2026-05-18T01:35:16.792000+00:00",
             "closed_at": "2026-05-18T01:35:16.792000+00:00"
-          },
-          {
-            "symbol": "BTC",
-            "side": "SELL",
-            "agent_id": "momentum_hunter",
-            "wallet_id": "directional",
-            "size": 0.001,
-            "entry_px": null,
-            "exit_px": 77286,
-            "realized_pnl_usd": 0.35,
-            "max_roe_pct": null,
-            "min_roe_pct": null,
-            "duration_min": null,
-            "close_reason": "exit_filled",
-            "opened_at": "2026-05-18T01:35:16.792000+00:00",
-            "closed_at": "2026-05-18T01:35:16.792000+00:00"
-          },
-          {
-            "symbol": "BTC",
-            "side": "SELL",
-            "agent_id": "momentum_hunter",
-            "wallet_id": "directional",
-            "size": 0.0005,
-            "entry_px": null,
-            "exit_px": 77366,
-            "realized_pnl_usd": 0.13,
-            "max_roe_pct": null,
-            "min_roe_pct": null,
-            "duration_min": null,
-            "close_reason": "exit_filled",
-            "opened_at": "2026-05-18T01:35:16.792000+00:00",
-            "closed_at": "2026-05-18T01:35:16.792000+00:00"
           }
         ]
       },
       "defi": {
         "env": "testnet",
         "kpis": {
-          "value_usd": 3521.49,
-          "rewards_usd": 25.79,
+          "value_usd": 3606.07,
+          "rewards_usd": 26.71,
           "positions": 13,
           "in_range_pct": 30.8
         },
@@ -1756,17 +1956,17 @@
           }
         ],
         "diversification": {
-          "WETH": 61.6,
+          "WETH": 60.8,
           "USDT": 0,
           "ENA": 1.3,
           "ONDO": 1,
           "ETHFI": 0.6,
-          "WBTC": 2.8,
+          "WBTC": 3.2,
           "LINK": 3.8,
-          "USDC": 10.9,
+          "USDC": 11.4,
           "PENDLE": 1.6,
           "USD₮0": 0,
-          "cbBTC": 14.9,
+          "cbBTC": 14.7,
           "VIRTUAL": 1,
           "COOKIE": 0.1,
           "ACOLYT": 0.4
@@ -1777,9 +1977,9 @@
             "from_pair": "USDC/cbBTC",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 53.9,
-            "est_monthly_usd": 23.52,
-            "notional_usd": 523.81,
+            "apr_gain_pct": 2.5,
+            "est_monthly_usd": 1.1,
+            "notional_usd": 529.2,
             "payback_days": 0
           },
           {
@@ -1787,9 +1987,9 @@
             "from_pair": "VIRTUAL/ACOLYT",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 53.9,
-            "est_monthly_usd": 0.65,
-            "notional_usd": 14.51,
+            "apr_gain_pct": 2.5,
+            "est_monthly_usd": 0.03,
+            "notional_usd": 14.6,
             "payback_days": 0
           },
           {
@@ -1797,9 +1997,9 @@
             "from_pair": "VIRTUAL/WETH",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 53.9,
-            "est_monthly_usd": 1.62,
-            "notional_usd": 36.09,
+            "apr_gain_pct": 2.5,
+            "est_monthly_usd": 0.08,
+            "notional_usd": 36.53,
             "payback_days": 0
           },
           {
@@ -1807,40 +2007,40 @@
             "from_pair": "VIRTUAL/COOKIE",
             "to_pair": "WETH/USDC",
             "network": "base",
-            "apr_gain_pct": 53.9,
-            "est_monthly_usd": 0.21,
-            "notional_usd": 4.62,
+            "apr_gain_pct": 2.5,
+            "est_monthly_usd": 0.01,
+            "notional_usd": 4.58,
             "payback_days": 0
           },
           {
             "action": "reposition",
             "from_pair": "WETH/cbBTC",
-            "to_pair": "WBTC/USDC",
+            "to_pair": "WBTC/WETH",
             "network": "arbitrum",
-            "apr_gain_pct": 15.5,
-            "est_monthly_usd": 2.59,
-            "notional_usd": 201.21,
+            "apr_gain_pct": 9.4,
+            "est_monthly_usd": 1.64,
+            "notional_usd": 208.43,
             "payback_days": 0
           },
           {
             "action": "reposition",
             "from_pair": "PENDLE/USD₮0",
-            "to_pair": "WBTC/USDC",
+            "to_pair": "WBTC/WETH",
             "network": "arbitrum",
-            "apr_gain_pct": 15.5,
-            "est_monthly_usd": 0.72,
-            "notional_usd": 55.96,
+            "apr_gain_pct": 9.4,
+            "est_monthly_usd": 0.45,
+            "notional_usd": 56.64,
             "payback_days": 0
           },
           {
-            "action": "realloc",
+            "action": "hold",
             "from_pair": "USDC/WETH",
-            "to_pair": "WETH/USDC",
+            "to_pair": "",
             "network": "ethereum",
-            "apr_gain_pct": 52.3,
-            "est_monthly_usd": 34.54,
-            "notional_usd": 793.09,
-            "payback_days": 7
+            "apr_gain_pct": 0,
+            "est_monthly_usd": 0,
+            "notional_usd": 806.95,
+            "payback_days": 0
           },
           {
             "action": "hold",
@@ -1849,43 +2049,1331 @@
             "network": "ethereum",
             "apr_gain_pct": 0,
             "est_monthly_usd": 0,
-            "notional_usd": 270.75,
+            "notional_usd": 278.05,
             "payback_days": 0
           }
         ],
-        "last_run": "2026-06-07T12:06:28.000004+00:00"
+        "last_run": "2026-06-08T00:09:52.742397+00:00"
+      },
+      "news": {
+        "dashboardType": "HOLDER_MARKET_NEWS_PANEL",
+        "env": "testnet",
+        "generated_at": "2026-06-08T00:35:35.224064+00:00",
+        "window_hours": 24,
+        "sentinel": {
+          "agent_id": "news_sentinel",
+          "status": "advisory",
+          "news_24h": 844,
+          "critical_24h": 7,
+          "suggestions_active": 28,
+          "suggestions_7d": 252,
+          "by_action_7d": {
+            "WATCH": 140,
+            "WAIT_CONFIRMATION": 59,
+            "BLOCK_TRADE": 28,
+            "BUY": 13,
+            "SELL": 11,
+            "HEDGE": 1
+          },
+          "human_review_pending": 7,
+          "avg_confidence_active": 0.75,
+          "joint_decisions_7d": 1,
+          "last_cycle_ts": "2026-06-07T23:55:33.435312+00:00"
+        },
+        "disclaimer": "Sugestões informativas geradas por agente de notícias — não é recomendação financeira; decisão final exige validação técnica e do sistema de risco.",
+        "sections": [
+          {
+            "market": "CRYPTO",
+            "title": "Cripto",
+            "summary": "6 notícias relevantes com viés negativo (sentimento médio -0.27).",
+            "topNews": [
+              {
+                "title": "NY Judge Halts Lawsuit Claiming 39,069 Dormant Bitcoin Wallets Until July Hearing",
+                "summary": "A New York judge stays the lawsuit claiming 39,069 dormant Bitcoin wallets worth $235 billion ahead of a July 14 hearing. The post NY Judge Halts Lawsuit Claiming 39,069 Dormant Bitcoin Wallets Until July Hearing appeared first on BeInCrypto .",
+                "source": "beincrypto",
+                "url": "https://beincrypto.com/ny-dormant-bitcoin-wallets-lawsuit-stay/",
+                "published_at": "2026-06-07T21:33:47+00:00",
+                "symbols": [
+                  "BTC"
+                ],
+                "event_type": "LEGAL_RISK",
+                "sentiment": "negative",
+                "sentiment_score": -0.9,
+                "impact_score": 81,
+                "relevance_score": 70
+              },
+              {
+                "title": "DeFi’s old hack vectors are fading – But the new risk can hit six chains at once",
+                "summary": "Decentralized finance has gotten a lot safer over the past six years, and a new review of protocol losses from 2020 through 2025 puts a pretty large number behind that claim. Industry-wide DeFi losses peaked at $2.62 billion in 2022 and fell roughly 80% to $534 million by 2024. B",
+                "source": "cryptoslate",
+                "url": "https://cryptoslate.com/defis-old-hacks-are-fading-the-new-risk-can-hit-six-chains-at-once/",
+                "published_at": "2026-06-07T17:10:56+00:00",
+                "symbols": [],
+                "event_type": "HACK_EXPLOIT",
+                "sentiment": "negative",
+                "sentiment_score": -1,
+                "impact_score": 78,
+                "relevance_score": 50
+              },
+              {
+                "title": "Pando Rings hacker buys 6,243 ETH for $10M amid market dip",
+                "summary": "The hacker's ETH purchase highlights ongoing vulnerabilities in DeFi, signaling potential market volatility and the need for improved security. The post Pando Rings hacker buys 6,243 ETH for $10M amid market dip appeared first on Crypto Briefing .",
+                "source": "cryptobriefing",
+                "url": "https://cryptobriefing.com/pando-rings-hacker-buys-eth-market-dip/",
+                "published_at": "2026-06-07T19:30:03+00:00",
+                "symbols": [
+                  "ETH"
+                ],
+                "event_type": "HACK_EXPLOIT",
+                "sentiment": "neutral",
+                "sentiment_score": 0,
+                "impact_score": 70,
+                "relevance_score": 70
+              },
+              {
+                "title": "Strategy’s Saylor signals BTC buy as preferred dividend pay date vote looms",
+                "summary": "Strategy’s top execs took to social media on Sunday to tout its Bitcoin strategy while shareholders cast final votes on a proposal for twice-monthly preferred stock dividend payments.",
+                "source": "cointelegraph",
+                "url": "https://cointelegraph.com/news/strategys-saylor-signals-btc-buy-as-preferred-dividend-pay-date-vote-looms",
+                "published_at": "2026-06-07T19:45:17+00:00",
+                "symbols": [
+                  "BTC"
+                ],
+                "event_type": "DIVIDEND",
+                "sentiment": "positive",
+                "sentiment_score": 0.3,
+                "impact_score": 62,
+                "relevance_score": 80
+              },
+              {
+                "title": "US military strikes Iranian radar sites after drone threat near Strait of Hormuz, Bitcoin drops below $77K",
+                "summary": "Escalating US-Iran tensions could destabilize global oil markets and heighten regulatory risks in the crypto sector, impacting investor confidence. The post US military strikes Iranian radar sites after drone threat near Strait of Hormuz, Bitcoin drops below $77K appeared first o",
+                "source": "cryptobriefing",
+                "url": "https://cryptobriefing.com/us-military-strikes-iran-bitcoin-drops/",
+                "published_at": "2026-06-07T16:43:31+00:00",
+                "symbols": [
+                  "BTC"
+                ],
+                "event_type": "REGULATION",
+                "sentiment": "neutral",
+                "sentiment_score": 0,
+                "impact_score": 62,
+                "relevance_score": 62
+              },
+              {
+                "title": "Claude Opus 4.8 Review: Better At What’s It Good At, Worse At What It’s Not",
+                "summary": "Anthropic's new flagship aced our math problem and shipped a spotless game—then drained our entire token quota in a single prompt. We ran it through six tests, and here's how it did.",
+                "source": "decrypt",
+                "url": "https://decrypt.co/370128/claude-opus-4-8-review",
+                "published_at": "2026-06-07T13:01:06+00:00",
+                "symbols": [],
+                "event_type": "HACK_EXPLOIT",
+                "sentiment": "neutral",
+                "sentiment_score": 0,
+                "impact_score": 61,
+                "relevance_score": 52
+              }
+            ],
+            "suggestions": [
+              {
+                "asset": "BNB",
+                "market": "CRYPTO",
+                "action": "BLOCK_TRADE",
+                "time_horizon": "INTRADAY",
+                "reason": "Evento crítico (HACK_EXPLOIT): Old DxSale Lockers Drained for $7.3M Across 1,400 BNB Chain Pools as Owner-Privilege Exploits Pile Up",
+                "bullish_factors": [],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "mean_reverter",
+                  "bear_hunter",
+                  "hedge_balancer",
+                  "unknown",
+                  "momentum_hunter",
+                  "trend_rider",
+                  "scalper",
+                  "news_sentinel",
+                  "risk_manager"
+                ],
+                "confidence": 0.51,
+                "risk": "CRITICAL",
+                "requires_human_review": true,
+                "block_trade_reason": "Evento crítico (HACK_EXPLOIT): Old DxSale Lockers Drained for $7.3M Across 1,400 BNB Chain Pools as Owner-Privilege Exploits Pile Up",
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "BTC",
+                "market": "CRYPTO",
+                "action": "WATCH",
+                "time_horizon": "POSITION",
+                "reason": "Evento severo (LEGAL_RISK) com sentimento negativo: NY Judge Halts Lawsuit Claiming 39,069 Dormant Bitcoin Wallets Until July Hearing",
+                "bullish_factors": [
+                  "AI’s $800 billion spending boom is becoming Bitcoin’s Fed problem (cryptoslate)",
+                  "Strategy’s Saylor signals BTC buy as preferred dividend pay date vote looms (cointelegraph)",
+                  "Tom Lee's Ethereum Treasury BitMine Prices Preferred Shares With 9.5% Dividend (decrypt)"
+                ],
+                "bearish_factors": [
+                  "NY Judge Halts Lawsuit Claiming 39,069 Dormant Bitcoin Wallets Until July Hearing (beincrypto)",
+                  "Can US CPI Inflation Save BTC after Bitcoin Dived Following Strong Payrolls? - FXLeaders (gnews_cpi)",
+                  "Standard Chartered Sees Bitcoin Bottom ‘Almost In’ as Sell-Off Cuts 14% in Seven Days (bitcoinmagazine)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "risk_manager"
+                ],
+                "confidence": 1,
+                "risk": "HIGH",
+                "requires_human_review": true,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "DOGE",
+                "market": "CRYPTO",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Sentimento negativo (sent -0.55) de fonte única — monitorar antes de agir.",
+                "bullish_factors": [],
+                "bearish_factors": [
+                  "Memecoins dogecoin, shiba inu dive 9% as bitcoin nears $60,000 (coindesk)"
+                ],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "mean_reverter"
+                ],
+                "confidence": 0.68,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "ETH",
+                "market": "CRYPTO",
+                "action": "BLOCK_TRADE",
+                "time_horizon": "INTRADAY",
+                "reason": "Evento crítico (HACK_EXPLOIT): Pando Rings hacker buys 6,243 ETH for $10M amid market dip",
+                "bullish_factors": [
+                  "Tom Lee's Ethereum Treasury BitMine Prices Preferred Shares With 9.5% Dividend (decrypt)",
+                  "Ethereum RSI drops to lowest level since launch amid relentless selling pressure (cryptobriefing)",
+                  "Ethereum Could Outperform Bitcoin Despite Recent Price Weakness: Standard Chartered (cryptonews)"
+                ],
+                "bearish_factors": [
+                  "Ethereum Price Prediction: Will ETH Dump Toward $1K Next? (cryptopotato)",
+                  "Bitcoin, ether eye worst weekly rout since FTX collapse as cryptos shed $390 billion (coindesk)",
+                  "ETH falls to 13-month low on Zcash bug news and Bitcoin drop to sub-$60K: Is $1.4K next? (cointelegraph)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "mean_reverter",
+                  "bear_hunter",
+                  "hedge_balancer",
+                  "unknown",
+                  "momentum_hunter",
+                  "trend_rider",
+                  "scalper",
+                  "news_sentinel",
+                  "risk_manager"
+                ],
+                "confidence": 1,
+                "risk": "CRITICAL",
+                "requires_human_review": true,
+                "block_trade_reason": "Evento crítico (HACK_EXPLOIT): Pando Rings hacker buys 6,243 ETH for $10M amid market dip",
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "HYPE",
+                "market": "CRYPTO",
+                "action": "WATCH",
+                "time_horizon": "POSITION",
+                "reason": "Evento severo (GEOPOLITICS) com sentimento negativo: Arthur Hayes Exits Entire HYPE and NEAR Positions, Cites Iran War and AI IPO Pipeline",
+                "bullish_factors": [
+                  "Hyperliquid’s UK warning reveals the regulatory test behind its Wall Street push (cryptoslate)"
+                ],
+                "bearish_factors": [
+                  "Arthur Hayes Exits Entire HYPE and NEAR Positions, Cites Iran War and AI IPO Pipeline (thedefiant)",
+                  "Wall Street Is Coming for Hyperliquid's Perps Crown, Arthur Hayes Says (decrypt)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "risk_manager"
+                ],
+                "confidence": 1,
+                "risk": "HIGH",
+                "requires_human_review": true,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "LINK",
+                "market": "CRYPTO",
+                "action": "BLOCK_TRADE",
+                "time_horizon": "INTRADAY",
+                "reason": "Evento crítico (HACK_EXPLOIT): Chainlink CCIP Draws $1.1 Billion in Value in One Week as Virtuals Join Migration Wave",
+                "bullish_factors": [],
+                "bearish_factors": [
+                  "Chainlink CCIP Draws $1.1 Billion in Value in One Week as Virtuals Join Migration Wave (thedefiant)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "mean_reverter",
+                  "bear_hunter",
+                  "hedge_balancer",
+                  "unknown",
+                  "momentum_hunter",
+                  "trend_rider",
+                  "scalper",
+                  "news_sentinel",
+                  "risk_manager"
+                ],
+                "confidence": 0.57,
+                "risk": "CRITICAL",
+                "requires_human_review": true,
+                "block_trade_reason": "Evento crítico (HACK_EXPLOIT): Chainlink CCIP Draws $1.1 Billion in Value in One Week as Virtuals Join Migration Wave",
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "NEAR",
+                "market": "CRYPTO",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Evento severo (GEOPOLITICS) com sentimento negativo: Arthur Hayes Exits Entire HYPE and NEAR Positions, Cites Iran War and AI IPO Pipeline",
+                "bullish_factors": [],
+                "bearish_factors": [
+                  "Arthur Hayes Exits Entire HYPE and NEAR Positions, Cites Iran War and AI IPO Pipeline (thedefiant)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "risk_manager"
+                ],
+                "confidence": 0.62,
+                "risk": "HIGH",
+                "requires_human_review": true,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              }
+            ]
+          },
+          {
+            "market": "TRADITIONAL_BR",
+            "title": "Brasil: Ações, FIIs e ETFs",
+            "summary": "2 notícias relevantes com viés positivo (sentimento médio +0.40).",
+            "topNews": [
+              {
+                "title": "PETR4 ainda compensa pelos dividendos? Petrobras muda cenário para investidores - arevista.com.br",
+                "summary": "PETR4 ainda compensa pelos dividendos? Petrobras muda cenário para investidores arevista.com.br",
+                "source": "gnews_petrobras",
+                "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPOGdRcWpIQTNKaUw1cFFzUWpsQTBGMnZnOFBqR1ZFdjV0MlRyekRVOWF4UEo0NTBwMzhQZXJEeHZKNU1YZ2F0SEhhTk5RV0JOV2oyWDZGaTVSRjJHWlV3QWFLbnhOUGJJN1hsT3F0ek9JbzRwMXJUVzlucHRPX3pfWkY0QldJandLdkt1VENMSVVOTUhGdjZyemRMQnFLTk5RWnkxcWlTd2FRVGpYTk1icmkyeDY?oc=5",
+                "published_at": "2026-06-07T19:51:41+00:00",
+                "symbols": [
+                  "PETR4"
+                ],
+                "event_type": "DIVIDEND",
+                "sentiment": "positive",
+                "sentiment_score": 0.4,
+                "impact_score": 59,
+                "relevance_score": 70
+              },
+              {
+                "title": "Dividendos de FIIs: 67 fundos imobiliários pagam na semana; veja - Fiis",
+                "summary": "Dividendos de FIIs: 67 fundos imobiliários pagam na semana; veja Fiis",
+                "source": "gnews_fiis",
+                "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQQXc1WTlHSm9odkxpZHphMEs0NkZMck1ucDlvb25kdlFUNWtwS2JuMmJJd196RzZCbUtCa3hwcjBFVEF4S1hmVkpHci1YTDhxUzR1aTFYVms3M2hXUXZPaVNPbklPa3Iya2ZvSEdHU18ya2FidHFzRUpHTlVvTXIzSkFQSHNMLS1rVmdjVi02UTkwX1daWWpJRXYzWUZxMnFHQ1hqY2tTSDRDNnN5dk9Z?oc=5",
+                "published_at": "2026-06-07T16:39:48+00:00",
+                "symbols": [],
+                "event_type": "DIVIDEND",
+                "sentiment": "positive",
+                "sentiment_score": 0.4,
+                "impact_score": 46,
+                "relevance_score": 42
+              }
+            ],
+            "suggestions": [
+              {
+                "asset": "B3SA3",
+                "market": "TRADITIONAL_BR",
+                "action": "WAIT_CONFIRMATION",
+                "time_horizon": "SWING",
+                "reason": "Sentimento positivo (sent +0.57) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+                "bullish_factors": [
+                  "Ações da B3 (B3SA3) sobem forte após balanço do 3T25 - Nord Investimentos (gnews_acoes_b3)",
+                  "Dividendos da semana: Telefônica Brasil (VIVT3) e B3 (B3SA3) pagam acionistas; veja lista completa - Estadão (gnews_acoes_b3)",
+                  "B3 (B3SA3): Alta no lucro do 4T25 e salto das ações em 12 meses; ainda é hora de comprar? - Money Times (gnews_acoes_b3)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.79,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "BBAS3",
+                "market": "TRADITIONAL_BR",
+                "action": "WAIT_CONFIRMATION",
+                "time_horizon": "SWING",
+                "reason": "Sentimento positivo (sent +0.38) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+                "bullish_factors": [
+                  "O pior está por vir para o Banco do Brasil (BBAS3)? A previsão de analistas para o lucro do BB após novos dado (gnews_acoes_b3)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.63,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "BBDC4",
+                "market": "TRADITIONAL_BR",
+                "action": "WAIT_CONFIRMATION",
+                "time_horizon": "LONG_TERM",
+                "reason": "Sentimento positivo (sent +0.40) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+                "bullish_factors": [
+                  "Dividendos: Itaú BBA segue apostando em Petrobras (PETR4), Vale (VALE3) e Bradesco (BBDC4) para junho - Money  (gnews_vale)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.58,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "BMEB4",
+                "market": "TRADITIONAL_BR",
+                "action": "WAIT_CONFIRMATION",
+                "time_horizon": "LONG_TERM",
+                "reason": "Sentimento positivo (sent +0.40) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+                "bullish_factors": [
+                  "Banco Mercantil (BMEB4) fecha acordo tributário histórico, anuncia aumento de capital e dividendos; ações tomb (gnews_acoes_b3)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.58,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "CSNA3",
+                "market": "TRADITIONAL_BR",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Sentimento negativo (sent -0.46) de fonte única — monitorar antes de agir.",
+                "bullish_factors": [],
+                "bearish_factors": [
+                  "CSN (CSNA3) lidera perdas do Ibovespa com tombo de 9%; Vale (VALE3) também cai forte - Money Times (gnews_vale)",
+                  "CSN (CSNA3) desaba mais de 10% e lidera perdas do Ibovespa; nem a Vale (VALE3) escapa. O que está por trás do  (gnews_vale)"
+                ],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "mean_reverter"
+                ],
+                "confidence": 0.74,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "ITSA4",
+                "market": "TRADITIONAL_BR",
+                "action": "WAIT_CONFIRMATION",
+                "time_horizon": "LONG_TERM",
+                "reason": "Sentimento positivo (sent +0.40) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+                "bullish_factors": [
+                  "Petrobras (PETR4), Itaúsa (ITSA4) e financeiras lideram carteiras de dividendos de junho - Estadão (gnews_petrobras)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.58,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "ITUB4",
+                "market": "TRADITIONAL_BR",
+                "action": "BUY",
+                "time_horizon": "LONG_TERM",
+                "reason": "Notícias positivas multi-fonte (sent +0.40, conf 0.63) — requer confirmação técnica conjunta.",
+                "bullish_factors": [
+                  "Itaú supera Petrobras como maior pagador de dividendos em 2025; veja ranking - Bora Investir (gnews_acoes_b3)",
+                  "Dividendos: Itaú BBA segue apostando em Petrobras (PETR4), Vale (VALE3) e Bradesco (BBDC4) para junho - Money  (gnews_vale)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.63,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "PETR4",
+                "market": "TRADITIONAL_BR",
+                "action": "WATCH",
+                "time_horizon": "LONG_TERM",
+                "reason": "Fluxo de notícias relevante (impacto 60) sem direção clara — manter em observação.",
+                "bullish_factors": [
+                  "Petrobras tem lucro de R$ 32,7 bi no 3o trimestre e anuncia R$ 12,16 bi em dividendos - Bora Investir (gnews_acoes_b3)",
+                  "PETR4 ainda compensa pelos dividendos? Petrobras muda cenário para investidores - arevista.com.br (gnews_petrobras)",
+                  "Petrobras (PETR4) e pares sobem com alta do petróleo lá fora - Valor Investe (gnews_petrobras)"
+                ],
+                "bearish_factors": [
+                  "Ibovespa recua, apesar de alta da Petrobras (PETR4), e dólar cai a R$ 5,04 - Bloomberg Línea Brasil (gnews_petrobras)",
+                  "Petrobras (PETR4) adere a subsídio do diesel em meio à crise no Oriente Médio - suno.com.br (gnews_petrobras)",
+                  "Ações da Petrobras caem 7% após resultado trimestral; entenda - Bora Investir (gnews_acoes_b3)"
+                ],
+                "conflicting_signals": [
+                  "mixed_sentiment"
+                ],
+                "agents_to_notify": [],
+                "confidence": 1,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              }
+            ]
+          },
+          {
+            "market": "TRADITIONAL_GLOBAL",
+            "title": "Global: Ações e ETFs",
+            "summary": "6 notícias relevantes com viés negativo (sentimento médio -0.35).",
+            "topNews": [
+              {
+                "title": "S&P 500 sheds $1.8T as Nasdaq records its biggest single-day point drop ever",
+                "summary": "The market's sharp decline highlights the vulnerability of equities and crypto to interest rate shifts, challenging diversification strategies. The post S&P 500 sheds $1.8T as Nasdaq records its biggest single-day point drop ever appeared first on Crypto Briefing .",
+                "source": "cryptobriefing",
+                "url": "https://cryptobriefing.com/sp500-nasdaq-record-drop-crypto/",
+                "published_at": "2026-06-07T15:32:45+00:00",
+                "symbols": [
+                  "SPY"
+                ],
+                "event_type": "MACRO_RATE",
+                "sentiment": "negative",
+                "sentiment_score": -0.7,
+                "impact_score": 75,
+                "relevance_score": 62
+              },
+              {
+                "title": "TKO's strong earnings sent Wall Street a warning anyway",
+                "summary": "",
+                "source": "yahoo_finance",
+                "url": "https://finance.yahoo.com/markets/stocks/articles/tkos-strong-earnings-sent-wall-200700857.html",
+                "published_at": "2026-06-07T20:07:00+00:00",
+                "symbols": [],
+                "event_type": "EARNINGS",
+                "sentiment": "neutral",
+                "sentiment_score": 0,
+                "impact_score": 55,
+                "relevance_score": 60
+              },
+              {
+                "title": "Want Nothing to Do With SpaceX? Buy This Ultra-Low-Cost Dividend Growth ETF in June.",
+                "summary": "",
+                "source": "yahoo_finance",
+                "url": "https://finance.yahoo.com/markets/stocks/articles/want-nothing-spacex-buy-ultra-232000094.html",
+                "published_at": "2026-06-07T23:20:00+00:00",
+                "symbols": [],
+                "event_type": "DIVIDEND",
+                "sentiment": "positive",
+                "sentiment_score": 0.35,
+                "impact_score": 53,
+                "relevance_score": 60
+              },
+              {
+                "title": "S&P 500 sees $1.8 trillion wipeout, Nasdaq tallies biggest point drop on record: What investors need to know about Friday’s selloff",
+                "summary": "A remarkable two-month sprint higher for major stock-market indexes encountered its first major hiccup on Friday as the Nasdaq Composite plummeted more than 1,121 points — the biggest one day point drop on record, according to Dow Jones Market Data.",
+                "source": "marketwatch",
+                "url": "https://www.marketwatch.com/story/s-p-500-sees-1-8-trillion-wipeout-nasdaq-tallies-biggest-point-drop-on-record-heres-what-investors-need-to-know-about-fridays-selloff-4eb7b490?mod=mw_rss_topstories",
+                "published_at": "2026-06-07T14:02:00+00:00",
+                "symbols": [
+                  "SPY"
+                ],
+                "event_type": "OTHER",
+                "sentiment": "negative",
+                "sentiment_score": -0.85,
+                "impact_score": 49,
+                "relevance_score": 52
+              },
+              {
+                "title": "S&P 500 companies can’t stop talking about higher oil prices. But few say they’ll actually hit profits.",
+                "summary": "Only seven companies cited oil prices as a reason for cutting or not updating their profit outlooks for the year.",
+                "source": "marketwatch",
+                "url": "https://www.marketwatch.com/story/s-p-500-companies-cant-stop-talking-about-higher-oil-prices-but-few-say-theyll-actually-hit-profits-c3a4e4ea?mod=mw_rss_topstories",
+                "published_at": "2026-06-07T14:00:00+00:00",
+                "symbols": [
+                  "SPY"
+                ],
+                "event_type": "COMMODITY",
+                "sentiment": "neutral",
+                "sentiment_score": -0.1,
+                "impact_score": 47,
+                "relevance_score": 52
+              },
+              {
+                "title": "Will the S&P 500 crash next week and what should you do about it? - Yahoo Finance UK",
+                "summary": "Will the S&P 500 crash next week and what should you do about it? Yahoo Finance UK",
+                "source": "gnews_sp500",
+                "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5VeVA3d3loYktBaERkc0ZMMzNmbmFtdExhdjFsT1o5R0UxZktiYjJlc1BmVU9pd2lPS21iT0g5NnhrTkF0eUllaE5YS2R6Q3JBbUhfQU5oRWJ5N2NfVG9jVUx3QkxvMFV3b3ZVVnFmV0o2WlZTY2UzSGRn?oc=5",
+                "published_at": "2026-06-07T06:55:00+00:00",
+                "symbols": [
+                  "SPY"
+                ],
+                "event_type": "MARKET_SENTIMENT",
+                "sentiment": "negative",
+                "sentiment_score": -0.8,
+                "impact_score": 45,
+                "relevance_score": 36
+              }
+            ],
+            "suggestions": [
+              {
+                "asset": "NVDA",
+                "market": "TRADITIONAL_GLOBAL",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Fluxo de notícias relevante (impacto 62) sem direção clara — manter em observação.",
+                "bullish_factors": [
+                  "Here is Why Nvidia (NVDA) is One of the Best Quality Growth Stocks to Buy - Yahoo Finance (gnews_nvda)"
+                ],
+                "bearish_factors": [
+                  "Nvidia: Downgrade To Hold As Earnings Fail To Push Price Higher (NASDAQ:NVDA) - Seeking Alpha (gnews_nvda)",
+                  "Is Your NVIDIA Stock Built to Survive a Crash? - Trefis (gnews_nvda)",
+                  "Nvidia Stock Falls On Concerns Of Backdoor AI Chip Sales To China - Investor's Business Daily (gnews_nvda)"
+                ],
+                "conflicting_signals": [
+                  "mixed_sentiment"
+                ],
+                "agents_to_notify": [],
+                "confidence": 1,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "SPY",
+                "market": "TRADITIONAL_GLOBAL",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Fluxo de notícias relevante (impacto 66) sem direção clara — manter em observação.",
+                "bullish_factors": [
+                  "Citi lifts S&P 500 target to 8100 as AI boom fuels episodic earnings surge - Investing.com (gnews_sp500)",
+                  "The S&P 500 Is Forecast to Climb as Earnings Growth Powers Stocks Higher - Goldman Sachs (gnews_sp500)",
+                  "Bank of America says only 20 S&P 500 stocks hit record highs in May — the same number as the dot-com bubble pe (gnews_sp500)"
+                ],
+                "bearish_factors": [
+                  "US Stock Market Today: S&P 500 Futures Slip As Rate Hike Worries Persist - Yahoo Finance (gnews_sp500)",
+                  "S&P 500 sees $1.8 trillion wipeout, Nasdaq tallies biggest point drop on record: What investors need to know a (marketwatch)",
+                  "Will the S&P 500 crash next week and what should you do about it? - Yahoo Finance UK (gnews_sp500)"
+                ],
+                "conflicting_signals": [
+                  "mixed_sentiment"
+                ],
+                "agents_to_notify": [],
+                "confidence": 1,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "GLD",
+                "market": "TRADITIONAL_GLOBAL",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Fluxo de notícias relevante (impacto 48) sem direção clara — manter em observação.",
+                "bullish_factors": [],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [],
+                "confidence": 0.46,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-07T22:13:23.757331+00:00"
+              },
+              {
+                "asset": "MSFT",
+                "market": "TRADITIONAL_GLOBAL",
+                "action": "BUY",
+                "time_horizon": "SWING",
+                "reason": "Notícias positivas multi-fonte (sent +0.38, conf 0.64) — requer confirmação técnica conjunta.",
+                "bullish_factors": [
+                  "Microsoft gains autonomy from OpenAI to pursue superintelligence on its own terms (cryptobriefing)"
+                ],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "swing_rider",
+                  "momentum_hunter"
+                ],
+                "confidence": 0.64,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-07T19:12:15.217007+00:00"
+              }
+            ]
+          },
+          {
+            "market": "MACRO_CROSS_MARKET",
+            "title": "Macro (afeta todos os mercados)",
+            "summary": "6 notícias relevantes com viés negativo (sentimento médio -0.20).",
+            "topNews": [
+              {
+                "title": "NASDAQ posts biggest point drop on record as S&P 500 sheds $1.8T in brutal selloff",
+                "summary": "The selloff highlights the vulnerability of risk assets to interest rate expectations, complicating the Fed's policy decisions amid strong job data. The post NASDAQ posts biggest point drop on record as S&P 500 sheds $1.8T in brutal selloff appeared first on Crypto Briefing .",
+                "source": "cryptobriefing",
+                "url": "https://cryptobriefing.com/nasdaq-record-drop-sp500-selloff/",
+                "published_at": "2026-06-07T14:45:13+00:00",
+                "symbols": [
+                  "SPY"
+                ],
+                "event_type": "MACRO_RATE",
+                "sentiment": "negative",
+                "sentiment_score": -1,
+                "impact_score": 81,
+                "relevance_score": 62
+              },
+              {
+                "title": "Can US CPI Inflation Save BTC after Bitcoin Dived Following Strong Payrolls? - FXLeaders",
+                "summary": "Can US CPI Inflation Save BTC after Bitcoin Dived Following Strong Payrolls? FXLeaders",
+                "source": "gnews_cpi",
+                "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOOXlZdEYxQjd5S21BUFJSWDAzSXBDeWF0NDNoRTBOYS1WVk12TEdQWGNEbHhheGpKR0U5NEZxVHNIWWxOLWd6SDhzRmdtakkxU3lsM2M0V3Y1OXdmSG1qOHVqSkt5TFdqdm1WblhZemtYVjhEWnpzVVV5dGlDS2xlRWZXaFZ2M1QwYlAweTY5M2RUVWltQndvZXJVdVpuQV9ETi10a05pcnU5QlIyTGRralF4MlJjQkNVeUE?oc=5",
+                "published_at": "2026-06-07T23:13:15+00:00",
+                "symbols": [
+                  "BTC"
+                ],
+                "event_type": "INFLATION",
+                "sentiment": "negative",
+                "sentiment_score": -0.3,
+                "impact_score": 69,
+                "relevance_score": 70
+              },
+              {
+                "title": "US Central Command intercepts Iranian missile attacks on Bahrain and Kuwait, triggering $700M in crypto liquidations",
+                "summary": "Geopolitical tensions highlight crypto's volatility and vulnerability, impacting investor confidence and potentially influencing global inflation trends. The post US Central Command intercepts Iranian missile attacks on Bahrain and Kuwait, triggering $700M in crypto liquidations ",
+                "source": "cryptobriefing",
+                "url": "https://cryptobriefing.com/iran-missile-attacks-crypto-liquidations/",
+                "published_at": "2026-06-07T19:29:09+00:00",
+                "symbols": [],
+                "event_type": "INFLATION",
+                "sentiment": "negative",
+                "sentiment_score": -0.75,
+                "impact_score": 69,
+                "relevance_score": 50
+              },
+              {
+                "title": "Bond Traders Bet on a CPI Surge That Bolsters Case for Fed Pivot - Bloomberg.com",
+                "summary": "Bond Traders Bet on a CPI Surge That Bolsters Case for Fed Pivot Bloomberg.com",
+                "source": "gnews_fed",
+                "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOSXlnaHBqaEI1ZmI2RHpwQlBLdFN0Ym9LdE9WOFk1VnJzcUhEVmRnaFNVcnFtbmNHdHliM3FPdDJHMW1Vcmw1NzBKd2FjUjFyX2xCSl9QQlFTalQ4LVNQUDBXdWYtcUQyTy1MbzFBYjc5Y0VNZ1c5X2ViVUhuc3AwT3k1aG84aWNNZUxRSlBTeWZaLV9SeE5MUVhTMlhZWXRMZGtlR1A5MDNhdXJTSk9pai1KeDl2dw?oc=5",
+                "published_at": "2026-06-07T19:00:00+00:00",
+                "symbols": [],
+                "event_type": "INFLATION",
+                "sentiment": "positive",
+                "sentiment_score": 0.8,
+                "impact_score": 66,
+                "relevance_score": 42
+              },
+              {
+                "title": "Goldman Sachs No Longer Expects Fed Interest-Rate Cut This Year - Bloomberg.com",
+                "summary": "Goldman Sachs No Longer Expects Fed Interest-Rate Cut This Year Bloomberg.com",
+                "source": "gnews_fed",
+                "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNdXlxdWZpaFEwSXhDRFh6ZV94ME14X1JHRFI2MGoxODRmT2dob24xQXhheW00SDBITTRKTHU2blZDeU9jQ2hPSVJWb3EwR1VuSGQ1ekpiRzFkbWNZMUFUcm03dXg0Z2lxcEIyWjNZdnZjdEMxODB1NGlKajY4NmJ3MHRSMWRfTXBsd0J6MVN5Njd0eEdQOHZTeExvcUNjbUVlbTNLdVpKQzZObG8zUzhqYkp6VFltMjlqRG9HM19ZTFY?oc=5",
+                "published_at": "2026-06-07T18:46:11+00:00",
+                "symbols": [],
+                "event_type": "MACRO_RATE",
+                "sentiment": "positive",
+                "sentiment_score": 0.35,
+                "impact_score": 63,
+                "relevance_score": 50
+              },
+              {
+                "title": "US stocks slump as fears over Big Tech shake Wall Street",
+                "summary": "The market's reaction underscores heightened volatility and uncertainty, challenging investor confidence in tech and crypto sectors amid rate hike fears. The post US stocks slump as fears over Big Tech shake Wall Street appeared first on Crypto Briefing .",
+                "source": "cryptobriefing",
+                "url": "https://cryptobriefing.com/us-stocks-slump-big-tech-fears/",
+                "published_at": "2026-06-07T23:04:16+00:00",
+                "symbols": [],
+                "event_type": "MACRO_RATE",
+                "sentiment": "negative",
+                "sentiment_score": -0.3,
+                "impact_score": 62,
+                "relevance_score": 50
+              }
+            ],
+            "suggestions": [
+              {
+                "asset": "AREA11",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "WATCH",
+                "time_horizon": "POSITION",
+                "reason": "Fluxo de notícias relevante (impacto 56) sem direção clara — manter em observação.",
+                "bullish_factors": [],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [],
+                "confidence": 0.48,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "COIN",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "WATCH",
+                "time_horizon": "POSITION",
+                "reason": "Fluxo de notícias relevante (impacto 56) sem direção clara — manter em observação.",
+                "bullish_factors": [
+                  "Bitcoin needs one more thing to happen to spark BTC price 'rally:' Analysis (cointelegraph)",
+                  "Coinbase embeds Solana trading (blockworks)"
+                ],
+                "bearish_factors": [
+                  "Are retail traders selling their bitcoin to buy the SpaceX IPO? (coindesk)",
+                  "Forward Industries moves $32M in SOL amid $1B paper loss (cointelegraph)"
+                ],
+                "conflicting_signals": [
+                  "mixed_sentiment"
+                ],
+                "agents_to_notify": [],
+                "confidence": 0.95,
+                "risk": "HIGH",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "META",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "WATCH",
+                "time_horizon": "POSITION",
+                "reason": "Fluxo de notícias relevante (impacto 56) sem direção clara — manter em observação.",
+                "bullish_factors": [],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [],
+                "confidence": 0.68,
+                "risk": "LOW",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "MSTR",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "SELL",
+                "time_horizon": "INTRADAY",
+                "reason": "Notícias negativas multi-fonte (sent -0.44) — short apenas com confirmação técnica (bear_hunter/consenso).",
+                "bullish_factors": [
+                  "Tom Lee's Ethereum Treasury BitMine Prices Preferred Shares With 9.5% Dividend (decrypt)"
+                ],
+                "bearish_factors": [
+                  "MicroStrategy and BitMine Could Trigger the Largest Bitcoin Crash Ever: DWF Labs Co-founder Warns (beincrypto)",
+                  "The Bitcoin Crash Just Wiped $62 Billion From Corporate Treasury Holders, Is the MicroStrategy Model Broken? (cryptonews)",
+                  "Bitcoin, ether eye worst weekly rout since FTX collapse as cryptos shed $390 billion (coindesk)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "mean_reverter"
+                ],
+                "confidence": 0.94,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "QQQ",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "WATCH",
+                "time_horizon": "SWING",
+                "reason": "Sentimento negativo (sent -0.65) de fonte única — monitorar antes de agir.",
+                "bullish_factors": [],
+                "bearish_factors": [
+                  "Bitcoin back above $61,000 after rout leads to $1.6 billion liquidations (coindesk)"
+                ],
+                "conflicting_signals": [
+                  "single_source"
+                ],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "mean_reverter"
+                ],
+                "confidence": 0.68,
+                "risk": "MEDIUM",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "USDC",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "WATCH",
+                "time_horizon": "POSITION",
+                "reason": "Fluxo de notícias relevante (impacto 56) sem direção clara — manter em observação.",
+                "bullish_factors": [],
+                "bearish_factors": [],
+                "conflicting_signals": [],
+                "agents_to_notify": [],
+                "confidence": 0.68,
+                "risk": "HIGH",
+                "requires_human_review": false,
+                "block_trade_reason": null,
+                "ts": "2026-06-08T00:01:28.687023+00:00"
+              },
+              {
+                "asset": "*",
+                "market": "MACRO_CROSS_MARKET",
+                "action": "HEDGE",
+                "time_horizon": "SWING",
+                "reason": "Macro risk-off (sent -0.25): NASDAQ posts biggest point drop on record as S&P 500 sheds $1.8T in brutal selloff — reduzir tamanho de novas posições até confirmação.",
+                "bullish_factors": [],
+                "bearish_factors": [
+                  "NASDAQ posts biggest point drop on record as S&P 500 sheds $1.8T in brutal selloff (cryptobriefing)",
+                  "S&P 500 sheds $1.8T as Nasdaq records its biggest single-day point drop ever (cryptobriefing)",
+                  "Consumer sentiment hits fresh record low in May as Iran war fuels inflation worries (cnbc_markets)"
+                ],
+                "conflicting_signals": [],
+                "agents_to_notify": [
+                  "hedge_balancer",
+                  "bear_hunter",
+                  "risk_manager"
+                ],
+                "confidence": 1,
+                "risk": "HIGH",
+                "requires_human_review": true,
+                "block_trade_reason": null,
+                "ts": "2026-06-07T19:03:31.705754+00:00"
+              }
+            ]
+          }
+        ],
+        "top_opportunities": [
+          {
+            "asset": "BTC",
+            "market": "CRYPTO",
+            "action": "WATCH",
+            "time_horizon": "POSITION",
+            "reason": "Evento severo (LEGAL_RISK) com sentimento negativo: NY Judge Halts Lawsuit Claiming 39,069 Dormant Bitcoin Wallets Until July Hearing",
+            "bullish_factors": [
+              "AI’s $800 billion spending boom is becoming Bitcoin’s Fed problem (cryptoslate)",
+              "Strategy’s Saylor signals BTC buy as preferred dividend pay date vote looms (cointelegraph)",
+              "Tom Lee's Ethereum Treasury BitMine Prices Preferred Shares With 9.5% Dividend (decrypt)"
+            ],
+            "bearish_factors": [
+              "NY Judge Halts Lawsuit Claiming 39,069 Dormant Bitcoin Wallets Until July Hearing (beincrypto)",
+              "Can US CPI Inflation Save BTC after Bitcoin Dived Following Strong Payrolls? - FXLeaders (gnews_cpi)",
+              "Standard Chartered Sees Bitcoin Bottom ‘Almost In’ as Sell-Off Cuts 14% in Seven Days (bitcoinmagazine)"
+            ],
+            "conflicting_signals": [],
+            "agents_to_notify": [
+              "hedge_balancer",
+              "bear_hunter",
+              "risk_manager"
+            ],
+            "confidence": 1,
+            "risk": "HIGH",
+            "requires_human_review": true,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "HYPE",
+            "market": "CRYPTO",
+            "action": "WATCH",
+            "time_horizon": "POSITION",
+            "reason": "Evento severo (GEOPOLITICS) com sentimento negativo: Arthur Hayes Exits Entire HYPE and NEAR Positions, Cites Iran War and AI IPO Pipeline",
+            "bullish_factors": [
+              "Hyperliquid’s UK warning reveals the regulatory test behind its Wall Street push (cryptoslate)"
+            ],
+            "bearish_factors": [
+              "Arthur Hayes Exits Entire HYPE and NEAR Positions, Cites Iran War and AI IPO Pipeline (thedefiant)",
+              "Wall Street Is Coming for Hyperliquid's Perps Crown, Arthur Hayes Says (decrypt)"
+            ],
+            "conflicting_signals": [],
+            "agents_to_notify": [
+              "hedge_balancer",
+              "bear_hunter",
+              "risk_manager"
+            ],
+            "confidence": 1,
+            "risk": "HIGH",
+            "requires_human_review": true,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "NVDA",
+            "market": "TRADITIONAL_GLOBAL",
+            "action": "WATCH",
+            "time_horizon": "SWING",
+            "reason": "Fluxo de notícias relevante (impacto 62) sem direção clara — manter em observação.",
+            "bullish_factors": [
+              "Here is Why Nvidia (NVDA) is One of the Best Quality Growth Stocks to Buy - Yahoo Finance (gnews_nvda)"
+            ],
+            "bearish_factors": [
+              "Nvidia: Downgrade To Hold As Earnings Fail To Push Price Higher (NASDAQ:NVDA) - Seeking Alpha (gnews_nvda)",
+              "Is Your NVIDIA Stock Built to Survive a Crash? - Trefis (gnews_nvda)",
+              "Nvidia Stock Falls On Concerns Of Backdoor AI Chip Sales To China - Investor's Business Daily (gnews_nvda)"
+            ],
+            "conflicting_signals": [
+              "mixed_sentiment"
+            ],
+            "agents_to_notify": [],
+            "confidence": 1,
+            "risk": "LOW",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "PETR4",
+            "market": "TRADITIONAL_BR",
+            "action": "WATCH",
+            "time_horizon": "LONG_TERM",
+            "reason": "Fluxo de notícias relevante (impacto 60) sem direção clara — manter em observação.",
+            "bullish_factors": [
+              "Petrobras tem lucro de R$ 32,7 bi no 3o trimestre e anuncia R$ 12,16 bi em dividendos - Bora Investir (gnews_acoes_b3)",
+              "PETR4 ainda compensa pelos dividendos? Petrobras muda cenário para investidores - arevista.com.br (gnews_petrobras)",
+              "Petrobras (PETR4) e pares sobem com alta do petróleo lá fora - Valor Investe (gnews_petrobras)"
+            ],
+            "bearish_factors": [
+              "Ibovespa recua, apesar de alta da Petrobras (PETR4), e dólar cai a R$ 5,04 - Bloomberg Línea Brasil (gnews_petrobras)",
+              "Petrobras (PETR4) adere a subsídio do diesel em meio à crise no Oriente Médio - suno.com.br (gnews_petrobras)",
+              "Ações da Petrobras caem 7% após resultado trimestral; entenda - Bora Investir (gnews_acoes_b3)"
+            ],
+            "conflicting_signals": [
+              "mixed_sentiment"
+            ],
+            "agents_to_notify": [],
+            "confidence": 1,
+            "risk": "LOW",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "SPY",
+            "market": "TRADITIONAL_GLOBAL",
+            "action": "WATCH",
+            "time_horizon": "SWING",
+            "reason": "Fluxo de notícias relevante (impacto 66) sem direção clara — manter em observação.",
+            "bullish_factors": [
+              "Citi lifts S&P 500 target to 8100 as AI boom fuels episodic earnings surge - Investing.com (gnews_sp500)",
+              "The S&P 500 Is Forecast to Climb as Earnings Growth Powers Stocks Higher - Goldman Sachs (gnews_sp500)",
+              "Bank of America says only 20 S&P 500 stocks hit record highs in May — the same number as the dot-com bubble pe (gnews_sp500)"
+            ],
+            "bearish_factors": [
+              "US Stock Market Today: S&P 500 Futures Slip As Rate Hike Worries Persist - Yahoo Finance (gnews_sp500)",
+              "S&P 500 sees $1.8 trillion wipeout, Nasdaq tallies biggest point drop on record: What investors need to know a (marketwatch)",
+              "Will the S&P 500 crash next week and what should you do about it? - Yahoo Finance UK (gnews_sp500)"
+            ],
+            "conflicting_signals": [
+              "mixed_sentiment"
+            ],
+            "agents_to_notify": [],
+            "confidence": 1,
+            "risk": "LOW",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "VALE3",
+            "market": "TRADITIONAL_BR",
+            "action": "WATCH",
+            "time_horizon": "POSITION",
+            "reason": "Fluxo de notícias relevante (impacto 56) sem direção clara — manter em observação.",
+            "bullish_factors": [
+              "Vale (VALE3) lidera recomendações para investir em junho com dividendos robustos — e Trump pode dar uma 'mãozi (gnews_vale)",
+              "Dividendos da semana: Vale (VALE3) paga R$ 2,14 por ação; veja lista completa - Estadão (gnews_vale)",
+              "Dividendos: Itaú BBA segue apostando em Petrobras (PETR4), Vale (VALE3) e Bradesco (BBDC4) para junho - Money  (gnews_vale)"
+            ],
+            "bearish_factors": [
+              "Vale (VALE3) cai quase 4% e pressiona o Ibovespa; o que está por trás da queda da mineradora? - Estadão (gnews_ibovespa)",
+              "CSN (CSNA3) lidera perdas do Ibovespa com tombo de 9%; Vale (VALE3) também cai forte - Money Times (gnews_vale)",
+              "CSN (CSNA3) desaba mais de 10% e lidera perdas do Ibovespa; nem a Vale (VALE3) escapa. O que está por trás do  (gnews_vale)"
+            ],
+            "conflicting_signals": [
+              "mixed_sentiment"
+            ],
+            "agents_to_notify": [],
+            "confidence": 1,
+            "risk": "LOW",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          }
+        ],
+        "top_risks": [
+          {
+            "asset": "ETH",
+            "market": "CRYPTO",
+            "action": "BLOCK_TRADE",
+            "time_horizon": "INTRADAY",
+            "reason": "Evento crítico (HACK_EXPLOIT): Pando Rings hacker buys 6,243 ETH for $10M amid market dip",
+            "bullish_factors": [
+              "Tom Lee's Ethereum Treasury BitMine Prices Preferred Shares With 9.5% Dividend (decrypt)",
+              "Ethereum RSI drops to lowest level since launch amid relentless selling pressure (cryptobriefing)",
+              "Ethereum Could Outperform Bitcoin Despite Recent Price Weakness: Standard Chartered (cryptonews)"
+            ],
+            "bearish_factors": [
+              "Ethereum Price Prediction: Will ETH Dump Toward $1K Next? (cryptopotato)",
+              "Bitcoin, ether eye worst weekly rout since FTX collapse as cryptos shed $390 billion (coindesk)",
+              "ETH falls to 13-month low on Zcash bug news and Bitcoin drop to sub-$60K: Is $1.4K next? (cointelegraph)"
+            ],
+            "conflicting_signals": [],
+            "agents_to_notify": [
+              "swing_rider",
+              "mean_reverter",
+              "bear_hunter",
+              "hedge_balancer",
+              "unknown",
+              "momentum_hunter",
+              "trend_rider",
+              "scalper",
+              "news_sentinel",
+              "risk_manager"
+            ],
+            "confidence": 1,
+            "risk": "CRITICAL",
+            "requires_human_review": true,
+            "block_trade_reason": "Evento crítico (HACK_EXPLOIT): Pando Rings hacker buys 6,243 ETH for $10M amid market dip",
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "*",
+            "market": "MACRO_CROSS_MARKET",
+            "action": "HEDGE",
+            "time_horizon": "SWING",
+            "reason": "Macro risk-off (sent -0.25): NASDAQ posts biggest point drop on record as S&P 500 sheds $1.8T in brutal selloff — reduzir tamanho de novas posições até confirmação.",
+            "bullish_factors": [],
+            "bearish_factors": [
+              "NASDAQ posts biggest point drop on record as S&P 500 sheds $1.8T in brutal selloff (cryptobriefing)",
+              "S&P 500 sheds $1.8T as Nasdaq records its biggest single-day point drop ever (cryptobriefing)",
+              "Consumer sentiment hits fresh record low in May as Iran war fuels inflation worries (cnbc_markets)"
+            ],
+            "conflicting_signals": [],
+            "agents_to_notify": [
+              "hedge_balancer",
+              "bear_hunter",
+              "risk_manager"
+            ],
+            "confidence": 1,
+            "risk": "HIGH",
+            "requires_human_review": true,
+            "block_trade_reason": null,
+            "ts": "2026-06-07T19:03:31.705754+00:00"
+          },
+          {
+            "asset": "MSTR",
+            "market": "MACRO_CROSS_MARKET",
+            "action": "SELL",
+            "time_horizon": "INTRADAY",
+            "reason": "Notícias negativas multi-fonte (sent -0.44) — short apenas com confirmação técnica (bear_hunter/consenso).",
+            "bullish_factors": [
+              "Tom Lee's Ethereum Treasury BitMine Prices Preferred Shares With 9.5% Dividend (decrypt)"
+            ],
+            "bearish_factors": [
+              "MicroStrategy and BitMine Could Trigger the Largest Bitcoin Crash Ever: DWF Labs Co-founder Warns (beincrypto)",
+              "The Bitcoin Crash Just Wiped $62 Billion From Corporate Treasury Holders, Is the MicroStrategy Model Broken? (cryptonews)",
+              "Bitcoin, ether eye worst weekly rout since FTX collapse as cryptos shed $390 billion (coindesk)"
+            ],
+            "conflicting_signals": [],
+            "agents_to_notify": [
+              "hedge_balancer",
+              "bear_hunter",
+              "mean_reverter"
+            ],
+            "confidence": 0.94,
+            "risk": "MEDIUM",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "B3SA3",
+            "market": "TRADITIONAL_BR",
+            "action": "WAIT_CONFIRMATION",
+            "time_horizon": "SWING",
+            "reason": "Sentimento positivo (sent +0.57) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+            "bullish_factors": [
+              "Ações da B3 (B3SA3) sobem forte após balanço do 3T25 - Nord Investimentos (gnews_acoes_b3)",
+              "Dividendos da semana: Telefônica Brasil (VIVT3) e B3 (B3SA3) pagam acionistas; veja lista completa - Estadão (gnews_acoes_b3)",
+              "B3 (B3SA3): Alta no lucro do 4T25 e salto das ações em 12 meses; ainda é hora de comprar? - Money Times (gnews_acoes_b3)"
+            ],
+            "bearish_factors": [],
+            "conflicting_signals": [
+              "single_source"
+            ],
+            "agents_to_notify": [
+              "swing_rider",
+              "momentum_hunter"
+            ],
+            "confidence": 0.79,
+            "risk": "MEDIUM",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "BBAS3",
+            "market": "TRADITIONAL_BR",
+            "action": "WAIT_CONFIRMATION",
+            "time_horizon": "SWING",
+            "reason": "Sentimento positivo (sent +0.38) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+            "bullish_factors": [
+              "O pior está por vir para o Banco do Brasil (BBAS3)? A previsão de analistas para o lucro do BB após novos dado (gnews_acoes_b3)"
+            ],
+            "bearish_factors": [],
+            "conflicting_signals": [
+              "single_source"
+            ],
+            "agents_to_notify": [
+              "swing_rider",
+              "momentum_hunter"
+            ],
+            "confidence": 0.63,
+            "risk": "LOW",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          },
+          {
+            "asset": "BBDC4",
+            "market": "TRADITIONAL_BR",
+            "action": "WAIT_CONFIRMATION",
+            "time_horizon": "LONG_TERM",
+            "reason": "Sentimento positivo (sent +0.40) mas fonte única/confiança baixa — aguardar confirmação técnica ou multi-fonte.",
+            "bullish_factors": [
+              "Dividendos: Itaú BBA segue apostando em Petrobras (PETR4), Vale (VALE3) e Bradesco (BBDC4) para junho - Money  (gnews_vale)"
+            ],
+            "bearish_factors": [],
+            "conflicting_signals": [
+              "single_source"
+            ],
+            "agents_to_notify": [
+              "swing_rider",
+              "momentum_hunter"
+            ],
+            "confidence": 0.58,
+            "risk": "MEDIUM",
+            "requires_human_review": false,
+            "block_trade_reason": null,
+            "ts": "2026-06-08T00:01:28.687023+00:00"
+          }
+        ],
+        "joint_decisions": [
+          {
+            "symbol": "BTC",
+            "market": "CRYPTO",
+            "final_action": "BUY",
+            "final_reason": "consenso EXECUTE: news(+0.50) + técnico(+0.82) | agentes=swing_rider,news_sentinel",
+            "news_score": 0.5,
+            "technical_score": 0.82,
+            "confidence": 0.79,
+            "status": "OBSERVED",
+            "ts": "2026-06-07T19:40:12.367640+00:00"
+          }
+        ]
       },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 573,
-        "open": 4,
-        "wins": 305,
-        "win_rate_pct": 53.2,
-        "net_pnl_usd": 27.62,
+        "closed": 606,
+        "open": 3,
+        "wins": 325,
+        "win_rate_pct": 53.6,
+        "net_pnl_usd": 32.7,
         "by_agent": {
           "scalper": {
-            "closed": 542,
-            "wins": 297,
-            "net_pnl_usd": -0.88
+            "closed": 573,
+            "wins": 315,
+            "net_pnl_usd": -0.12
           },
           "mean_reverter": {
-            "closed": 31,
-            "wins": 8,
-            "net_pnl_usd": 28.5
+            "closed": 33,
+            "wins": 10,
+            "net_pnl_usd": 32.82
           }
         }
       },
       "readiness": {
         "env": "testnet",
-        "as_of": "2026-06-07T17:17:14.923603+00:00",
+        "as_of": "2026-06-08T00:35:35.125620+00:00",
         "decision_date": "2026-06-13",
         "validation_window": "2026-06-06 → 2026-06-13",
-        "overall": "conditional",
+        "overall": "no_go",
         "summary": "Produção condicional: começar com $300-500, somente swing_rider (+DCA opcional), lev ≤3x, ordem ≤$100, dia ≤$300 — SE os componentes dinâmicos passarem na data da decisão.",
         "config_atual": {
           "desde": "2026-05-30",
-          "net_usd": -7.77,
-          "monthly_pct_estimate": -2.19,
+          "net_usd": -6.2,
+          "monthly_pct_estimate": -1.7,
           "nota": "config atual (swing-only) fez 14W/0L +$8,83 líquido na semana do crash (BTC -15%), excluída uma posição legada do momentum"
         },
         "components": [
@@ -1899,12 +3387,12 @@
           {
             "id": "swing_rider",
             "label": "swing_rider (único agente live)",
-            "status": "pending",
-            "reason": "aguardando trades da semana de validação (precisa ≥3, net ≥ $0 e zero SL falho)",
+            "status": "no_go",
+            "reason": "semana: 1 trades, net $1.15 (critério: ≥3 trades e net ≥ $0)",
             "metrics": {
-              "week_trades": 0,
-              "week_net_usd": 0,
-              "week_wins": 0
+              "week_trades": 1,
+              "week_net_usd": 1.15,
+              "week_wins": 1
             }
           },
           {
@@ -1918,12 +3406,12 @@
             "id": "mean_reverter_lateral",
             "label": "mean_reverter lateral-gated (lab)",
             "status": "pending",
-            "reason": "net $28.5; falta: amostra 31/40, concentração top-1 92% (máx 50%)",
+            "reason": "net $32.82; falta: amostra 33/40, concentração top-1 80% (máx 50%)",
             "metrics": {
-              "trades": 31,
-              "net_usd": 28.5,
-              "payoff": 6.08,
-              "top1_share": 0.92
+              "trades": 33,
+              "net_usd": 32.82,
+              "payoff": 5.25,
+              "top1_share": 0.8
             }
           },
           {
@@ -1971,6 +3459,10 @@
           "bear_hunter": {
             "family": "momentum",
             "desc": "Short-only: 2 de 3 (RSI alto, ROC negativo, close<EMA) + ADX. Bloqueia em BTC risk_on."
+          },
+          "news_sentinel": {
+            "family": "news_sentiment",
+            "desc": "NewsSentinel Free: monitora notícias gratuitas (cripto, Brasil, global, macro), classifica impacto por ativo e sugere ações. Advisory-only: vota no consenso e bloqueia entradas em evento crítico — nunca executa ordens."
           }
         }
       },
@@ -2015,7 +3507,7 @@
     "prod": {
       "schemaVersion": 1,
       "env": "prod",
-      "capturedAt": "2026-06-07T17:17:14.961Z",
+      "capturedAt": "2026-06-08T00:35:35.293Z",
       "catalog": {
         "service": "openclaw-panel-api",
         "version": "v1",
@@ -2042,6 +3534,7 @@
           "/api/v1/lab/lateral",
           "/api/v1/meta/agents",
           "/api/v1/meta/wallets",
+          "/api/v1/news/summary",
           "/api/v1/overview",
           "/api/v1/readiness"
         ],
@@ -2056,8 +3549,8 @@
         "defi_kpis": null,
         "circuit_breaker": {
           "available": true,
-          "date": "2026-06-07",
-          "peak_usd": 1962.94,
+          "date": "2026-06-08",
+          "peak_usd": 1965.22,
           "threshold_pct": 12,
           "halt_mode": "entry-only (nunca fecha posição)"
         },
@@ -2088,29 +3581,36 @@
         "empty": true,
         "reason": "aguardando go-live mainnet"
       },
+      "news": {
+        "dashboardType": "HOLDER_MARKET_NEWS_PANEL",
+        "env": "prod",
+        "generated_at": "2026-06-08T00:35:35.261885+00:00",
+        "empty": true,
+        "reason": "brain indisponível — rode news-sentinel-run primeiro"
+      },
       "lab": {
         "lab": "lateral_shadow",
-        "closed": 573,
-        "open": 4,
-        "wins": 305,
-        "win_rate_pct": 53.2,
-        "net_pnl_usd": 27.62,
+        "closed": 606,
+        "open": 3,
+        "wins": 325,
+        "win_rate_pct": 53.6,
+        "net_pnl_usd": 32.7,
         "by_agent": {
           "scalper": {
-            "closed": 542,
-            "wins": 297,
-            "net_pnl_usd": -0.88
+            "closed": 573,
+            "wins": 315,
+            "net_pnl_usd": -0.12
           },
           "mean_reverter": {
-            "closed": 31,
-            "wins": 8,
-            "net_pnl_usd": 28.5
+            "closed": 33,
+            "wins": 10,
+            "net_pnl_usd": 32.82
           }
         }
       },
       "readiness": {
         "env": "prod",
-        "as_of": "2026-06-07T17:17:14.960066+00:00",
+        "as_of": "2026-06-08T00:35:35.262181+00:00",
         "decision_date": "2026-06-13",
         "validation_window": "2026-06-06 → 2026-06-13",
         "overall": "no_go",
@@ -2140,12 +3640,12 @@
             "id": "mean_reverter_lateral",
             "label": "mean_reverter lateral-gated (lab)",
             "status": "pending",
-            "reason": "net $28.5; falta: amostra 31/40, concentração top-1 92% (máx 50%)",
+            "reason": "net $32.82; falta: amostra 33/40, concentração top-1 80% (máx 50%)",
             "metrics": {
-              "trades": 31,
-              "net_usd": 28.5,
-              "payoff": 6.08,
-              "top1_share": 0.92
+              "trades": 33,
+              "net_usd": 32.82,
+              "payoff": 5.25,
+              "top1_share": 0.8
             }
           },
           {
@@ -2193,6 +3693,10 @@
           "bear_hunter": {
             "family": "momentum",
             "desc": "Short-only: 2 de 3 (RSI alto, ROC negativo, close<EMA) + ADX. Bloqueia em BTC risk_on."
+          },
+          "news_sentinel": {
+            "family": "news_sentiment",
+            "desc": "NewsSentinel Free: monitora notícias gratuitas (cripto, Brasil, global, macro), classifica impacto por ativo e sugere ações. Advisory-only: vota no consenso e bloqueia entradas em evento crítico — nunca executa ordens."
           }
         }
       },
